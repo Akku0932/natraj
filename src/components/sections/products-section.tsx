@@ -383,7 +383,7 @@ export default function ProductsSection() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="product-card group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5"
+                      className="product-card glow-hover card-shine group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5"
                     >
                       {/* Gold gradient bottom border on hover */}
                       <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold/0 via-gold to-gold/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 -z-10" />

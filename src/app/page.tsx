@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, FileText, LayoutGrid, Zap, ArrowRight, MessageCircle, Mail } from 'lucide-react'
 import { useStore } from '@/store/use-store'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Navbar } from '@/components/navbar'
@@ -23,6 +23,8 @@ import CatalogDownloadSection from '@/components/sections/catalog-section'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
+import ClientsSection from '@/components/sections/clients-section'
+import WhyChooseSection from '@/components/sections/why-choose-section'
 import ProcessSection from '@/components/sections/process-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
@@ -64,7 +66,9 @@ export default function Home() {
               <SectionTransition variant="gold-line" />
               <FeaturesSection />
               <StatsSection />
+              <ClientsSection />
               <TestimonialsSection />
+              <WhyChooseSection />
               <SectionTransition variant="dots" />
               <ProcessSection />
               <SectionTransition variant="gold-line" />
@@ -630,99 +634,147 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
-              <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Sitemap' }]} />
-              <div className="min-h-screen bg-background py-16">
-                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-                  <motion.h1
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-4xl font-bold mb-2"
-                  >
-                    Site <span className="gradient-text">Map</span>
-                  </motion.h1>
-                  <motion.p
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: 0.1 }}
-                    className="text-muted-foreground mb-12"
-                  >
-                    A complete overview of all pages on Natraj Electricals
-                  </motion.p>
-
-                  {/* Sitemap groups */}
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    {/* Main Pages */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
-                        Main Pages
-                      </h3>
-                      {[
-                        { label: 'Home', page: 'home' as const, desc: 'Main landing page with hero animation' },
-                        { label: 'About Us', page: 'about' as const, desc: 'Our story, mission, and timeline' },
-                        { label: 'Products', page: 'products' as const, desc: 'Browse our full product catalog' },
-                        { label: 'Contact', page: 'contact' as const, desc: 'Get in touch with our team' },
-                      ].map((item) => (
-                        <button
-                          key={item.page}
-                          onClick={() => setCurrentPage(item.page)}
-                          className="group block w-full text-left p-4 rounded-xl border border-border/50 hover:border-gold/30 hover:bg-gold/5 transition-all duration-200"
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className="text-foreground font-medium group-hover:text-gold transition-colors">
-                              {item.label}
-                            </span>
-                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-gold group-hover:translate-x-1 transition-all" />
-                          </div>
-                          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
-                        </button>
-                      ))}
-                    </div>
-
-                    {/* Legal Pages */}
-                    <div className="space-y-4">
-                      <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
-                        Legal
-                      </h3>
-                      {[
-                        { label: 'Terms & Conditions', page: 'terms' as const, desc: 'Website terms and usage policies' },
-                        { label: 'Privacy Policy', page: 'privacy' as const, desc: 'How we handle your data' },
-                        { label: 'Sitemap', page: 'sitemap' as const, desc: 'Complete site overview' },
-                      ].map((item) => (
-                        <button
-                          key={item.page}
-                          onClick={() => setCurrentPage(item.page)}
-                          className="group block w-full text-left p-4 rounded-xl border border-border/50 hover:border-gold/30 hover:bg-gold/5 transition-all duration-200"
-                        >
-                          <div className="flex items-center gap-2">
-                            <span className="text-foreground font-medium group-hover:text-gold transition-colors">
-                              {item.label}
-                            </span>
-                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-gold group-hover:translate-x-1 transition-all" />
-                          </div>
-                          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
-                        </button>
-                      ))}
-                    </div>
+              <div className="min-h-screen">
+                {/* Page Header */}
+                <section className="relative overflow-hidden bg-charcoal py-20 md:py-28">
+                  <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(200,150,62,0.1)_0%,transparent_60%)]" />
+                  <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+                    <motion.h1
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className="text-4xl font-bold text-white sm:text-5xl md:text-6xl"
+                    >
+                      Site <span className="gradient-text">Map</span>
+                    </motion.h1>
+                    <motion.p
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6, delay: 0.1 }}
+                      className="mx-auto mt-4 max-w-2xl text-lg text-white/60"
+                    >
+                      Navigate to any section of our website
+                    </motion.p>
                   </div>
+                </section>
 
-                  {/* Product Categories Quick Access */}
-                  <div className="mt-12 space-y-4">
-                    <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
-                      Product Categories
-                    </h3>
-                    <p className="text-muted-foreground text-sm">
-                      Visit our{' '}
-                      <button
-                        onClick={() => setCurrentPage('products')}
-                        className="text-gold hover:underline"
-                      >
-                        Products page
-                      </button>{' '}
-                      to explore all 16 categories including Three Phase Panels, Automatic Changeovers, Busbar Systems, and more.
-                    </p>
+                <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Sitemap' }]} />
+
+                <section className="py-12 md:py-20">
+                  <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
+                    {/* Pages */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="mb-12"
+                    >
+                      <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-foreground">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
+                          <FileText className="h-4 w-4" />
+                        </span>
+                        Pages
+                      </h2>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                        {[
+                          { label: 'Home', page: 'home' as const, desc: 'Overview, features, and highlights' },
+                          { label: 'About Us', page: 'about' as const, desc: 'Our story, mission, and team' },
+                          { label: 'Products', page: 'products' as const, desc: 'Browse our full product catalog' },
+                          { label: 'Contact', page: 'contact' as const, desc: 'Get in touch with us' },
+                          { label: 'Terms & Conditions', page: 'terms' as const, desc: 'Website terms and policies' },
+                          { label: 'Privacy Policy', page: 'privacy' as const, desc: 'How we handle your data' },
+                        ].map((item, i) => (
+                          <motion.button
+                            key={item.page}
+                            onClick={() => setCurrentPage(item.page)}
+                            whileHover={{ scale: 1.02, y: -2 }}
+                            whileTap={{ scale: 0.98 }}
+                            initial={{ opacity: 0, y: 10 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.05 }}
+                            className="group rounded-xl border border-border/50 bg-card p-5 text-left transition-all duration-300 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 card-shine"
+                          >
+                            <div className="mb-1 text-base font-semibold text-foreground transition-colors group-hover:text-gold">
+                              {item.label}
+                            </div>
+                            <div className="text-sm text-muted-foreground">{item.desc}</div>
+                            <ChevronRight className="mt-2 h-4 w-4 text-gold/0 transition-all group-hover:translate-x-1 group-hover:text-gold" />
+                          </motion.button>
+                        ))}
+                      </div>
+                    </motion.div>
+
+                    {/* Product Categories */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                    >
+                      <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-foreground">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
+                          <LayoutGrid className="h-4 w-4" />
+                        </span>
+                        Product Categories
+                      </h2>
+                      <div className="rounded-xl border border-border/50 bg-card p-6">
+                        <p className="mb-4 text-sm text-muted-foreground">
+                          Browse our 16 product categories
+                        </p>
+                        <button
+                          onClick={() => setCurrentPage('products')}
+                          className="inline-flex items-center gap-2 rounded-lg bg-gold/10 px-4 py-2.5 text-sm font-medium text-gold transition-all hover:bg-gold/20 hover:shadow-md hover:shadow-gold/10"
+                        >
+                          View All Products
+                          <ArrowRight className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </motion.div>
+
+                    {/* Quick Actions */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="mt-12"
+                    >
+                      <h2 className="mb-6 flex items-center gap-3 text-xl font-bold text-foreground">
+                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-gold/10 text-gold">
+                          <Zap className="h-4 w-4" />
+                        </span>
+                        Quick Actions
+                      </h2>
+                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+                        <a
+                          href="https://wa.me/919868225911?text=Hello%20Natraj%20Electricals!%20I%20would%20like%20to%20enquire%20about%20your%20products."
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="group flex items-center gap-3 rounded-xl border border-border/50 bg-card p-4 transition-all hover:border-green-500/30 hover:shadow-lg hover:shadow-green-500/5"
+                        >
+                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-green-500/10 text-green-500">
+                            <MessageCircle className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <div className="text-sm font-semibold text-foreground">Chat on WhatsApp</div>
+                            <div className="text-xs text-muted-foreground">Quick response guaranteed</div>
+                          </div>
+                        </a>
+                        <button
+                          onClick={() => setCurrentPage('contact')}
+                          className="group flex items-center gap-3 rounded-xl border border-border/50 bg-card p-4 text-left transition-all hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5"
+                        >
+                          <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-gold/10 text-gold">
+                            <Mail className="h-5 w-5" />
+                          </span>
+                          <div>
+                            <div className="text-sm font-semibold text-foreground">Request a Quote</div>
+                            <div className="text-xs text-muted-foreground">Get pricing for your project</div>
+                          </div>
+                        </button>
+                      </div>
+                    </motion.div>
                   </div>
-                </div>
+                </section>
               </div>
             </motion.div>
           )}

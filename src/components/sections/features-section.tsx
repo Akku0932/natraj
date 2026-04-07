@@ -181,7 +181,7 @@ export default function FeaturesSection() {
               <motion.div
                 key={feature.title}
                 variants={cardVariants}
-                className="glass group relative rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-gold/10"
+                className="glass card-shine group relative rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-gold/10"
               >
                 {/* Hover glow effect */}
                 <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"

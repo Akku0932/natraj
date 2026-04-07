@@ -216,7 +216,7 @@ export function Footer() {
                 </p>
               </motion.div>
             ) : (
-              <form onSubmit={handleNewsletterSubmit} className="space-y-3">
+              <form onSubmit={handleNewsletterSubmit} className="gold-border-card space-y-3 rounded-lg p-3">
                 <div className="flex gap-2">
                   <Input
                     type="email"

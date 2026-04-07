@@ -18,7 +18,7 @@ export default function CTASection() {
   const orbYReverse = useTransform(scrollYProgress, [0, 1], [0, 30])
 
   return (
-    <section ref={sectionRef} className="relative overflow-hidden py-24 md:py-32">
+    <section ref={sectionRef} className="animated-border relative overflow-hidden py-24 md:py-32">
       {/* Gold gradient background */}
       <div className="absolute inset-0 gold-gradient" />
 
@@ -86,7 +86,7 @@ export default function CTASection() {
           </div>
 
           {/* Heading */}
-          <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+          <h2 className="gold-shimmer-text text-3xl font-bold leading-tight sm:text-4xl md:text-5xl lg:text-6xl">
             Ready to Power Up
             <br />
             Your Project?

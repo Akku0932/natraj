@@ -66,14 +66,14 @@ export function Navbar() {
             {/* Logo */}
             <button
               onClick={() => handleNavClick('home')}
-              className="flex items-center gap-2 group"
+              className="ripple flex items-center gap-2 group"
             >
               <Image
                 src="/images/logo.PNG"
                 alt="Natraj Electricals"
                 width={140}
                 height={40}
-                className="h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
+                className="h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 group-hover:drop-shadow-[0_0_8px_rgba(200,150,62,0.4)]"
                 priority
               />
             </button>
@@ -228,6 +228,18 @@ export function Navbar() {
                 )}
               </motion.button>
             ))}
+          </div>
+
+          <div className="mt-4 px-4">
+            <motion.button
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: navLinks.length * 0.08, duration: 0.3 }}
+              onClick={() => handleNavClick('sitemap')}
+              className="relative flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 text-foreground/70 hover:bg-accent hover:text-foreground"
+            >
+              Sitemap
+            </motion.button>
           </div>
 
           <div className="mt-6 px-4">

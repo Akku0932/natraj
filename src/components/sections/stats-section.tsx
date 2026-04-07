@@ -53,7 +53,7 @@ function AnimatedCounter({
   }, [isInView, target])
 
   return (
-    <span className="gradient-text tabular-nums">
+    <span className="gold-shimmer-text tabular-nums">
       {count.toLocaleString('en-IN')}
       {suffix}
     </span>
@@ -113,7 +113,7 @@ export default function StatsSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className={`relative text-center ${floatClasses[index]}`}
+              className={`card-shine relative text-center ${floatClasses[index]}`}
             >
               {/* Decorative gold ring behind counter */}
               <div className="relative mx-auto flex items-center justify-center">

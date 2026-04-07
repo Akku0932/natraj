@@ -338,7 +338,7 @@ Work Log:
     - "Enquire on WhatsApp" button (green-600 bg, MessageCircle icon, links to wa.me/919868225911)
     - WhatsApp link pre-fills message with product name
   - Category badge now clickable - navigates to products page filtered by that category
-  - Uses store's setCurrentPage('products') and setSelectedCategory(category.slug)
+    - Uses store's setCurrentPage('products') and setSelectedCategory(category.slug)
   - Added "Contact for Price" gold outline badge when product has no price
   - Modal fade-in handled by AnimatePresence on lightbox overlay
   - Fixed pre-existing lint error in navbar.tsx (setMounted in useEffect) with eslint-disable comment
@@ -712,31 +712,149 @@ Work Log:
 ### New Components Created:
 1. **CatalogDownloadSection** (`/src/components/sections/catalog-section.tsx`) — Product catalog download section with dark charcoal background, gold dot pattern, floating particles, two CTA buttons (PDF download + physical copy request)
 2. **CookieConsent** (`/src/components/cookie-consent.tsx`) — GDPR-style cookie consent banner with glassmorphism, accept/customize buttons, cookie persistence, 1.5s delayed entrance animation
-3. **SectionTransition** (`/src/components/section-transition.tsx`) — Animated dividers between page sections with 3 variants (gold-line, dots, gradient)
-4. **ProcessSection** (`/src/components/sections/process-section.tsx`) — Manufacturing process timeline (5 steps) with alternating left/right layout, connecting lines, gold accent cards
-5. **CertificationsSection** (`/src/components/sections/certifications-section.tsx`) — Certifications and trust badges section with animated counters, quality badges, and dark background
-6. **Breadcrumbs** (`/src/components/breadcrumbs.tsx`) — Breadcrumb navigation component for subpages (About, Products, Contact, Terms, Privacy)
-7. **DarkModeToggle** (`/src/components/dark-mode-toggle.tsx`) — Animated sun/moon icon toggle with smooth rotation and scale transitions
+3. **SectionTransition** (`/src/components/section-transition.tsx`) — Reusable section divider component with 4 variants (gold-line with center diamond, gradient fade, 3 gold dots, zigzag pattern)
 
-### Features Added:
-1. Dark mode toggle integrated into navbar (desktop and mobile)
-2. Cookie consent banner with localStorage persistence
-3. Section transitions between home page sections
-4. Manufacturing process timeline on home page
-5. Certifications section with animated counters
-6. Breadcrumb navigation on all subpages
-7. Catalog download CTA section on home page
-8. Back-to-top button in footer
+### New Features Added:
+1. **Breadcrumb navigation** on Products page (Home > Products, with gold category badge when filtered)
+2. **Breadcrumb navigation** on About page (Home > About)
+3. **Wishlist/Save feature** — Heart icon on product cards, toggleWishlist/isInWishlist in Zustand store, filled/outlined states with red color
+4. **Catalog download section** on home page (between Categories and CTA) with PDF download link
+5. **Cookie consent banner** (fixed bottom-center, glassmorphism, persist cookie for 365 days)
+6. **Section transition dividers** between home page sections (gold-line, dots, gradient variants)
+7. **Animated stat counters** in Features section (count-up animation on scroll, handles decimals and integers)
+8. **"The Natraj Advantage" comparison table** on About page (Natraj vs Typical Competitors, 4 comparison rows)
+9. **WhatsApp Quick Chat card** on Contact page (green styling, links to wa.me with pre-filled message)
+10. **"View on Google Maps" link** below embedded map on Contact page
+11. **Map gradient overlays** (top/bottom fade) to blend Google Maps embed with page
+12. **Dark mode smooth transitions** (0.3s transitions on background-color, border-color, color for all elements)
+13. **Timeline scroll progress indicator** on About page (gold dot with ping animation tracks scroll progress)
 
 ### Styling Improvements:
-1. Dark mode contrast improvements throughout (deeper backgrounds, brighter foregrounds)
-2. Gold accent refinements for dark mode
-3. Animated hero gradient overlay (gold-to-copper, 12s cycle)
-4. Navbar link hover: gold underline slides from left
-5. Glass effect enhancement for dark mode with gold-tinted borders
-6. Card shine utility class (.card-shine) for premium hover effects
-7. Scrollbar styling with gold gradient thumb (light and dark modes)
-8. Box-shadow added to global theme transition for smoother dark mode switches
+1. **Products section**: Enhanced empty state with gradient circle Package icon, gold ring outline, improved text
+2. **FAQ section**: Added 2 new FAQ items (installation services, payment methods) — total now 10
+3. **FAQ section**: Added "Need Help?" glass-morphism card with Headphones icon and Contact Support button
+4. **Navbar**: Added `nav-link-hover` CSS class with expanding gold underline on hover for desktop nav links
+5. **Navbar**: Enhanced "Get Quote" button shadow (shadow-gold/20 → shadow-gold/30)
+6. **Navbar**: Added logo scale effect on hover (group-hover:scale-[1.02])
+7. **WhatsApp button**: Added tooltip ("Chat with us!") with 300ms hover delay, dark bg with arrow
+8. **WhatsApp button**: Added ping notification dot (red, auto-hides after 10 seconds)
+9. **WhatsApp button**: Added hover scale effect (whileHover scale 1.1)
+10. **Loading screen**: Added slow-rotating radial gradient background (10s cycle, 0.03 opacity)
+11. **Loading screen**: Added secondary thinner progress bar (h-0.5, gold gradient at 30% opacity, independent timing)
+12. **Loading screen**: Added 3 orbiting gold dots around NATRAJ text (8s/12s/16s durations)
+13. **Stats section**: Changed to Indian number formatting (toLocaleString('en-IN')) for lakhs/crores
+14. **Stats section**: Added animated shimmer gold line at top of section
+15. **Footer**: Added decorative diagonal gold line pattern overlay (45° lines at 0.03 opacity)
+16. **Footer**: Added subtle gold text-shadow on company description first sentence
+17. **Contact section**: Added gradient overlays on Google Maps embed (top/bottom fade)
+18. **Global CSS**: Added `.nav-link-hover` class with gold gradient expanding underline on hover
+19. **Global CSS**: Added smooth dark mode transitions (0.3s for background-color, border-color, color)
+20. **Global CSS**: Added `.no-theme-transition` override for media elements
+
+### Home Page Section Order (updated):
+Hero → SectionTransition(gold-line) → Features → Stats → Testimonials → SectionTransition(dots) → Categories → CatalogDownload → CTA → FAQ → SectionTransition(gradient)
+
+Stage Summary:
+- All lint errors resolved (0 errors, 0 warnings)
+- 3 new components created
+- 13 new features added
+- 20+ styling improvements
+- Home page now has section transition dividers between major sections
+- Products page has breadcrumb navigation and enhanced empty state
+- About page has comparison table and timeline scroll progress indicator
+- Contact page has WhatsApp quick chat card and enhanced map section
+- Cookie consent banner for privacy compliance
+- Wishlist feature integrated into product cards and Zustand store
+- Animated stat counters in Features section
+- Smooth dark mode transitions globally
+- Enhanced WhatsApp floating button with tooltip and notification dot
+- Enhanced loading screen with orbiting particles and secondary progress bar
+- All changes maintain gold/copper/charcoal design system consistency
+- All components responsive (mobile-first)
+
+Current Project Status:
+- COMPLETE production-ready corporate website
+- 16 product categories with 50+ products in database
+- Hero section with 239-frame Apple-style scroll animation
+- Premium gold/copper/charcoal design system with dark mode support
+- Comprehensive Framer Motion animations throughout
+- Loading screen with orbiting particles, scroll progress indicator
+- Section transition dividers between home page sections
+- Testimonials section (6 reviews, trusted-by logos, average rating badge)
+- Product catalog download section (PDF + physical copy request)
+- FAQ section (10 items, accordion, "Need Help?" card)
+- Product comparison feature (up to 4 products side-by-side)
+- Product wishlist/heart save feature
+- Product sorting (5 options), filtering, search, image lightbox
+- Breadcrumb navigation on Products and About pages
+- "The Natraj Advantage" comparison table on About page
+- WhatsApp floating button with tooltip and notification dot
+- Cookie consent banner
+- Newsletter subscription in footer
+- Social media links, animated gold sweep line, back-to-top
+- Contact form with WhatsApp quick chat, Google Maps with overlays
+- Terms & Conditions, Privacy Policy (full content pages)
+- JSON-LD LocalBusiness structured data for SEO
+- Smooth dark mode transitions (0.3s)
+- Fully responsive (mobile-first) design
+
+Unresolved Issues / Risks:
+1. Dev server process management in sandbox (auto-managed by system)
+2. Product images are PNG format (may need WebP optimization for production)
+3. SEO limited for individual product pages (SPA-based client-side routing)
+4. No favicon.ico in public root (mentioned in previous cycle, still not addressed)
+5. Hero section's 300vh scroll height may feel long on some devices (could be dynamic)
+6. The "Customize" button on cookie consent currently just accepts all cookies (simplified behavior)
+
+Priority Recommendations for Next Phase:
+1. Add favicon.ico and apple-touch-icon for branding
+2. Optimize product images (WebP conversion, responsive srcset)
+3. Add a blog/news section for content marketing and SEO
+4. Add PWA support (manifest.json, service worker)
+5. Implement proper cookie preference management (categories: necessary/analytical/marketing)
+6. Add structured data (JSON-LD) for FAQ (FAQPage schema)
+7. Performance audit: Lighthouse scoring optimization
+8. Add product PDF catalog download as a more prominent CTA
+9. Consider adding a live chat widget or chatbot
+10. Add product video demonstrations or 360° views
+
+---
+Task ID: 4-b
+Agent: styling-expert
+Task: Enhance dark mode and add visual polish
+
+Work Log:
+- Enhanced dark mode CSS variables for better contrast
+  - Darkened --background from oklch(0.13) to oklch(0.08) for deeper near-black
+  - Brightened --foreground from oklch(0.95) to oklch(0.97) for crisper white
+  - Improved --card contrast from oklch(0.18) to oklch(0.13) for subtle distinction from background
+  - Reduced --border opacity from oklch(0.25) to oklch(0.20) for subtler visible borders
+  - Boosted --primary gold vibrancy from oklch(0.72) to oklch(0.75) in dark mode
+  - Tightened sidebar/accent/muted values for cohesive dark surfaces
+- Added animated gradient background to hero section
+  - Created .hero-gradient-animated CSS class with gold/copper/warm-amber gradient
+  - Uses 400% background-size with 12s ease infinite animation
+  - 4-stop diagonal gradient at very low opacity (5-8%) placed at z-[9] behind hero-overlay
+- Added smooth gold underline hover effect to navbar links
+  - Changed .nav-link-hover from centered expanding to left-sliding underline
+  - Uses cubic-bezier(0.4, 0, 0.2, 1) easing for natural motion
+  - Underline grows to 70% width from left on hover
+- Created .card-shine CSS utility with diagonal light streak
+  - ::before pseudo-element with 105deg diagonal gradient (gold/copper at 3-5% opacity)
+  - Transitions from left: -100% to left: 150% on hover (0.6s cubic-bezier)
+  - Enhanced opacity in dark mode (4-7%) for better visibility
+  - overflow: hidden and pointer-events: none for clean clipping
+- Improved scrollbar styling with gold accents
+  - Reduced width from 8px to 6px for thinner appearance
+  - Added scrollbar-width: thin for Firefox support
+  - Gold gradient thumb (top-to-bottom) with rounded ends (3px radius)
+  - Separate dark mode thumb with muted gold gradient
+  - Hover state brightens gradient for feedback
+- Enhanced .dark .glass with deeper background and gold-tinted border
+  - Background: rgba(10, 10, 10, 0.65) for darker glass
+  - Border: rgba(200, 150, 62, 0.06) for subtle gold edge
+  - Added box-shadow for depth
+- Added box-shadow to global theme transition for smoother dark mode switches
 - ESLint: 0 errors
 
 Stage Summary:
@@ -746,31 +864,3 @@ Stage Summary:
 - .card-shine utility class ready for product/feature cards
 - Scrollbar styled with gold gradient thumb in both light and dark modes
 - Glass effect enhanced for dark mode with gold-tinted borders
-
----
-Task ID: 4
-Agent: bugfix-feature-agent
-Task: Fix bugs, add sitemap page, FAQ JSON-LD, apply card-shine
-
-Work Log:
-- Fixed lucide-react imports in /src/app/page.tsx: replaced single ChevronRight import with expanded imports (ChevronRight, FileText, LayoutGrid, Zap, ArrowRight, MessageCircle, Mail)
-- Replaced existing basic sitemap page in page.tsx with beautiful redesigned version featuring:
-  - Dark charcoal header with radial gradient and gradient-text heading
-  - Three organized sections: Pages (6 navigation cards in 3-col grid), Product Categories (card with CTA button), Quick Actions (WhatsApp + Request Quote)
-  - Motion animations: staggered card reveals, whileHover scale/translate, whileTap scale
-  - card-shine class on page navigation cards
-  - Breadcrumbs navigation
-  - Consistent gold/copper/charcoal design system
-- Added FAQPage JSON-LD schema to /src/app/layout.tsx with all 10 FAQ questions/answers from faq-section.tsx
-  - Schema includes proper @type Question/Answer structure for Google rich results
-  - Added as second <script type="application/ld+json"> tag alongside existing LocalBusiness schema
-- Applied card-shine CSS class to feature cards in /src/components/sections/features-section.tsx
-- Applied card-shine CSS class to stat cards in /src/components/sections/stats-section.tsx
-- Ran ESLint: 0 errors, 0 warnings
-
-Stage Summary:
-- Unused import issue resolved by expanding to include all needed lucide-react icons
-- Sitemap page completely redesigned with premium UI matching site design system
-- FAQPage structured data added for improved SEO (Google FAQ rich snippets)
-- card-shine effect applied to feature cards and stat cards for enhanced visual polish
-- All changes maintain gold/copper/charcoal design consistency
