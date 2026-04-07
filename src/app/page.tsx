@@ -1,6 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
+import { ChevronRight } from 'lucide-react'
 import { useStore } from '@/store/use-store'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
@@ -17,11 +18,14 @@ import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
 import CategoriesPreview from '@/components/sections/categories-preview'
 import CTASection from '@/components/sections/cta-section'
+import CatalogDownloadSection from '@/components/sections/catalog-section'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
+import { CookieConsent } from '@/components/cookie-consent'
+import { SectionTransition } from '@/components/section-transition'
 
 const pageVariants = {
   initial: { opacity: 0, y: 20, scale: 0.98, filter: 'blur(4px)' },
@@ -35,7 +39,7 @@ const pageTransition = {
 }
 
 export default function Home() {
-  const { currentPage } = useStore()
+  const { currentPage, setCurrentPage } = useStore()
 
   return (
     <>
@@ -54,12 +58,16 @@ export default function Home() {
               transition={pageTransition}
             >
               <HeroSection />
+              <SectionTransition variant="gold-line" />
               <FeaturesSection />
               <StatsSection />
               <TestimonialsSection />
+              <SectionTransition variant="dots" />
               <CategoriesPreview />
+              <CatalogDownloadSection />
               <CTASection />
               <FaqSection />
+              <SectionTransition variant="gradient" />
             </motion.div>
           )}
 
@@ -73,6 +81,19 @@ export default function Home() {
               transition={pageTransition}
             >
               <AboutSection />
+              <div className="flex items-center justify-center border-b border-border/30 py-4 px-4 sm:px-6 lg:px-8">
+                <div className="mx-auto flex w-full max-w-7xl items-center text-sm text-muted-foreground">
+                  <button
+                    type="button"
+                    onClick={() => setCurrentPage('home')}
+                    className="transition-colors hover:text-gold"
+                  >
+                    Home
+                  </button>
+                  <ChevronRight className="mx-2 h-3.5 w-3.5" />
+                  <span className="text-sm font-medium text-gold">About</span>
+                </div>
+              </div>
               <CTASection />
             </motion.div>
           )}
@@ -609,6 +630,7 @@ export default function Home() {
       <PrivacyModal />
       <ProductDetailModal />
       <ProductComparisonModal />
+      <CookieConsent />
     </>
   )
 }

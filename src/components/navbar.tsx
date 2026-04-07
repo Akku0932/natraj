@@ -73,7 +73,7 @@ export function Navbar() {
                 alt="Natraj Electricals"
                 width={140}
                 height={40}
-                className="h-9 w-auto object-contain md:h-11 transition-opacity duration-300 group-hover:opacity-90"
+                className="h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90"
                 priority
               />
             </button>
@@ -84,7 +84,7 @@ export function Navbar() {
                 <button
                   key={link.page}
                   onClick={() => handleNavClick(link.page)}
-                  className="relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-gold"
+                  className="nav-link-hover relative px-4 py-2 text-sm font-medium transition-colors duration-200 hover:text-gold"
                 >
                   <span
                     className={
@@ -149,7 +149,7 @@ export function Navbar() {
               </Button>
               <Button
                 onClick={() => handleNavClick('contact')}
-                className="gold-gradient border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300"
+                className="gold-gradient border-0 text-white shadow-lg shadow-gold/30 hover:shadow-gold/40 transition-all duration-300"
                 size="sm"
               >
                 Get Quote

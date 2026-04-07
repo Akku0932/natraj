@@ -1,20 +1,46 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useState, useEffect } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 
 export function WhatsAppButton() {
+  const [showTooltip, setShowTooltip] = useState(false)
+  const [showPing, setShowPing] = useState(true)
+  const [hoverTimeout, setHoverTimeout] = useState<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPing(false)
+    }, 10000)
+    return () => clearTimeout(timer)
+  }, [])
+
+  const handleMouseEnter = () => {
+    const timeout = setTimeout(() => {
+      setShowTooltip(true)
+    }, 300)
+    setHoverTimeout(timeout)
+  }
+
+  const handleMouseLeave = () => {
+    if (hoverTimeout) clearTimeout(hoverTimeout)
+    setShowTooltip(false)
+  }
+
   return (
     <motion.a
       href="https://wa.me/919868225911?text=Hello%20Natraj%20Electricals"
       target="_blank"
       rel="noopener noreferrer"
-      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/30 transition-colors hover:bg-[#20BD5A] md:h-14 md:w-14 md:bottom-8 md:right-8"
+      className="fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-[#25D366] shadow-lg shadow-[#25D366]/30 md:h-14 md:w-14 md:bottom-8 md:right-8"
       initial={{ scale: 0, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
       transition={{ delay: 1, type: 'spring', stiffness: 200, damping: 15 }}
       whileHover={{ scale: 1.1 }}
       whileTap={{ scale: 0.95 }}
       aria-label="Chat on WhatsApp"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
     >
       {/* WhatsApp SVG Icon */}
       <motion.svg
@@ -40,6 +66,39 @@ export function WhatsAppButton() {
 
       {/* Pulse ring */}
       <span className="absolute inset-0 rounded-full bg-[#25D366] animate-ping opacity-20 pointer-events-none" />
+
+      {/* Ping notification dot */}
+      <AnimatePresence>
+        {showPing && (
+          <motion.span
+            initial={{ scale: 0 }}
+            animate={{ scale: 1 }}
+            exit={{ scale: 0 }}
+            transition={{ duration: 0.3 }}
+            className="absolute -top-0.5 -right-0.5 flex h-3 w-3 items-center justify-center md:h-3.5 md:w-3.5"
+          >
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-50" />
+            <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-red-600 md:h-2 md:w-2" />
+          </motion.span>
+        )}
+      </AnimatePresence>
+
+      {/* Tooltip */}
+      <AnimatePresence>
+        {showTooltip && (
+          <motion.div
+            initial={{ opacity: 0, x: 10, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: 10, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="absolute right-full mr-3 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-lg bg-charcoal px-3 py-2 text-sm font-medium text-white shadow-lg"
+          >
+            Chat with us!
+            {/* Arrow pointing right */}
+            <div className="absolute -right-1.5 top-1/2 -translate-y-1/2 h-3 w-3 rotate-45 bg-charcoal" />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.a>
   )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Award, Shield, Wrench, Settings, Truck, Headphones } from 'lucide-react'
 import { FloatingParticles } from '@/components/floating-particles'
@@ -49,6 +49,59 @@ const features = [
       'Our dedicated support team is always ready to assist you with technical queries, installation guidance, and after-sales service.',
   },
 ]
+
+function AnimatedStat({ value }: { value: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const isInView = useInView(ref, { once: true, margin: '-40px' })
+  const animatedRef = useRef(false)
+  const [displayValue, setDisplayValue] = useState(value)
+
+  const parseValue = useCallback((val: string) => {
+    const match = val.match(/^([\d.]+)(.*)$/)
+    if (!match) return { num: 0, suffix: val, hasNum: false }
+    return { num: parseFloat(match[1]), suffix: match[2], hasNum: true }
+  }, [])
+
+  useEffect(() => {
+    if (!isInView || animatedRef.current) return
+
+    const { num, suffix, hasNum } = parseValue(value)
+    if (!hasNum) return
+
+    animatedRef.current = true
+    const isDecimal = num % 1 !== 0
+    const duration = 1500
+    const startTime = performance.now()
+
+    function animate(currentTime: number) {
+      const elapsed = currentTime - startTime
+      const progress = Math.min(elapsed / duration, 1)
+      // Ease out cubic
+      const eased = 1 - Math.pow(1 - progress, 3)
+      const currentNum = eased * num
+
+      if (isDecimal) {
+        setDisplayValue(currentNum.toFixed(1) + suffix)
+      } else {
+        setDisplayValue(Math.round(currentNum).toString() + suffix)
+      }
+
+      if (progress < 1) {
+        requestAnimationFrame(animate)
+      } else {
+        if (isDecimal) {
+          setDisplayValue(num.toFixed(1) + suffix)
+        } else {
+          setDisplayValue(Math.round(num).toString() + suffix)
+        }
+      }
+    }
+
+    requestAnimationFrame(animate)
+  }, [isInView, value, parseValue])
+
+  return <span ref={ref}>{displayValue}</span>
+}
 
 const containerVariants = {
   hidden: {},
@@ -155,7 +208,9 @@ export default function FeaturesSection() {
                   <h3 className="mb-1 text-lg font-semibold text-foreground transition-colors group-hover:text-gold">
                     {feature.title}
                   </h3>
-                  <span className="mb-3 inline-block text-sm font-bold gradient-text">{feature.stat}</span>
+                  <span className="mb-3 inline-block text-sm font-bold gradient-text">
+                    <AnimatedStat value={feature.stat} />
+                  </span>
                   <p className="text-sm leading-relaxed text-muted-foreground">
                     {feature.description}
                   </p>

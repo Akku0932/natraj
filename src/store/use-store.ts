@@ -37,6 +37,11 @@ interface StoreState {
   clearCompare: () => void
   isInCompare: (productId: string) => boolean
   toggleCompare: (productId: string) => void
+
+  // Wishlist feature
+  wishlist: string[]
+  toggleWishlist: (productId: string) => void
+  isInWishlist: (productId: string) => boolean
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -91,4 +96,18 @@ export const useStore = create<StoreState>((set) => ({
       if (state.compareList.length >= 4) return state
       return { compareList: [...state.compareList, productId] }
     }),
+
+  // Wishlist feature
+  wishlist: [],
+  toggleWishlist: (productId) =>
+    set((state) => {
+      if (state.wishlist.includes(productId)) {
+        return { wishlist: state.wishlist.filter((id) => id !== productId) }
+      }
+      return { wishlist: [...state.wishlist, productId] }
+    }),
+  isInWishlist: (productId) => {
+    const state = useStore.getState()
+    return state.wishlist.includes(productId)
+  },
 }))

@@ -106,6 +106,20 @@ export function Footer() {
       {/* Top gold accent line */}
       <div className="h-px w-full gold-gradient" />
 
+      {/* Subtle diagonal gold line pattern overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.03]"
+        style={{
+          backgroundImage: `repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 20px,
+            rgba(200, 150, 62, 0.5) 20px,
+            rgba(200, 150, 62, 0.5) 21px
+          )`,
+        }}
+      />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Main footer content */}
         <div className="grid grid-cols-1 gap-8 py-12 sm:grid-cols-2 lg:grid-cols-4 lg:py-16 lg:gap-12">
@@ -129,9 +143,8 @@ export function Footer() {
             </div>
 
             <p className="text-sm leading-relaxed text-white/60">
-              Manufacturer and supplier of premium electrical control panels,
-              automatic changeovers, busbar systems, and more. Serving the
-              industry with excellence since establishment.
+              <span className="[text-shadow:0_0_30px_rgba(200,150,62,0.05)]">Manufacturer and supplier of premium electrical control panels, automatic changeovers, busbar systems, and more.</span>{' '}
+              Serving the industry with excellence since establishment.
             </p>
 
             {/* Social Media Links */}

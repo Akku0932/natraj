@@ -11,6 +11,8 @@ import {
   Eye,
   Calendar,
   MapPin,
+  Check,
+  X as XIcon,
 } from 'lucide-react'
 import { FloatingParticles } from '@/components/floating-particles'
 
@@ -310,9 +312,19 @@ export default function AboutSection() {
 
             {/* Animated progress bar that fills as user scrolls */}
             <motion.div
-              className="absolute left-4 top-0 w-px bg-gradient-to-b from-gold/60 via-gold/30 to-gold/10 md:left-1/2 md:-translate-x-px"
+              className="absolute left-4 top-0 w-px bg-gradient-to-b from-gold/60 via-gold/40 to-gold/20 md:left-1/2 md:-translate-x-px"
               style={{ height: timelineHeight }}
             />
+
+            {/* Small gold dot that moves with scroll progress */}
+            <motion.div
+              className="absolute left-4 -translate-x-1/2 md:left-1/2"
+              style={{ top: timelineHeight }}
+            >
+              <div className="h-2.5 w-2.5 -translate-y-1/2 rounded-full bg-gold shadow-lg shadow-gold/50">
+                <div className="absolute inset-0 animate-ping rounded-full bg-gold/30" />
+              </div>
+            </motion.div>
 
             <motion.div
               variants={containerVariants}
@@ -411,6 +423,104 @@ export default function AboutSection() {
               ))}
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* The Natraj Advantage - Comparison Table */}
+      <section className="relative overflow-hidden py-20 md:py-28">
+        <div className="absolute inset-0 bg-warm-gray" />
+        <div className="gold-gradient-subtle absolute inset-0" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-12 text-center"
+          >
+            <span className="mb-4 inline-block text-sm font-medium uppercase tracking-[0.2em] text-gold">
+              The Natraj Advantage
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              Why We <span className="gradient-text">Stand Out</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-60px' }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto max-w-3xl glass rounded-2xl p-6 sm:p-8"
+          >
+            {/* Column headers */}
+            <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-[1fr_1fr]">
+              <div />
+              <div className="grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <span className="text-sm font-bold gradient-text">Natraj Electricals</span>
+                </div>
+                <div className="text-center">
+                  <span className="text-sm font-medium text-muted-foreground">Typical Competitors</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Divider */}
+            <div className="section-divider mb-6" />
+
+            {/* Comparison rows */}
+            <div className="space-y-0">
+              {[
+                {
+                  label: 'Quality Standards',
+                  natraj: 'ISO 9001:2015 Certified',
+                  others: 'Basic Compliance',
+                },
+                {
+                  label: 'Customization',
+                  natraj: '100% Tailored to Your Needs',
+                  others: 'Standard Options Only',
+                },
+                {
+                  label: 'After-Sales Support',
+                  natraj: '24/7 Dedicated Support',
+                  others: 'Limited Business Hours',
+                },
+                {
+                  label: 'Delivery',
+                  natraj: 'Pan-India with Tracking',
+                  others: 'Regional Only',
+                },
+              ].map((row, i) => (
+                <motion.div
+                  key={row.label}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  className={`grid grid-cols-1 gap-3 py-4 ${i < 3 ? 'border-b border-border/30' : ''} sm:grid-cols-[1fr_1fr]`}
+                >
+                  {/* Label */}
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-semibold text-foreground/80">{row.label}</span>
+                  </div>
+                  {/* Values */}
+                  <div className="grid grid-cols-2 gap-3">
+                    {/* Natraj column */}
+                    <div className="flex items-center gap-2 rounded-lg border-l-2 border-gold/50 bg-gold/5 px-3 py-2">
+                      <Check className="h-4 w-4 shrink-0 text-green-600" />
+                      <span className="text-xs font-medium gradient-text leading-tight">{row.natraj}</span>
+                    </div>
+                    {/* Others column */}
+                    <div className="flex items-center gap-2 rounded-lg bg-muted/50 px-3 py-2">
+                      <XIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+                      <span className="text-xs text-muted-foreground leading-tight">{row.others}</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </motion.div>
         </div>
       </section>
 

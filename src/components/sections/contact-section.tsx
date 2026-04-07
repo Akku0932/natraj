@@ -11,6 +11,8 @@ import {
   CheckCircle,
   AlertCircle,
   Clock3,
+  MessageCircle,
+  ExternalLink,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -449,6 +451,31 @@ export default function ContactSection() {
                   9868225911
                 </a>
               </motion.div>
+
+              {/* WhatsApp Quick Chat Card */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.6 }}
+                className="mt-4 rounded-xl border border-green-500/30 bg-green-50 p-6 text-center dark:bg-green-900/20"
+              >
+                <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40">
+                  <MessageCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
+                </div>
+                <h3 className="mb-1 font-semibold text-foreground">Chat with us on WhatsApp</h3>
+                <p className="mb-4 text-sm text-muted-foreground">
+                  Get instant replies for product queries, pricing, and technical support
+                </p>
+                <a
+                  href="https://wa.me/919868225911?text=Hi%2C%20I%20have%20a%20query%20about%20your%20products"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 rounded-lg bg-green-600 px-5 py-2.5 text-sm font-medium text-white transition-colors hover:bg-green-700"
+                >
+                  <MessageCircle className="h-4 w-4" />
+                  Start Chat
+                </a>
+              </motion.div>
             </motion.div>
           </div>
 
@@ -458,19 +485,38 @@ export default function ContactSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="mt-16 overflow-hidden rounded-2xl border border-border/50"
+            className="mt-16"
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.6743877557526!2d77.23151231508227!3d28.650804982415366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd37b741d057%3A0xcdee88e47393c3f1!2sBhagirath%20Place%2C%20Delhi%2C%20110006!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
-              width="100%"
-              height="400"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Natraj Electricals Location - Bhagirath Place, Delhi"
-              className="w-full"
-            />
+            <div className="relative overflow-hidden rounded-2xl border border-border/50">
+              {/* Gradient overlay at top and bottom of map to blend with page */}
+              <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-background/80 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-16 bg-gradient-to-t from-background/80 to-transparent" />
+
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3501.6743877557526!2d77.23151231508227!3d28.650804982415366!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x390cfd37b741d057%3A0xcdee88e47393c3f1!2sBhagirath%20Place%2C%20Delhi%2C%20110006!5e0!3m2!1sen!2sin!4v1700000000000!5m2!1sen!2sin"
+                width="100%"
+                height="400"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Natraj Electricals Location - Bhagirath Place, Delhi"
+                className="w-full"
+              />
+            </div>
+
+            {/* View on Google Maps link */}
+            <div className="mt-3 text-center">
+              <a
+                href="https://www.google.com/maps/place/Bhagirath+Place,+Delhi,+110006"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-gold"
+              >
+                <ExternalLink className="h-3.5 w-3.5" />
+                View on Google Maps
+              </a>
+            </div>
           </motion.div>
         </div>
       </section>

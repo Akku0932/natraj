@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompareHorizontal, ChevronRight, Trash2 } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompareHorizontal, ChevronRight, Trash2, Package, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -90,7 +90,7 @@ export default function ProductsSection() {
   const [searchInput, setSearchInput] = useState('')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
 
-  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen } = useStore()
+  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen, setCurrentPage, wishlist, toggleWishlist, isInWishlist } = useStore()
 
   // Fetch categories on mount
   useEffect(() => {
@@ -182,6 +182,30 @@ export default function ProductsSection() {
           </motion.p>
         </div>
       </section>
+
+      {/* Breadcrumb Navigation */}
+      <div className="border-b border-border/30 bg-background/50 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
+          <div className="flex items-center gap-2 text-sm">
+            <button
+              onClick={() => setCurrentPage('home')}
+              className="text-gold/60 transition-colors hover:text-gold"
+            >
+              Home
+            </button>
+            <ChevronRight className="h-3.5 w-3.5 text-gold/40" />
+            <span className="text-gold/80 font-medium">Products</span>
+            {selectedCategory && (
+              <>
+                <ChevronRight className="h-3.5 w-3.5 text-gold/40" />
+                <span className="inline-flex items-center rounded-full bg-gold/10 border border-gold/20 px-2.5 py-0.5 text-xs font-medium text-gold">
+                  {categories.find((c) => c.slug === selectedCategory)?.name}
+                </span>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Search & Filter Section */}
       <section className="sticky top-16 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl md:top-20">
@@ -322,12 +346,14 @@ export default function ProductsSection() {
             </div>
           ) : sortedProducts.length === 0 ? (
             <div className="py-20 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                <Search className="h-8 w-8 text-muted-foreground" />
+              <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 to-gold/5 ring-1 ring-gold/20">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gold/20 to-gold/5">
+                  <Package className="h-8 w-8 text-gold/70" />
+                </div>
               </div>
-              <h3 className="text-lg font-semibold text-foreground">No products found</h3>
+              <h3 className="text-lg font-semibold text-foreground">Hmm, no products match your search</h3>
               <p className="mt-2 text-muted-foreground">
-                Try adjusting your search or filter criteria
+                Try adjusting your search query or browse all categories
               </p>
               <Button
                 onClick={() => {
@@ -413,6 +439,22 @@ export default function ProductsSection() {
                           aria-label="Compare product"
                         >
                           <GitCompareHorizontal className="h-4 w-4" />
+                        </button>
+
+                        {/* Wishlist heart icon - bottom left of image */}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleWishlist(product.slug)
+                          }}
+                          className={`absolute bottom-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                            isInWishlist(product.slug)
+                              ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                              : 'bg-black/30 text-white border border-white/20 hover:bg-red-500/80 hover:border-red-500'
+                          }`}
+                          aria-label="Add to wishlist"
+                        >
+                          <Heart className={`h-4 w-4 ${isInWishlist(product.slug) ? 'fill-white' : ''}`} />
                         </button>
 
                         {/* Quick View button - overlay on hover */}

@@ -54,7 +54,7 @@ function AnimatedCounter({
 
   return (
     <span className="gradient-text tabular-nums">
-      {count.toLocaleString()}
+      {count.toLocaleString('en-IN')}
       {suffix}
     </span>
   )
@@ -84,6 +84,23 @@ export default function StatsSection() {
       <div className="absolute inset-0 dot-pattern opacity-60" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Animated shimmer gold line at top */}
+        <div className="relative mb-10 overflow-hidden">
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            animate={isInView ? { opacity: 1, scaleX: 1 } : {}}
+            transition={{ duration: 1.2, delay: 0.2 }}
+            className="h-[2px] w-full bg-gradient-to-r from-transparent via-gold to-transparent"
+            style={{ transformOrigin: 'center' }}
+          />
+          <motion.div
+            initial={{ x: '-100%' }}
+            animate={isInView ? { x: '100%' } : {}}
+            transition={{ duration: 2, delay: 0.5, ease: 'easeInOut' }}
+            className="absolute top-0 left-0 h-[2px] w-1/3 bg-gradient-to-r from-transparent via-white/60 to-transparent"
+          />
+        </div>
+
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}

@@ -525,3 +525,34 @@
 .dark .prose-gold a:hover {
   color: #C8963E;
 }
+
+/* Nav link hover underline */
+.nav-link-hover {
+  position: relative;
+}
+.nav-link-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  width: 0;
+  height: 1.5px;
+  background: linear-gradient(90deg, #C8963E, #E8C77B);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+.nav-link-hover:hover::after {
+  width: 60%;
+}
+
+/* Smooth dark mode transitions */
+*, *::before, *::after {
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.15s ease;
+}
+
+/* Override transitions for elements that shouldn't animate on theme change */
+.no-theme-transition, .no-theme-transition *,
+img, video, canvas, iframe, [role="img"] {
+  transition: none !important;
+}

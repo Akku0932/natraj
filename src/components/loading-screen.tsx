@@ -83,6 +83,21 @@ export function LoadingScreen() {
             <div className="w-[600px] h-[600px] rounded-full bg-gold/[0.03] blur-3xl" />
           </div>
 
+          {/* Slow-rotating radial gradient background animation (10s cycle) */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{ opacity: 0.03 }}
+          >
+            <motion.div
+              className="absolute inset-0"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 10, repeat: Infinity, ease: 'linear' }}
+              style={{
+                background: 'radial-gradient(ellipse at 30% 50%, rgba(200, 150, 62, 0.8) 0%, transparent 50%)',
+              }}
+            />
+          </div>
+
           {/* Animated circuit lines - decorative background */}
           <CircuitPattern />
 
@@ -93,7 +108,7 @@ export function LoadingScreen() {
             transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
             className="relative z-10 flex flex-col items-center"
           >
-            {/* Animated Zap icon */}
+            {/* Animated Zap icon with orbiting dots */}
             <div className="relative mb-8">
               {/* Outer ring glow */}
               <motion.div
@@ -164,15 +179,43 @@ export function LoadingScreen() {
             </div>
 
             {/* Company Name with gold text-shadow for premium feel */}
-            <motion.h1
-              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-3"
-              style={{ textShadow: '0 0 30px rgba(200, 150, 62, 0.15), 0 0 60px rgba(200, 150, 62, 0.08)' }}
-              initial={{ opacity: 0, letterSpacing: '0.5em' }}
-              animate={{ opacity: 1, letterSpacing: '0.2em' }}
-              transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            >
-              NATRAJ
-            </motion.h1>
+            <div className="relative">
+              {/* 3 small gold dots that orbit around the NATRAJ text */}
+              <motion.div
+                className="absolute -top-8 -right-6 h-1 w-1 rounded-full bg-gold/40"
+                animate={{
+                  rotate: [0, 360],
+                }}
+                transition={{ duration: 8, repeat: Infinity, ease: 'linear' }}
+                style={{ transformOrigin: '70px 44px' }}
+              />
+              <motion.div
+                className="absolute -top-6 -left-4 h-1 w-1 rounded-full bg-gold/40"
+                animate={{
+                  rotate: [120, 480],
+                }}
+                transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+                style={{ transformOrigin: '80px 48px' }}
+              />
+              <motion.div
+                className="absolute -bottom-8 -left-6 h-1 w-1 rounded-full bg-gold/40"
+                animate={{
+                  rotate: [240, 600],
+                }}
+                transition={{ duration: 16, repeat: Infinity, ease: 'linear' }}
+                style={{ transformOrigin: '90px 52px' }}
+              />
+
+              <motion.h1
+                className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-3"
+                style={{ textShadow: '0 0 30px rgba(200, 150, 62, 0.15), 0 0 60px rgba(200, 150, 62, 0.08)' }}
+                initial={{ opacity: 0, letterSpacing: '0.5em' }}
+                animate={{ opacity: 1, letterSpacing: '0.2em' }}
+                transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                NATRAJ
+              </motion.h1>
+            </div>
 
             <motion.p
               className="text-base sm:text-lg md:text-xl font-light tracking-[0.4em] text-gold-light/80 mb-12"
@@ -225,6 +268,18 @@ export function LoadingScreen() {
                   />
                 </motion.div>
               </div>
+
+              {/* Secondary progress bar (thinner, 30% opacity, independent timing) */}
+              <motion.div
+                className="relative mt-2 h-[1px] bg-white/5 rounded-full overflow-hidden"
+              >
+                <motion.div
+                  className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-gold-dark/30 via-gold/30 to-gold-light/30"
+                  initial={{ width: '0%' }}
+                  animate={{ width: `${Math.min(progress + 5, 100)}%` }}
+                  transition={{ duration: 0.15, ease: 'linear' }}
+                />
+              </motion.div>
 
               {/* Progress indicator dot */}
               <motion.div

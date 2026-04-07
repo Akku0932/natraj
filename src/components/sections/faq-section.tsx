@@ -2,13 +2,15 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Plus, X } from 'lucide-react'
+import { Plus, X, Headphones } from 'lucide-react'
 import {
   Accordion,
   AccordionItem,
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
+import { Button } from '@/components/ui/button'
+import { useStore } from '@/store/use-store'
 
 const faqs = [
   {
@@ -51,6 +53,16 @@ const faqs = [
     answer:
       'You can request a quote through our contact form on the website, call us directly at +91 98682 25911, or message us on WhatsApp. We typically respond within 24 hours with a detailed quotation.',
   },
+  {
+    question: 'Do you provide installation services?',
+    answer:
+      'Yes, our team provides professional installation support and commissioning services for all our electrical panels. We ensure proper setup and testing before handover.',
+  },
+  {
+    question: 'What payment methods do you accept?',
+    answer:
+      'We accept bank transfers (NEFT/RTGS), cheque payments, and UPI. For large orders, we offer flexible payment terms including partial advance and milestone-based payments.',
+  },
 ]
 
 const containerVariants = {
@@ -71,6 +83,37 @@ const itemVariants = {
     y: 0,
     transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] },
   },
+}
+
+function NeedHelpCard({ isInView }: { isInView: boolean }) {
+  const { setCurrentPage } = useStore()
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, delay: 1 }}
+      className="mt-12"
+    >
+      <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-8 text-center backdrop-blur-md sm:p-10">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gold/10">
+          <Headphones className="h-7 w-7 text-gold" />
+        </div>
+        <h3 className="text-lg font-semibold text-white">
+          Can&apos;t find what you&apos;re looking for?
+        </h3>
+        <p className="mx-auto mt-2 max-w-md text-sm text-white/50">
+          Our team is here to help you with any questions about our products or services.
+        </p>
+        <Button
+          onClick={() => setCurrentPage('contact')}
+          className="gold-gradient mt-6 border-0 px-8 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-shadow"
+        >
+          Contact Support
+        </Button>
+      </div>
+    </motion.div>
+  )
 }
 
 export default function FaqSection() {
@@ -179,6 +222,9 @@ export default function FaqSection() {
             </a>
           </p>
         </motion.div>
+
+        {/* Need Help? Card */}
+        <NeedHelpCard isInView={isInView} />
       </div>
     </section>
   )
