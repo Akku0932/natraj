@@ -129,7 +129,7 @@ export default function HeroSection() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <div className="glass rounded-full px-8 py-3">
+          <div className="glass-dark rounded-full px-8 py-3">
             <h1 className="text-2xl font-bold tracking-wider md:text-3xl">
               <span className="gradient-text">NATRAJ</span>{' '}
               <span className="text-white/90 font-light tracking-widest">ELECTRICALS</span>
@@ -189,8 +189,8 @@ export default function HeroSection() {
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-8 left-4 z-20 hidden md:block animate-float-slow"
         >
-          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+          <div className="glass-dark flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/15">
               <Calendar className="h-4 w-4 text-gold" />
             </div>
             <div>
@@ -204,8 +204,8 @@ export default function HeroSection() {
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-24 left-12 z-20 hidden md:block animate-float-medium"
         >
-          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+          <div className="glass-dark flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/15">
               <Package className="h-4 w-4 text-gold" />
             </div>
             <div>
@@ -219,8 +219,8 @@ export default function HeroSection() {
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-16 right-4 z-20 hidden md:block animate-float-fast"
         >
-          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+          <div className="glass-dark flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/15">
               <Award className="h-4 w-4 text-gold" />
             </div>
             <div>

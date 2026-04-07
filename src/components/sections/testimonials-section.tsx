@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react'
+import { Star, Quote, ChevronLeft, ChevronRight, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import {
   Carousel,
@@ -45,13 +45,22 @@ const testimonials = [
   },
 ]
 
+const trustedBy = [
+  'L&T Construction',
+  'Tata Motors',
+  'DLF Ltd',
+  'NHAI',
+  'Siemens',
+  'Schneider',
+]
+
 function StarRating() {
   return (
-    <div className="flex gap-1">
+    <div className="flex gap-0.5">
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className="h-4 w-4 fill-gold text-gold"
+          className="h-4 w-4 fill-gold text-gold drop-shadow-[0_0_4px_rgba(200,150,62,0.4)]"
         />
       ))}
     </div>
@@ -74,8 +83,8 @@ function TestimonialCard({
       className="h-full"
     >
       <div className="relative h-full overflow-hidden rounded-2xl border border-gold/10 bg-card p-6 md:p-8 transition-all duration-500 hover:border-gold/25 hover:shadow-xl hover:shadow-gold/5 group">
-        {/* Subtle gold gradient accent top */}
-        <div className="absolute left-0 top-0 h-1 w-full gold-gradient opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        {/* Gold left border accent (always visible) */}
+        <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold-light to-copper" />
 
         {/* Quote icon */}
         <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10">
@@ -130,7 +139,7 @@ export default function TestimonialsSection() {
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="mx-auto mb-14 max-w-2xl text-center">
+        <div className="mx-auto mb-8 max-w-2xl text-center">
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
@@ -157,6 +166,63 @@ export default function TestimonialsSection() {
             Hear what our valued customers have to say about their experience
             working with Natraj Electricals
           </motion.p>
+        </div>
+
+        {/* Average Rating Badge */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={isInView ? { opacity: 1, scale: 1 } : {}}
+          transition={{ duration: 0.5, delay: 0.25 }}
+          className="mx-auto mb-6 flex justify-center"
+        >
+          <div className="inline-flex items-center gap-2 rounded-full bg-gold/10 px-5 py-2 border border-gold/20">
+            <Trophy className="h-4 w-4 text-gold" />
+            <span className="text-sm font-bold gradient-text">5.0/5</span>
+            <span className="text-sm text-muted-foreground">Average Rating</span>
+            <div className="flex gap-0.5 ml-1">
+              {Array.from({ length: 5 }).map((_, i) => (
+                <Star
+                  key={i}
+                  className="h-3.5 w-3.5 fill-gold text-gold drop-shadow-[0_0_3px_rgba(200,150,62,0.3)]"
+                />
+              ))}
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Trusted By logos */}
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mx-auto mb-12 max-w-2xl text-center"
+        >
+          <p className="mb-3 text-xs font-medium uppercase tracking-[0.15em] text-muted-foreground">
+            Trusted by leading organizations
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-2">
+            {trustedBy.map((company) => (
+              <span
+                key={company}
+                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground border border-border/50"
+              >
+                {company}
+              </span>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Mobile scroll progress indicator */}
+        <div className="mb-6 md:hidden">
+          <div className="mx-auto h-1 max-w-xs overflow-hidden rounded-full bg-muted">
+            <motion.div
+              className="h-full rounded-full bg-gradient-to-r from-gold-dark via-gold to-gold-light"
+              initial={{ width: '16.66%' }}
+              animate={{ width: '100%' }}
+              transition={{ duration: 12, ease: 'linear' }}
+            />
+          </div>
+          <p className="mt-1.5 text-center text-[10px] text-muted-foreground">Swipe to explore reviews</p>
         </div>
 
         {/* Desktop: 3-column grid */}

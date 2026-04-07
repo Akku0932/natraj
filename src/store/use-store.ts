@@ -27,6 +27,16 @@ interface StoreState {
 
   privacyOpen: boolean
   setPrivacyOpen: (open: boolean) => void
+
+  // Comparison feature
+  compareList: string[]
+  compareOpen: boolean
+  setCompareOpen: (open: boolean) => void
+  addToCompare: (productId: string) => void
+  removeFromCompare: (productId: string) => void
+  clearCompare: () => void
+  isInCompare: (productId: string) => boolean
+  toggleCompare: (productId: string) => void
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -53,4 +63,32 @@ export const useStore = create<StoreState>((set) => ({
 
   privacyOpen: false,
   setPrivacyOpen: (open) => set({ privacyOpen: open }),
+
+  // Comparison feature
+  compareList: [],
+  compareOpen: false,
+  setCompareOpen: (open) => set({ compareOpen: open }),
+  addToCompare: (productId) =>
+    set((state) => {
+      if (state.compareList.length >= 4) return state
+      if (state.compareList.includes(productId)) return state
+      return { compareList: [...state.compareList, productId] }
+    }),
+  removeFromCompare: (productId) =>
+    set((state) => ({
+      compareList: state.compareList.filter((id) => id !== productId),
+    })),
+  clearCompare: () => set({ compareList: [], compareOpen: false }),
+  isInCompare: (productId) => {
+    const state = useStore.getState()
+    return state.compareList.includes(productId)
+  },
+  toggleCompare: (productId) =>
+    set((state) => {
+      if (state.compareList.includes(productId)) {
+        return { compareList: state.compareList.filter((id) => id !== productId) }
+      }
+      if (state.compareList.length >= 4) return state
+      return { compareList: [...state.compareList, productId] }
+    }),
 }))

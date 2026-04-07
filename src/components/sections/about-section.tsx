@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useCallback } from 'react'
-import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring, useScroll, useTransform } from 'framer-motion'
 import {
   Award,
   Lightbulb,
@@ -38,6 +38,13 @@ const milestones = [
     title: 'Innovation Hub',
     description:
       'Launched smart control panel solutions and embraced modern automation technologies to meet the evolving needs of our clients.',
+  },
+  {
+    year: '2024 - Present',
+    title: 'Smart Manufacturing',
+    current: true,
+    description:
+      'Pioneering IoT-enabled smart panels and digital manufacturing to lead the next era of electrical control solutions in India.',
   },
 ]
 
@@ -85,6 +92,13 @@ const itemVariants = {
   },
 }
 
+const inlineStats = [
+  { value: '25+', label: 'Years' },
+  { value: '5000+', label: 'Panels' },
+  { value: '200+', label: 'Clients' },
+  { value: '16', label: 'Categories' },
+]
+
 function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -124,6 +138,14 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
 export default function AboutSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
+
+  // Timeline scroll-based progress bar
+  const timelineRef = useRef<HTMLDivElement>(null)
+  const { scrollYProgress: timelineProgress } = useScroll({
+    target: timelineRef,
+    offset: ['start end', 'end start'],
+  })
+  const timelineHeight = useTransform(timelineProgress, [0.1, 0.8], ['0%', '100%'])
 
   return (
     <div ref={ref}>
@@ -181,7 +203,29 @@ export default function AboutSection() {
                 specialize in a wide range of electrical panels designed for industrial and
                 commercial applications.
               </p>
-              <p className="mt-6 text-lg leading-relaxed text-foreground/80 md:text-xl">
+
+              {/* Inline stats row with gold separators */}
+              <motion.div
+                initial={{ opacity: 0, y: 15 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+                className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-6"
+              >
+                {inlineStats.map((stat, i) => (
+                  <div key={stat.label} className="flex items-center gap-2">
+                    <div className="text-center">
+                      <span className="text-xl sm:text-2xl font-bold gradient-text">{stat.value}</span>
+                      <span className="ml-1 text-sm text-muted-foreground">{stat.label}</span>
+                    </div>
+                    {i < inlineStats.length - 1 && (
+                      <div className="h-4 w-[2px] rounded-full bg-gold/30" />
+                    )}
+                  </div>
+                ))}
+              </motion.div>
+
+              <p className="mt-8 text-lg leading-relaxed text-foreground/80 md:text-xl">
                 With over <strong className="gradient-text">25 years</strong> of expertise, we
                 combine traditional craftsmanship with modern engineering to create panels that are
                 safe, reliable, and built to last. Our commitment to{' '}
@@ -244,7 +288,7 @@ export default function AboutSection() {
       </section>
 
       {/* Timeline */}
-      <section className="relative overflow-hidden py-20 md:py-28">
+      <section ref={timelineRef} className="relative overflow-hidden py-20 md:py-28">
         <div className="absolute inset-0 bg-charcoal" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,150,62,0.06)_0%,transparent_60%)]" />
         <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -261,8 +305,14 @@ export default function AboutSection() {
           </motion.div>
 
           <div className="relative">
-            {/* Timeline line */}
-            <div className="absolute left-4 top-0 bottom-0 w-px bg-gradient-to-b from-gold/40 via-gold/20 to-transparent md:left-1/2 md:-translate-x-px" />
+            {/* Timeline base line (always visible, faded) */}
+            <div className="absolute left-4 top-0 bottom-0 w-px bg-white/5 md:left-1/2 md:-translate-x-px" />
+
+            {/* Animated progress bar that fills as user scrolls */}
+            <motion.div
+              className="absolute left-4 top-0 w-px bg-gradient-to-b from-gold/60 via-gold/30 to-gold/10 md:left-1/2 md:-translate-x-px"
+              style={{ height: timelineHeight }}
+            />
 
             <motion.div
               variants={containerVariants}
@@ -278,47 +328,84 @@ export default function AboutSection() {
                     index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
                   }`}
                 >
-                  {/* Content */}
+                  {/* Content - Glass card effect */}
                   <div className={`ml-12 md:ml-0 md:w-1/2 ${index % 2 === 0 ? 'md:pr-12 md:text-right' : 'md:pl-12'}`}>
-                    <div className="inline-flex items-center gap-2 rounded-full bg-gold/10 px-4 py-1">
-                      <Calendar className="h-4 w-4 text-gold" />
-                      <span className="text-sm font-semibold text-gold">{milestone.year}</span>
-                    </div>
-                    <h3 className="mt-3 text-xl font-bold text-white">{milestone.title}</h3>
-                    <p className="mt-2 text-white/60 leading-relaxed">{milestone.description}</p>
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                      className={`relative overflow-hidden rounded-xl p-5 md:p-6 transition-all duration-300 ${
+                        milestone.current
+                          ? 'bg-gold/10 border border-gold/30 shadow-lg shadow-gold/10'
+                          : 'bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-gold/20'
+                      }`}
+                    >
+                      {/* Gold gradient top border for glass card */}
+                      <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+
+                      <div className="flex items-center gap-2 mb-3" style={{ justifyContent: index % 2 === 0 ? 'flex-end' : 'flex-start' }}>
+                        <div className="inline-flex items-center gap-2 rounded-full bg-gold/10 px-3 py-1">
+                          <Calendar className="h-3.5 w-3.5 text-gold" />
+                          <span className="text-sm font-semibold text-gold">{milestone.year}</span>
+                        </div>
+                        {milestone.current && (
+                          <span className="inline-flex items-center gap-1 rounded-full bg-green-500/20 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-green-400 border border-green-500/30">
+                            Current
+                          </span>
+                        )}
+                      </div>
+                      <h3 className="text-lg font-bold text-white">{milestone.title}</h3>
+                      <p className="mt-2 text-sm text-white/60 leading-relaxed">{milestone.description}</p>
+                    </motion.div>
                   </div>
 
                   {/* Timeline dot with pulse animation */}
                   <div className="absolute left-4 top-1 -translate-x-1/2 md:left-1/2">
                     <motion.div
-                      className="h-3 w-3 rounded-full border-2 border-gold bg-charcoal"
-                      animate={{
-                        boxShadow: [
-                          '0 0 0 0 rgba(200,150,62,0)',
-                          '0 0 0 6px rgba(200,150,62,0.3)',
-                          '0 0 0 0 rgba(200,150,62,0)',
-                        ],
-                      }}
+                      className={`rounded-full border-2 ${
+                        milestone.current
+                          ? 'h-4 w-4 border-gold bg-gold'
+                          : 'h-3 w-3 border-gold bg-charcoal'
+                      }`}
+                      animate={
+                        milestone.current
+                          ? {
+                              boxShadow: [
+                                '0 0 0 0 rgba(200,150,62,0.5)',
+                                '0 0 0 10px rgba(200,150,62,0)',
+                                '0 0 0 0 rgba(200,150,62,0.5)',
+                              ],
+                              scale: [1, 1.1, 1],
+                            }
+                          : {
+                              boxShadow: [
+                                '0 0 0 0 rgba(200,150,62,0)',
+                                '0 0 0 6px rgba(200,150,62,0.3)',
+                                '0 0 0 0 rgba(200,150,62,0)',
+                              ],
+                            }
+                      }
                       transition={{
-                        duration: 2.5,
+                        duration: milestone.current ? 1.5 : 2.5,
                         delay: index * 0.5,
                         repeat: Infinity,
                         ease: 'easeInOut',
                       }}
                     />
-                    <motion.div
-                      className="absolute inset-0 h-3 w-3 rounded-full bg-gold/40"
-                      animate={{
-                        scale: [1, 1.8, 1],
-                        opacity: [0.4, 0, 0.4],
-                      }}
-                      transition={{
-                        duration: 2.5,
-                        delay: index * 0.5,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                    />
+                    {!milestone.current && (
+                      <motion.div
+                        className="absolute inset-0 h-3 w-3 rounded-full bg-gold/40"
+                        animate={{
+                          scale: [1, 1.8, 1],
+                          opacity: [0.4, 0, 0.4],
+                        }}
+                        transition={{
+                          duration: 2.5,
+                          delay: index * 0.5,
+                          repeat: Infinity,
+                          ease: 'easeInOut',
+                        }}
+                      />
+                    )}
                   </div>
                 </motion.div>
               ))}

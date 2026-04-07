@@ -10,15 +10,17 @@ export function LoadingScreen() {
   const [progress, setProgress] = useState(0);
   const [isComplete, setIsComplete] = useState(false);
 
-  // Simulate progress with realistic pacing
+  // Simulate progress with realistic pacing and faster initial burst
   const animateProgress = useCallback(() => {
     const duration = 2000; // 2 seconds total
     const startTime = Date.now();
     const milestones = [
-      { at: 0.15, value: 30 },
-      { at: 0.40, value: 55 },
-      { at: 0.65, value: 75 },
-      { at: 0.85, value: 90 },
+      { at: 0.0, value: 0 },
+      { at: 0.10, value: 20 },  // Faster initial burst: reach 20% within 200ms
+      { at: 0.35, value: 50 },
+      { at: 0.60, value: 72 },
+      { at: 0.80, value: 88 },
+      { at: 0.95, value: 97 },
       { at: 1.0, value: 100 },
     ];
 
@@ -161,9 +163,10 @@ export function LoadingScreen() {
               ))}
             </div>
 
-            {/* Company Name */}
+            {/* Company Name with gold text-shadow for premium feel */}
             <motion.h1
               className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-3"
+              style={{ textShadow: '0 0 30px rgba(200, 150, 62, 0.15), 0 0 60px rgba(200, 150, 62, 0.08)' }}
               initial={{ opacity: 0, letterSpacing: '0.5em' }}
               animate={{ opacity: 1, letterSpacing: '0.2em' }}
               transition={{ duration: 1, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
@@ -232,15 +235,27 @@ export function LoadingScreen() {
               />
             </div>
 
-            {/* Progress text */}
-            <motion.p
-              className="mt-4 text-xs tracking-[0.3em] uppercase text-gold/50 font-light"
+            {/* Progress text + Loading message */}
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.8 }}
+              className="mt-4 flex flex-col items-center gap-1.5"
             >
-              {isComplete ? 'Ready' : `${progress}%`}
-            </motion.p>
+              <p className="text-xs tracking-[0.3em] uppercase text-gold/50 font-light">
+                {isComplete ? 'Ready' : `${progress}%`}
+              </p>
+              {!isComplete && (
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 0.5, delay: 1.2 }}
+                  className="text-[11px] tracking-[0.15em] text-gold/30 font-light"
+                >
+                  Loading your experience...
+                </motion.p>
+              )}
+            </motion.div>
           </motion.div>
         </motion.div>
       ) : (
@@ -255,7 +270,10 @@ export function LoadingScreen() {
           {/* Last frame before exit */}
           <div className="relative flex flex-col items-center">
             <Zap className="w-10 h-10 text-gold mb-4" strokeWidth={1.5} />
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-3">
+            <h1
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-3"
+              style={{ textShadow: '0 0 30px rgba(200, 150, 62, 0.15)' }}
+            >
               NATRAJ
             </h1>
             <p className="text-base sm:text-lg md:text-xl font-light tracking-[0.4em] text-gold-light/80">

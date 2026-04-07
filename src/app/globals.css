@@ -168,6 +168,41 @@
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
+/* Dark surface glass - for use on dark backgrounds like hero */
+.glass-dark {
+  background: rgba(26, 26, 26, 0.5);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(200, 150, 62, 0.15);
+}
+
+.dark .glass-dark {
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(200, 150, 62, 0.1);
+}
+
+/* Navbar glass variants */
+.glass-nav {
+  background: rgba(250, 250, 248, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(200, 150, 62, 0.08);
+}
+
+.dark .glass-nav {
+  background: rgba(20, 20, 20, 0.8);
+  border-bottom: 1px solid rgba(200, 150, 62, 0.1);
+}
+
+/* Scrollbar hide utility */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* Gradient text utility */
 .gradient-text {
   background: linear-gradient(135deg, #C8963E, #E8C77B, #B87333);
@@ -379,4 +414,114 @@
 .dot-pattern {
   background-image: radial-gradient(circle, rgba(200, 150, 62, 0.06) 1px, transparent 1px);
   background-size: 24px 24px;
+}
+
+/* Gold border top utility */
+.gold-border-top {
+  border-top: 2px solid;
+  border-image: linear-gradient(to right, transparent, #C8963E, transparent) 1;
+}
+
+/* Gold border bottom utility */
+.gold-border-bottom {
+  border-bottom: 2px solid;
+  border-image: linear-gradient(to right, transparent, #C8963E, transparent) 1;
+}
+
+/* Text balance for better heading typography */
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Subtle hover lift effect */
+.hover-lift {
+  transition: transform 0.3s ease;
+}
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+/* Gold-themed prose content */
+.prose-gold {
+  color: oklch(0.30 0.01 60);
+  line-height: 1.75;
+}
+
+.prose-gold h1,
+.prose-gold h2,
+.prose-gold h3,
+.prose-gold h4 {
+  color: oklch(0.15 0.01 60);
+  font-weight: 700;
+}
+
+.prose-gold h1 {
+  background: linear-gradient(135deg, #C8963E, #E8C77B, #B87333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.prose-gold strong {
+  color: oklch(0.20 0.02 60);
+}
+
+.prose-gold a {
+  color: #C8963E;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.prose-gold a:hover {
+  color: #9B7227;
+}
+
+.prose-gold blockquote {
+  border-left: 3px solid #C8963E;
+  padding-left: 1rem;
+  font-style: italic;
+  color: oklch(0.40 0.01 60);
+}
+
+.prose-gold ul,
+.prose-gold ol {
+  padding-left: 1.5rem;
+}
+
+.prose-gold li::marker {
+  color: #C8963E;
+}
+
+.prose-gold hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, #C8963E, transparent);
+  margin: 2rem 0;
+}
+
+.dark .prose-gold {
+  color: oklch(0.85 0.005 80);
+}
+
+.dark .prose-gold h1,
+.dark .prose-gold h2,
+.dark .prose-gold h3,
+.dark .prose-gold h4 {
+  color: oklch(0.95 0.005 80);
+}
+
+.dark .prose-gold strong {
+  color: oklch(0.95 0.005 80);
+}
+
+.dark .prose-gold blockquote {
+  color: oklch(0.75 0.01 80);
+}
+
+.dark .prose-gold a {
+  color: #E8C77B;
+}
+
+.dark .prose-gold a:hover {
+  color: #C8963E;
 }

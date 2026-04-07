@@ -54,8 +54,45 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "LocalBusiness",
+    "name": "Natraj Electricals",
+    "description": "ISO 9001:2015 certified manufacturer of premium electrical control panels, automatic changeovers, busbar systems, and more.",
+    "url": "https://natrajelectricals.com",
+    "telephone": ["+91-11-23873532", "+91-9868225911"],
+    "email": "natrajenterprises14@gmail.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "1547/3, Jai Hind Building, Bhagirath Place",
+      "addressLocality": "Delhi",
+      "addressRegion": "Delhi",
+      "postalCode": "110006",
+      "addressCountry": "IN"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 28.6508,
+      "longitude": 77.2345
+    },
+    "openingHoursSpecification": {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      "opens": "09:00",
+      "closes": "19:00"
+    },
+    "priceRange": "$$",
+    "image": "/images/logo.PNG"
+  }
+
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-background text-foreground`}
       >

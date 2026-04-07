@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import {
   MapPin,
   Phone,
@@ -10,6 +10,7 @@ import {
   Send,
   CheckCircle,
   AlertCircle,
+  Clock3,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -65,6 +66,9 @@ const itemVariants = {
   },
 }
 
+/* Checkmark path animation for success state */
+const checkmarkPath = 'M6 12l4 4 8-8'
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
@@ -80,6 +84,15 @@ export default function ContactSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
   const { toast } = useToast()
+
+  // Parallax for the header section
+  const headerRef = useRef(null)
+  const { scrollYProgress } = useScroll({
+    target: headerRef,
+    offset: ['start start', 'end start'],
+  })
+  const headerY = useTransform(scrollYProgress, [0, 1], [0, 60])
+  const headerOpacity = useTransform(scrollYProgress, [0, 0.8], [1, 0])
 
   const validate = () => {
     const newErrors: Record<string, string> = {}
@@ -145,10 +158,27 @@ export default function ContactSection() {
 
   return (
     <div className="min-h-screen">
-      {/* Page Header */}
-      <section className="relative overflow-hidden bg-charcoal py-20 md:py-28">
+      {/* Page Header with gold mesh pattern and parallax */}
+      <section ref={headerRef} className="relative overflow-hidden bg-charcoal py-20 md:py-28">
+        {/* Decorative gold mesh/grid pattern */}
+        <div
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(200,150,62,0.5) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(200,150,62,0.5) 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+        {/* Mesh gradient overlay to fade edges */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(200,150,62,0.1)_0%,transparent_60%)]" />
-        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+        <div className="absolute inset-0 bg-gradient-to-t from-charcoal via-transparent to-charcoal/80" />
+
+        <motion.div
+          style={{ y: headerY, opacity: headerOpacity }}
+          className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8"
+        >
           <motion.h1
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -165,7 +195,7 @@ export default function ContactSection() {
           >
             Have a project in mind? We&apos;d love to hear from you. Reach out and let&apos;s discuss your requirements.
           </motion.p>
-        </div>
+        </motion.div>
       </section>
 
       {/* Contact Form + Info */}
@@ -180,24 +210,62 @@ export default function ContactSection() {
               className="lg:col-span-3"
             >
               <div className="glass rounded-2xl p-8 md:p-10">
-                <h2 className="mb-2 text-2xl font-bold text-foreground">Send Us a Message</h2>
+                <div className="flex flex-wrap items-center gap-3 mb-2">
+                  <h2 className="text-2xl font-bold text-foreground">Send Us a Message</h2>
+                  {/* 24h response badge */}
+                  <motion.span
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={isInView ? { opacity: 1, scale: 1 } : {}}
+                    transition={{ duration: 0.4, delay: 0.3 }}
+                    className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-medium text-gold border border-gold/20"
+                  >
+                    <Clock3 className="h-3 w-3" />
+                    We typically respond within 24 hours
+                  </motion.span>
+                </div>
                 <p className="mb-8 text-muted-foreground">
                   Fill out the form below and we&apos;ll respond as soon as possible.
                 </p>
 
                 {submitSuccess ? (
                   <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
+                    transition={{ type: 'spring', stiffness: 200, damping: 15 }}
                     className="flex flex-col items-center justify-center rounded-xl border border-green-200 bg-green-50 p-12 text-center dark:border-green-800 dark:bg-green-900/20"
                   >
-                    <CheckCircle className="mb-4 h-12 w-12 text-green-500" />
-                    <h3 className="text-lg font-semibold text-green-800 dark:text-green-300">
+                    {/* Animated checkmark circle */}
+                    <motion.div
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', stiffness: 200, damping: 12, delay: 0.1 }}
+                      className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40"
+                    >
+                      <svg className="h-8 w-8 text-green-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <motion.path
+                          d={checkmarkPath}
+                          initial={{ pathLength: 0 }}
+                          animate={{ pathLength: 1 }}
+                          transition={{ duration: 0.5, delay: 0.3, ease: 'easeOut' }}
+                        />
+                      </svg>
+                    </motion.div>
+                    <motion.h3
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.5 }}
+                      className="text-lg font-semibold text-green-800 dark:text-green-300"
+                    >
                       Message Sent Successfully!
-                    </h3>
-                    <p className="mt-2 text-green-600 dark:text-green-400">
+                    </motion.h3>
+                    <motion.p
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.6 }}
+                      className="mt-2 text-green-600 dark:text-green-400"
+                    >
                       Thank you for reaching out. We&apos;ll get back to you within 24 hours.
-                    </p>
+                    </motion.p>
                   </motion.div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-5">
@@ -338,18 +406,24 @@ export default function ContactSection() {
                     <motion.div
                       key={info.title}
                       variants={itemVariants}
-                      className="glass flex gap-4 rounded-xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-gold/5"
+                      whileHover={{ scale: 1.02 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 25 }}
+                      className="relative glass overflow-hidden rounded-xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-gold/5"
                     >
-                      <div className={`inline-flex shrink-0 rounded-lg bg-gradient-to-br ${info.color} p-3`}>
-                        <Icon className="h-5 w-5 text-gold" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{info.title}</h3>
-                        {info.lines.map((line, i) => (
-                          <p key={i} className="text-sm text-muted-foreground">
-                            {line}
-                          </p>
-                        ))}
+                      {/* Gold gradient top border accent */}
+                      <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold to-transparent" />
+                      <div className="flex gap-4">
+                        <div className={`inline-flex shrink-0 rounded-lg bg-gradient-to-br ${info.color} p-3`}>
+                          <Icon className="h-5 w-5 text-gold" />
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-foreground">{info.title}</h3>
+                          {info.lines.map((line, i) => (
+                            <p key={i} className="text-sm text-muted-foreground">
+                              {line}
+                            </p>
+                          ))}
+                        </div>
                       </div>
                     </motion.div>
                   )

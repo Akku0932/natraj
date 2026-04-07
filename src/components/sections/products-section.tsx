@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, Bookmark, ChevronRight } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompareHorizontal, ChevronRight, Trash2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -90,7 +90,7 @@ export default function ProductsSection() {
   const [searchInput, setSearchInput] = useState('')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
 
-  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen } = useStore()
+  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen } = useStore()
 
   // Fetch categories on mount
   useEffect(() => {
@@ -399,12 +399,20 @@ export default function ProductsSection() {
                           )}
                         </div>
 
-                        {/* Save/Compare icon - top right */}
+                        {/* Compare icon - top right */}
                         <button
-                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition-all hover:bg-gold/80 hover:scale-110"
-                          aria-label="Save product"
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            toggleCompare(product.slug)
+                          }}
+                          className={`absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                            compareList.includes(product.slug)
+                              ? 'bg-gold text-white shadow-lg shadow-gold/30'
+                              : 'bg-black/30 text-white hover:bg-gold/80'
+                          }`}
+                          aria-label="Compare product"
                         >
-                          <Bookmark className="h-4 w-4" />
+                          <GitCompareHorizontal className="h-4 w-4" />
                         </button>
 
                         {/* Quick View button - overlay on hover */}
@@ -459,6 +467,44 @@ export default function ProductsSection() {
           )}
         </div>
       </section>
+
+      {/* Floating comparison bar */}
+      <AnimatePresence>
+        {compareList.length > 0 && (
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 100, opacity: 0 }}
+            transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+            className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2"
+          >
+            <div className="flex items-center gap-3 rounded-2xl border border-gold/20 bg-background/80 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl">
+              <GitCompareHorizontal className="h-5 w-5 shrink-0 text-gold" />
+              <span className="whitespace-nowrap text-sm font-medium">
+                <span className="text-gold font-bold">{compareList.length}</span>
+                {compareList.length === 1 ? ' product' : ' products'} selected for comparison
+              </span>
+              <div className="h-6 w-px bg-border/50" />
+              <Button
+                size="sm"
+                onClick={() => setCompareOpen(true)}
+                className="gap-2 gold-gradient shrink-0 border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40"
+              >
+                <GitCompareHorizontal className="h-4 w-4" />
+                Compare Now
+              </Button>
+              <Button
+                size="sm"
+                variant="ghost"
+                onClick={clearCompare}
+                className="shrink-0 text-muted-foreground hover:text-destructive"
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Shimmer animation CSS */}
       <style jsx global>{`
