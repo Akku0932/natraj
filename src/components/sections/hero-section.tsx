@@ -122,6 +122,9 @@ export default function HeroSection() {
         {/* Dark overlay for text readability */}
         <div className="hero-overlay absolute inset-0 z-10" />
 
+        {/* Subtle animated gradient overlay */}
+        <div className="hero-gradient-animated absolute inset-0 z-[9]" />
+
         {/* Top: Logo */}
         <motion.div
           className="absolute left-0 right-0 top-0 z-20 flex justify-center pt-8 md:pt-12"

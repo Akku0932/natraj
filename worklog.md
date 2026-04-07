@@ -817,3 +817,50 @@ Priority Recommendations for Next Phase:
 8. Add product PDF catalog download as a more prominent CTA
 9. Consider adding a live chat widget or chatbot
 10. Add product video demonstrations or 360° views
+
+---
+Task ID: 4-b
+Agent: styling-expert
+Task: Enhance dark mode and add visual polish
+
+Work Log:
+- Enhanced dark mode CSS variables for better contrast
+  - Darkened --background from oklch(0.13) to oklch(0.08) for deeper near-black
+  - Brightened --foreground from oklch(0.95) to oklch(0.97) for crisper white
+  - Improved --card contrast from oklch(0.18) to oklch(0.13) for subtle distinction from background
+  - Reduced --border opacity from oklch(0.25) to oklch(0.20) for subtler visible borders
+  - Boosted --primary gold vibrancy from oklch(0.72) to oklch(0.75) in dark mode
+  - Tightened sidebar/accent/muted values for cohesive dark surfaces
+- Added animated gradient background to hero section
+  - Created .hero-gradient-animated CSS class with gold/copper/warm-amber gradient
+  - Uses 400% background-size with 12s ease infinite animation
+  - 4-stop diagonal gradient at very low opacity (5-8%) placed at z-[9] behind hero-overlay
+- Added smooth gold underline hover effect to navbar links
+  - Changed .nav-link-hover from centered expanding to left-sliding underline
+  - Uses cubic-bezier(0.4, 0, 0.2, 1) easing for natural motion
+  - Underline grows to 70% width from left on hover
+- Created .card-shine CSS utility with diagonal light streak
+  - ::before pseudo-element with 105deg diagonal gradient (gold/copper at 3-5% opacity)
+  - Transitions from left: -100% to left: 150% on hover (0.6s cubic-bezier)
+  - Enhanced opacity in dark mode (4-7%) for better visibility
+  - overflow: hidden and pointer-events: none for clean clipping
+- Improved scrollbar styling with gold accents
+  - Reduced width from 8px to 6px for thinner appearance
+  - Added scrollbar-width: thin for Firefox support
+  - Gold gradient thumb (top-to-bottom) with rounded ends (3px radius)
+  - Separate dark mode thumb with muted gold gradient
+  - Hover state brightens gradient for feedback
+- Enhanced .dark .glass with deeper background and gold-tinted border
+  - Background: rgba(10, 10, 10, 0.65) for darker glass
+  - Border: rgba(200, 150, 62, 0.06) for subtle gold edge
+  - Added box-shadow for depth
+- Added box-shadow to global theme transition for smoother dark mode switches
+- ESLint: 0 errors
+
+Stage Summary:
+- Dark mode contrast significantly improved with deeper backgrounds and brighter foregrounds
+- Hero has subtle animated gold-to-copper gradient overlay (12s cycle)
+- Navbar links slide gold underline from left on hover
+- .card-shine utility class ready for product/feature cards
+- Scrollbar styled with gold gradient thumb in both light and dark modes
+- Glass effect enhanced for dark mode with gold-tinted borders

@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from 'framer-motion'
 import { ChevronRight } from 'lucide-react'
 import { useStore } from '@/store/use-store'
+import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { WhatsAppButton } from '@/components/whatsapp-button'
@@ -22,8 +23,10 @@ import CatalogDownloadSection from '@/components/sections/catalog-section'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
+import ProcessSection from '@/components/sections/process-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
+import CertificationsSection from '@/components/sections/certifications-section'
 import { CookieConsent } from '@/components/cookie-consent'
 import { SectionTransition } from '@/components/section-transition'
 
@@ -63,11 +66,14 @@ export default function Home() {
               <StatsSection />
               <TestimonialsSection />
               <SectionTransition variant="dots" />
+              <ProcessSection />
+              <SectionTransition variant="gold-line" />
               <CategoriesPreview />
               <CatalogDownloadSection />
               <CTASection />
               <FaqSection />
               <SectionTransition variant="gradient" />
+              <CertificationsSection />
             </motion.div>
           )}
 
@@ -80,20 +86,8 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'About' }]} />
               <AboutSection />
-              <div className="flex items-center justify-center border-b border-border/30 py-4 px-4 sm:px-6 lg:px-8">
-                <div className="mx-auto flex w-full max-w-7xl items-center text-sm text-muted-foreground">
-                  <button
-                    type="button"
-                    onClick={() => setCurrentPage('home')}
-                    className="transition-colors hover:text-gold"
-                  >
-                    Home
-                  </button>
-                  <ChevronRight className="mx-2 h-3.5 w-3.5" />
-                  <span className="text-sm font-medium text-gold">About</span>
-                </div>
-              </div>
               <CTASection />
             </motion.div>
           )}
@@ -107,6 +101,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Products' }]} />
               <ProductsSection />
             </motion.div>
           )}
@@ -120,6 +115,7 @@ export default function Home() {
               exit="exit"
               transition={pageTransition}
             >
+              <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Contact' }]} />
               <ContactSection />
             </motion.div>
           )}
@@ -156,6 +152,8 @@ export default function Home() {
                     </motion.p>
                   </div>
                 </section>
+
+                <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Terms & Conditions' }]} />
 
                 {/* Table of Contents */}
                 <section className="border-b border-border/50 bg-muted/30 py-8">
@@ -394,6 +392,8 @@ export default function Home() {
                   </div>
                 </section>
 
+                <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Privacy Policy' }]} />
+
                 {/* Table of Contents */}
                 <section className="border-b border-border/50 bg-muted/30 py-8">
                   <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
@@ -621,6 +621,112 @@ export default function Home() {
               </div>
             </motion.div>
           )}
+          {currentPage === 'sitemap' && (
+            <motion.div
+              key="sitemap"
+              variants={pageVariants}
+              initial="initial"
+              animate="animate"
+              exit="exit"
+              transition={pageTransition}
+            >
+              <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Sitemap' }]} />
+              <div className="min-h-screen bg-background py-16">
+                <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+                  <motion.h1
+                    initial={{ opacity: 0, y: 30 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6 }}
+                    className="text-4xl font-bold mb-2"
+                  >
+                    Site <span className="gradient-text">Map</span>
+                  </motion.h1>
+                  <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.6, delay: 0.1 }}
+                    className="text-muted-foreground mb-12"
+                  >
+                    A complete overview of all pages on Natraj Electricals
+                  </motion.p>
+
+                  {/* Sitemap groups */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    {/* Main Pages */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
+                        Main Pages
+                      </h3>
+                      {[
+                        { label: 'Home', page: 'home' as const, desc: 'Main landing page with hero animation' },
+                        { label: 'About Us', page: 'about' as const, desc: 'Our story, mission, and timeline' },
+                        { label: 'Products', page: 'products' as const, desc: 'Browse our full product catalog' },
+                        { label: 'Contact', page: 'contact' as const, desc: 'Get in touch with our team' },
+                      ].map((item) => (
+                        <button
+                          key={item.page}
+                          onClick={() => setCurrentPage(item.page)}
+                          className="group block w-full text-left p-4 rounded-xl border border-border/50 hover:border-gold/30 hover:bg-gold/5 transition-all duration-200"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-foreground font-medium group-hover:text-gold transition-colors">
+                              {item.label}
+                            </span>
+                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                        </button>
+                      ))}
+                    </div>
+
+                    {/* Legal Pages */}
+                    <div className="space-y-4">
+                      <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
+                        Legal
+                      </h3>
+                      {[
+                        { label: 'Terms & Conditions', page: 'terms' as const, desc: 'Website terms and usage policies' },
+                        { label: 'Privacy Policy', page: 'privacy' as const, desc: 'How we handle your data' },
+                        { label: 'Sitemap', page: 'sitemap' as const, desc: 'Complete site overview' },
+                      ].map((item) => (
+                        <button
+                          key={item.page}
+                          onClick={() => setCurrentPage(item.page)}
+                          className="group block w-full text-left p-4 rounded-xl border border-border/50 hover:border-gold/30 hover:bg-gold/5 transition-all duration-200"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-foreground font-medium group-hover:text-gold transition-colors">
+                              {item.label}
+                            </span>
+                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground group-hover:text-gold group-hover:translate-x-1 transition-all" />
+                          </div>
+                          <p className="text-sm text-muted-foreground mt-1">{item.desc}</p>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Product Categories Quick Access */}
+                  <div className="mt-12 space-y-4">
+                    <h3 className="text-sm font-semibold uppercase tracking-wider text-gold">
+                      Product Categories
+                    </h3>
+                    <p className="text-muted-foreground text-sm">
+                      Visit our{' '}
+                      <button
+                        onClick={() => setCurrentPage('products')}
+                        className="text-gold hover:underline"
+                      >
+                        Products page
+                      </button>{' '}
+                      to explore all 16 categories including Three Phase Panels, Automatic Changeovers, Busbar Systems, and more.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
         </AnimatePresence>
       </main>
       <Footer />

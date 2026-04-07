@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { X, MessageCircle, Trash2, GitCompareHorizontal, ArrowRight } from 'lucide-react'
+import { X, MessageCircle, Trash2, GitCompare, ArrowRight } from 'lucide-react'
 import {
   Dialog,
   DialogContent,
@@ -136,7 +136,7 @@ export function ProductComparisonModal() {
         <div className="border-b border-border/50 bg-gradient-to-r from-charcoal to-charcoal/95 px-6 py-5">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-xl text-white">
-              <GitCompareHorizontal className="h-5 w-5 text-gold" />
+              <GitCompare className="h-5 w-5 text-gold" />
               Product Comparison
               <Badge className="ml-2 bg-gold/20 text-gold hover:bg-gold/30 border-gold/30">
                 {products.length} of 4
@@ -165,7 +165,7 @@ export function ProductComparisonModal() {
           ) : products.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center">
               <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-                <GitCompareHorizontal className="h-8 w-8 text-muted-foreground" />
+                <GitCompare className="h-8 w-8 text-muted-foreground" />
               </div>
               <h3 className="text-lg font-semibold">No products to compare</h3>
               <p className="mt-1 text-sm text-muted-foreground">

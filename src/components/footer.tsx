@@ -26,6 +26,7 @@ const quickLinks: { label: string; page: PageView }[] = [
   { label: 'About Us', page: 'about' },
   { label: 'Products', page: 'products' },
   { label: 'Contact', page: 'contact' },
+  { label: 'Sitemap', page: 'sitemap' },
 ]
 
 const socialLinks = [
@@ -172,13 +173,14 @@ export function Footer() {
             <h3 className="text-sm font-semibold tracking-wider text-gold-light uppercase">
               Quick Links
             </h3>
-            <ul className="space-y-2.5">
+            <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.page}>
                   <button
                     onClick={() => handleQuickLink(link.page)}
-                    className="text-sm text-white/60 transition-all duration-200 hover:text-gold-light hover:pl-1"
+                    className="group flex items-center gap-2.5 text-sm text-white/60 transition-all duration-200 hover:text-gold-light border-l-2 border-transparent hover:border-gold/40 hover:pl-2"
                   >
+                    <span className="w-1 h-1 rounded-full bg-gold/50 group-hover:bg-gold shrink-0" />
                     {link.label}
                   </button>
                 </li>

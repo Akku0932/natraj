@@ -2,7 +2,7 @@
 
 import { create } from 'zustand'
 
-export type PageView = 'home' | 'about' | 'products' | 'contact' | 'terms' | 'privacy'
+export type PageView = 'home' | 'about' | 'products' | 'contact' | 'terms' | 'privacy' | 'sitemap'
 
 interface StoreState {
   currentPage: PageView

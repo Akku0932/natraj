@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompareHorizontal, ChevronRight, Trash2, Package, Heart } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -89,6 +89,8 @@ export default function ProductsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
+  const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen, setCurrentPage, wishlist, toggleWishlist, isInWishlist } = useStore()
 
@@ -143,8 +145,26 @@ export default function ProductsSection() {
     setSelectedCategory(slug === 'all' ? null : slug)
   }
 
+  // Debounced search: auto-search 300ms after user stops typing
+  useEffect(() => {
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
+    debounceTimer.current = setTimeout(() => {
+      setSearchQuery(searchInput)
+    }, 300)
+    return () => {
+      if (debounceTimer.current) {
+        clearTimeout(debounceTimer.current)
+      }
+    }
+  }, [searchInput])
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
+    if (debounceTimer.current) {
+      clearTimeout(debounceTimer.current)
+    }
     setSearchQuery(searchInput)
   }
 
@@ -183,54 +203,33 @@ export default function ProductsSection() {
         </div>
       </section>
 
-      {/* Breadcrumb Navigation */}
-      <div className="border-b border-border/30 bg-background/50 backdrop-blur-sm">
-        <div className="mx-auto max-w-7xl px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 text-sm">
-            <button
-              onClick={() => setCurrentPage('home')}
-              className="text-gold/60 transition-colors hover:text-gold"
-            >
-              Home
-            </button>
-            <ChevronRight className="h-3.5 w-3.5 text-gold/40" />
-            <span className="text-gold/80 font-medium">Products</span>
-            {selectedCategory && (
-              <>
-                <ChevronRight className="h-3.5 w-3.5 text-gold/40" />
-                <span className="inline-flex items-center rounded-full bg-gold/10 border border-gold/20 px-2.5 py-0.5 text-xs font-medium text-gold">
-                  {categories.find((c) => c.slug === selectedCategory)?.name}
-                </span>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
+      {/* Breadcrumb handled by page.tsx */}
 
       {/* Search & Filter Section */}
       <section className="sticky top-16 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl md:top-20">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <div className="group relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-gold" />
               <Input
+                ref={inputRef}
                 placeholder="Search products..."
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                className="pl-10 pr-10"
+                className="pl-10 pr-10 border-border/60 transition-all duration-200 focus-visible:border-gold/50 focus-visible:ring-gold/30 focus-visible:ring-offset-0"
               />
               {searchInput && (
                 <button
                   type="button"
                   onClick={clearSearch}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-0.5 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
                 >
                   <X className="h-4 w-4" />
                 </button>
               )}
             </div>
-            <Button type="submit" variant="outline" className="border-gold/30 text-gold hover:bg-gold/10">
+            <Button type="submit" variant="outline" className="border-gold/30 text-gold hover:bg-gold/10 transition-colors">
               <Search className="mr-2 h-4 w-4" />
               Search
             </Button>
@@ -438,7 +437,7 @@ export default function ProductsSection() {
                           }`}
                           aria-label="Compare product"
                         >
-                          <GitCompareHorizontal className="h-4 w-4" />
+                          <GitCompare className="h-4 w-4" />
                         </button>
 
                         {/* Wishlist heart icon - bottom left of image */}
@@ -521,7 +520,7 @@ export default function ProductsSection() {
             className="fixed bottom-6 left-1/2 z-40 -translate-x-1/2"
           >
             <div className="flex items-center gap-3 rounded-2xl border border-gold/20 bg-background/80 px-4 py-3 shadow-2xl shadow-black/20 backdrop-blur-xl">
-              <GitCompareHorizontal className="h-5 w-5 shrink-0 text-gold" />
+              <GitCompare className="h-5 w-5 shrink-0 text-gold" />
               <span className="whitespace-nowrap text-sm font-medium">
                 <span className="text-gold font-bold">{compareList.length}</span>
                 {compareList.length === 1 ? ' product' : ' products'} selected for comparison
@@ -532,7 +531,7 @@ export default function ProductsSection() {
                 onClick={() => setCompareOpen(true)}
                 className="gap-2 gold-gradient shrink-0 border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40"
               >
-                <GitCompareHorizontal className="h-4 w-4" />
+                <GitCompare className="h-4 w-4" />
                 Compare Now
               </Button>
               <Button
