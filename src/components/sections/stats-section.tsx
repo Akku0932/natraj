@@ -53,7 +53,7 @@ function AnimatedCounter({
   }, [isInView, target])
 
   return (
-    <span className="gold-shimmer-text tabular-nums">
+    <span className="gold-shimmer-text tabular-nums text-gold-glow">
       {count.toLocaleString('en-IN')}
       {suffix}
     </span>
@@ -80,8 +80,8 @@ export default function StatsSection() {
         }}
       />
 
-      {/* Decorative dot pattern */}
-      <div className="absolute inset-0 dot-pattern opacity-60" />
+      {/* Decorative dot pattern with slow drift animation */}
+      <div className="absolute inset-0 dot-pattern opacity-60 animate-dot-drift" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Animated shimmer gold line at top */}
@@ -105,7 +105,7 @@ export default function StatsSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="grid grid-cols-2 gap-6 md:gap-12 lg:grid-cols-4"
+          className="grid grid-cols-2 gap-6 md:gap-12 lg:grid-cols-4 stagger-in"
         >
           {stats.map((stat, index) => (
             <motion.div
@@ -113,41 +113,47 @@ export default function StatsSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className={`card-shine relative text-center ${floatClasses[index]}`}
+              className="animated-gradient-border"
             >
-              {/* Decorative gold ring behind counter */}
-              <div className="relative mx-auto flex items-center justify-center">
-                <div
-                  className="absolute h-24 w-24 rounded-full border border-gold/10 md:h-32 md:w-32"
-                  style={{
-                    background: 'radial-gradient(circle, rgba(200,150,62,0.03) 0%, transparent 70%)',
-                  }}
-                />
-                <div className="absolute h-28 w-28 rounded-full border border-gold/5 md:h-36 md:w-36 lg:h-40 lg:w-40" />
-                <div className="relative text-4xl font-bold md:text-5xl lg:text-6xl">
-                  <AnimatedCounter
-                    target={stat.value}
-                    suffix={stat.suffix}
-                    isInView={isInView}
+              <div className={`card-shine spotlight-card relative text-center rounded-2xl py-8 px-4 ${floatClasses[index]}`}
+                style={{ background: 'rgba(26, 26, 26, 0.85)' }}
+              >
+                {/* Decorative gold ring behind counter */}
+                <div className="relative mx-auto flex items-center justify-center">
+                  <div
+                    className="absolute h-24 w-24 rounded-full border border-gold/10 md:h-32 md:w-32"
+                    style={{
+                      background: 'radial-gradient(circle, rgba(200,150,62,0.03) 0%, transparent 70%)',
+                    }}
                   />
+                  <div className="absolute h-28 w-28 rounded-full border border-gold/5 md:h-36 md:w-36 lg:h-40 lg:w-40" />
+                  {/* Third ring with breathing animation */}
+                  <div className="absolute h-36 w-36 rounded-full border border-gold/[0.03] md:h-44 md:w-44 lg:h-48 lg:w-48 animate-breathe" />
+                  <div className="relative text-4xl font-bold md:text-5xl lg:text-6xl">
+                    <AnimatedCounter
+                      target={stat.value}
+                      suffix={stat.suffix}
+                      isInView={isInView}
+                    />
+                  </div>
                 </div>
+
+                {/* Stat label with hover underline */}
+                <p className="mt-4 text-sm font-medium uppercase tracking-wider text-white/60 transition-colors hover:text-white/80 md:text-base">
+                  <span className="stat-label-hover cursor-default">
+                    {stat.label}
+                  </span>
+                </p>
+
+                {/* Mobile divider dots (between items in column direction) */}
+                {index < stats.length - 1 && (
+                  <div className="mt-6 flex items-center justify-center gap-1.5 md:hidden">
+                    <div className="h-1 w-1 rounded-full bg-gold/30" />
+                    <div className="h-1 w-1 rounded-full bg-gold/20" />
+                    <div className="h-1 w-1 rounded-full bg-gold/10" />
+                  </div>
+                )}
               </div>
-
-              {/* Stat label with hover underline */}
-              <p className="mt-4 text-sm font-medium uppercase tracking-wider text-white/60 transition-colors hover:text-white/80 md:text-base">
-                <span className="stat-label-hover cursor-default">
-                  {stat.label}
-                </span>
-              </p>
-
-              {/* Mobile divider dots (between items in column direction) */}
-              {index < stats.length - 1 && (
-                <div className="mt-6 flex items-center justify-center gap-1.5 md:hidden">
-                  <div className="h-1 w-1 rounded-full bg-gold/30" />
-                  <div className="h-1 w-1 rounded-full bg-gold/20" />
-                  <div className="h-1 w-1 rounded-full bg-gold/10" />
-                </div>
-              )}
             </motion.div>
           ))}
         </motion.div>

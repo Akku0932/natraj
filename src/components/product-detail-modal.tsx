@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/store/use-store'
+import { addToRecentlyViewed } from '@/lib/recently-viewed'
 import {
   Dialog,
   DialogContent,
@@ -26,7 +27,9 @@ import {
   FileText,
   ZoomIn,
   MessageCircle,
+  Share,
 } from 'lucide-react'
+import { useToast } from '@/hooks/use-toast'
 
 interface ProductData {
   id: string
@@ -116,6 +119,7 @@ export function ProductDetailModal() {
             setLoading(false)
             setError(null)
             setCurrentImageIndex(0)
+            addToRecentlyViewed(selectedProduct)
           }
         } catch (err) {
           if (!cancelled) {
@@ -200,10 +204,45 @@ export function ProductDetailModal() {
     setSelectedCategory(product.category.slug)
   }
 
+  const { toast } = useToast()
+
   // WhatsApp enquiry link
   const whatsappLink = product
     ? `https://wa.me/919868225911?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name}`)}`
     : '#'
+
+  // Share handler
+  const handleShare = async () => {
+    if (!product) return
+
+    const shareUrl = `${window.location.origin}/products/${product.slug}`
+    const shareText = `Check out ${product.name} - ${product.category.name} at Natraj Electricals`
+
+    if (typeof navigator.share === 'function') {
+      try {
+        await navigator.share({
+          title: product.name,
+          text: shareText,
+          url: shareUrl,
+        })
+        toast({ title: 'Shared successfully!' })
+      } catch (err) {
+        // User cancelled or share failed — do nothing on cancel
+        if (err instanceof Error && err.name !== 'AbortError') {
+          toast({ title: 'Sharing is not supported', variant: 'destructive' })
+        }
+      }
+    } else if (typeof navigator.clipboard === 'function') {
+      try {
+        await navigator.clipboard.writeText(shareUrl)
+        toast({ title: 'Link copied to clipboard!' })
+      } catch {
+        toast({ title: 'Sharing is not supported', variant: 'destructive' })
+      }
+    } else {
+      toast({ title: 'Sharing is not supported', variant: 'destructive' })
+    }
+  }
 
   return (
     <>
@@ -442,6 +481,15 @@ export function ProductDetailModal() {
                         className="flex-1 border-border/50 text-foreground hover:bg-muted"
                       >
                         Close
+                      </Button>
+                      <Button
+                        onClick={handleShare}
+                        variant="outline"
+                        size="sm"
+                        className="border-gold/30 text-gold hover:bg-gold/10"
+                      >
+                        <Share className="mr-1.5 h-4 w-4" />
+                        Share
                       </Button>
                       <Button
                         asChild

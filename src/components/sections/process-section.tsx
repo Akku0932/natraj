@@ -9,6 +9,7 @@ const steps = [
     number: 1,
     icon: Search,
     title: 'Browse & Select',
+    subtitle: 'Discover Your Solution',
     description:
       'Explore our comprehensive catalog of 16+ product categories and select the electrical panels that match your requirements.',
   },
@@ -16,6 +17,7 @@ const steps = [
     number: 2,
     icon: FileText,
     title: 'Get Custom Quote',
+    subtitle: 'Tailored Pricing',
     description:
       'Request a tailored quotation based on your specifications. Our team responds within 24 hours with competitive pricing.',
   },
@@ -23,6 +25,7 @@ const steps = [
     number: 3,
     icon: Settings,
     title: 'Expert Manufacturing',
+    subtitle: 'Precision Engineering',
     description:
       'Our ISO-certified engineers manufacture your panels with precision, using premium materials and rigorous quality checks.',
   },
@@ -30,9 +33,17 @@ const steps = [
     number: 4,
     icon: Truck,
     title: 'Delivery & Support',
+    subtitle: 'End-to-End Service',
     description:
       'Receive timely pan-India delivery with full after-sales support, installation guidance, and warranty coverage.',
   },
+]
+
+const floatAnimations = [
+  'animate-float-slow',
+  'animate-float-medium',
+  'animate-float-fast',
+  'animate-float-slow',
 ]
 
 const containerVariants = {
@@ -93,7 +104,7 @@ function StepCard({
       {!isLast && (
         <div className="absolute top-7 left-[calc(50%+1.75rem)] hidden h-0.5 w-[calc(100%-3.5rem)] lg:block">
           <motion.div
-            className="h-full w-full bg-gradient-to-r from-gold/60 via-gold/30 to-gold/60"
+            className="h-full w-full bg-gradient-to-r from-gold/60 via-gold/30 to-gold/60 shadow-[0_0_8px_rgba(200,150,62,0.25)]"
             initial={{ scaleX: 0 }}
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -115,7 +126,7 @@ function StepCard({
       {!isLast && (
         <div className="absolute top-[4.5rem] left-1/2 h-16 w-0.5 -translate-x-1/2 lg:hidden">
           <motion.div
-            className="h-full w-full bg-gradient-to-b from-gold/50 via-gold/25 to-gold/50"
+            className="h-full w-full bg-gradient-to-b from-gold/50 via-gold/25 to-gold/50 shadow-[0_0_6px_rgba(200,150,62,0.2)]"
             initial={{ scaleY: 0 }}
             whileInView={{ scaleY: 1 }}
             viewport={{ once: true, margin: '-40px' }}
@@ -125,24 +136,27 @@ function StepCard({
         </div>
       )}
 
-      {/* Icon container */}
+      {/* Icon container with float animation */}
       <motion.div
         whileHover={{ scale: 1.1 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10 transition-colors duration-300 group-hover:bg-gold/20"
+        className={`mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-gold/10 transition-colors duration-300 group-hover:bg-gold/20 ${floatAnimations[index]}`}
       >
         <Icon className="h-7 w-7 text-gold" />
       </motion.div>
 
-      {/* Card */}
+      {/* Card with card-shine, glow-hover, and enhanced hover */}
       <motion.div
         whileHover={{ scale: 1.03, y: -4 }}
         transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-        className="glass w-full max-w-xs rounded-2xl p-6 transition-all duration-500 hover:border-gold/20 hover:shadow-xl hover:shadow-gold/5"
+        className="glass card-shine glow-hover w-full max-w-xs rounded-2xl p-6 transition-all duration-500 hover:border-gold/20 hover:shadow-xl hover:shadow-gold/5"
       >
-        <h3 className="mb-2 text-lg font-semibold text-foreground transition-colors duration-300 hover:text-gold">
+        <h3 className="smooth-underline mb-1 text-lg font-semibold text-foreground transition-colors duration-300 hover:text-gold">
           {step.title}
         </h3>
+        <p className="mb-2 text-xs font-medium uppercase tracking-wider text-gold/70">
+          {step.subtitle}
+        </p>
         <p className="text-sm leading-relaxed text-muted-foreground">
           {step.description}
         </p>
@@ -205,12 +219,12 @@ export default function ProcessSection() {
           </motion.p>
         </div>
 
-        {/* Steps Grid */}
+        {/* Steps Grid with stagger-in */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           animate={isInView ? 'visible' : 'hidden'}
-          className="grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-6"
+          className="stagger-in grid grid-cols-1 gap-10 lg:grid-cols-4 lg:gap-6"
         >
           {steps.map((step, index) => (
             <StepCard

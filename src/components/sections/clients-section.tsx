@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useCallback } from 'react'
 import { motion, useInView } from 'framer-motion'
 
 const clients = [
@@ -66,13 +66,13 @@ export function ClientsSection() {
         {/* Scrolling container */}
         <div className="relative overflow-hidden">
           <motion.div
-            className="flex gap-4 md:gap-6"
+            className="stagger-in flex gap-4 md:gap-6"
             animate={{ x: ['0%', '-50%'] }}
             transition={{
               x: {
                 repeat: Infinity,
                 repeatType: 'loop',
-                duration: 30,
+                duration: 35,
                 ease: 'linear',
               },
             }}
@@ -88,14 +88,34 @@ export function ClientsSection() {
           </motion.div>
         </div>
       </div>
+
+      {/* Subtle gold gradient overlay at bottom for depth */}
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-gold/[0.03] to-transparent" />
     </section>
   )
 }
 
 function ClientCard({ client }: { client: (typeof clients)[0] }) {
+  const initial = client.name.charAt(0)
+
+  const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    e.currentTarget.style.setProperty('--mouse-x', `${x}%`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}%`)
+  }, [])
+
   return (
-    <div className="glass group flex h-24 w-40 shrink-0 flex-col items-center justify-center gap-1.5 rounded-xl border border-border/50 px-4 transition-all duration-300 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 md:h-28 md:w-52 md:px-6">
-      <span className="text-sm font-bold text-muted-foreground transition-colors duration-300 group-hover:text-gold md:text-base text-center">
+    <div
+      onMouseMove={handleMouseMove}
+      className="glass-gold card-shine spotlight-card glow-hover group flex h-24 w-40 shrink-0 flex-col items-center justify-center gap-1.5 rounded-xl border border-border/50 px-4 transition-all duration-300 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 md:h-28 md:w-52 md:px-6"
+    >
+      {/* Gold initial badge */}
+      <div className="mb-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-gold/20 bg-gradient-to-br from-gold/10 to-copper/10 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:border-gold/40 group-hover:shadow-md group-hover:shadow-gold/10">
+        <span className="text-xs font-bold text-gold">{initial}</span>
+      </div>
+      <span className="smooth-underline text-sm font-bold text-muted-foreground transition-colors duration-300 group-hover:text-gold md:text-base text-center">
         {client.name}
       </span>
       <span className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/60 transition-colors duration-300 group-hover:text-gold/60 md:text-xs">

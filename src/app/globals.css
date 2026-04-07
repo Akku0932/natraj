@@ -810,3 +810,231 @@ img, video, canvas, iframe, [role="img"] {
   border-color: rgba(200, 150, 62, 0.3);
   box-shadow: 0 0 0 1px rgba(200, 150, 62, 0.1), 0 4px 20px rgba(200, 150, 62, 0.1);
 }
+
+/* Announcement marquee — seamless infinite horizontal scroll */
+@keyframes announcement-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.announcement-marquee {
+  display: flex;
+  animation: announcement-scroll 30s linear infinite;
+}
+
+/* Pause marquee on hover for accessibility */
+.announcement-marquee:hover {
+  animation-play-state: paused;
+}
+
+/* ============================================================
+   Premium Animations & Utility Classes — Task 6 Additions
+   ============================================================ */
+
+/* 1. Marquee animation for announcement banners */
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+
+/* 2. Counter/ticker animation for numbers */
+@keyframes count-up {
+  0% { opacity: 0; transform: translateY(10px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.animate-count-up {
+  animation: count-up 0.6s ease-out forwards;
+}
+
+/* 3. Spotlight/shine effect for premium cards */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+}
+.spotlight-card::after {
+  content: '';
+  position: absolute;
+  top: var(--mouse-y, 50%);
+  left: var(--mouse-x, 50%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(200, 150, 62, 0.08) 0%, transparent 70%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.spotlight-card:hover::after {
+  opacity: 1;
+}
+
+/* 4. Gold text shadow glow utility */
+.text-gold-glow {
+  text-shadow: 0 0 20px rgba(200, 150, 62, 0.3), 0 0 40px rgba(200, 150, 62, 0.15);
+}
+
+/* 5. Smooth underline animation for links */
+.smooth-underline {
+  position: relative;
+}
+.smooth-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, #C8963E, #E8C77B);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.smooth-underline:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+/* 6. Staggered fade in utility */
+@keyframes stagger-fade-in {
+  0% { opacity: 0; transform: translateY(15px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+.stagger-in > * {
+  opacity: 0;
+  animation: stagger-fade-in 0.5s ease-out forwards;
+}
+.stagger-in > *:nth-child(1) { animation-delay: 0s; }
+.stagger-in > *:nth-child(2) { animation-delay: 0.08s; }
+.stagger-in > *:nth-child(3) { animation-delay: 0.16s; }
+.stagger-in > *:nth-child(4) { animation-delay: 0.24s; }
+.stagger-in > *:nth-child(5) { animation-delay: 0.32s; }
+.stagger-in > *:nth-child(6) { animation-delay: 0.40s; }
+.stagger-in > *:nth-child(7) { animation-delay: 0.48s; }
+.stagger-in > *:nth-child(8) { animation-delay: 0.56s; }
+
+/* 7. Premium divider with diamond center */
+.premium-divider {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.premium-divider::before,
+.premium-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 62, 0.3), transparent);
+}
+
+/* 8. Focus ring gold for inputs */
+.focus-gold:focus-visible {
+  outline: 2px solid rgba(200, 150, 62, 0.5);
+  outline-offset: 2px;
+}
+
+/* 9. Gradient border animated */
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes gradient-border-rotate {
+  0% { --gradient-angle: 0deg; }
+  100% { --gradient-angle: 360deg; }
+}
+.animated-gradient-border {
+  position: relative;
+  border-radius: 1rem;
+  padding: 2px;
+  background: conic-gradient(from var(--gradient-angle, 0deg), transparent 25%, #C8963E 50%, transparent 75%);
+}
+.animated-gradient-border > * {
+  position: relative;
+  border-radius: calc(1rem - 2px);
+  background: inherit;
+}
+.animated-gradient-border:hover {
+  animation: gradient-border-rotate 3s linear infinite;
+}
+
+/* 10. Soft inner shadow for depth */
+.inner-shadow {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.05);
+}
+.dark .inner-shadow {
+  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* 11. Backdrop blur card */
+.blur-card {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.dark .blur-card {
+  background: rgba(20, 20, 20, 0.6);
+  border: 1px solid rgba(200, 150, 62, 0.08);
+}
+
+/* 12. Accent underline on hover (for text like in FAQ answers) */
+.accent-underline-hover {
+  background-image: linear-gradient(#C8963E, #C8963E);
+  background-size: 0% 2px;
+  background-position: left bottom;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s ease;
+}
+.accent-underline-hover:hover {
+  background-size: 100% 2px;
+}
+
+/* 13. Rotating border animation (for featured items) */
+@keyframes rotate-border {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* 14. Glassmorphism with gold tint for elevated surfaces */
+.glass-gold {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(200, 150, 62, 0.12);
+  box-shadow: 0 4px 24px rgba(200, 150, 62, 0.06);
+}
+.dark .glass-gold {
+  background: rgba(10, 10, 10, 0.6);
+  border: 1px solid rgba(200, 150, 62, 0.08);
+  box-shadow: 0 4px 24px rgba(200, 150, 62, 0.04);
+}
+
+/* ============================================================
+   Premium Animations & Utility Classes — Task 4 Additions
+   ============================================================ */
+
+/* Slow dot pattern drift animation for stats background */
+@keyframes dot-drift {
+  0% { background-position: 0 0; }
+  100% { background-position: 24px 24px; }
+}
+.animate-dot-drift {
+  animation: dot-drift 20s linear infinite;
+}
+
+/* Override: glass cards inside animated-gradient-border should keep their own background */
+.animated-gradient-border > .glass {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+.dark .animated-gradient-border > .glass {
+  background: rgba(10, 10, 10, 0.65);
+  border: 1px solid rgba(200, 150, 62, 0.06);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+}

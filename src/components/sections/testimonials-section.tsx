@@ -60,7 +60,7 @@ function StarRating() {
       {Array.from({ length: 5 }).map((_, i) => (
         <Star
           key={i}
-          className="h-4 w-4 fill-gold text-gold drop-shadow-[0_0_4px_rgba(200,150,62,0.4)]"
+          className="h-5 w-5 fill-gold text-gold drop-shadow-[0_0_6px_rgba(200,150,62,0.5)]"
         />
       ))}
     </div>
@@ -82,27 +82,32 @@ function TestimonialCard({
       transition={{ duration: 0.5, delay: index * 0.1 }}
       className="h-full"
     >
-      <div className="relative h-full overflow-hidden rounded-2xl border border-gold/10 bg-card p-6 md:p-8 transition-all duration-500 hover:border-gold/25 hover:shadow-xl hover:shadow-gold/5 group">
+      <div className="relative h-full overflow-hidden rounded-2xl border border-gold/10 bg-card p-6 md:p-8 transition-all duration-500 hover:border-gold/25 hover:shadow-xl hover:shadow-gold/5 group card-shine glow-hover spotlight-card">
         {/* Gold left border accent (always visible) */}
         <div className="absolute left-0 top-0 h-full w-[3px] bg-gradient-to-b from-gold via-gold-light to-copper" />
 
+        {/* Decorative gold quote mark */}
+        <span className="absolute top-4 left-5 text-5xl font-serif leading-none text-gold/10 select-none pointer-events-none z-0" aria-hidden="true">
+          ❝
+        </span>
+
         {/* Quote icon */}
-        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10">
+        <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-gold/10 relative z-10">
           <Quote className="h-5 w-5 text-gold" />
         </div>
 
         {/* Star rating */}
-        <div className="mb-4">
+        <div className="mb-4 relative z-10">
           <StarRating />
         </div>
 
         {/* Testimonial text */}
-        <p className="mb-6 text-sm leading-relaxed text-muted-foreground md:text-base">
+        <p className="mb-6 text-sm leading-relaxed text-muted-foreground md:text-base relative z-10">
           &ldquo;{testimonial.text}&rdquo;
         </p>
 
         {/* Author info */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 relative z-10">
           <div className="flex h-11 w-11 items-center justify-center rounded-full gold-gradient text-white text-sm font-bold shrink-0">
             {testimonial.name
               .split(' ')
@@ -110,7 +115,7 @@ function TestimonialCard({
               .join('')}
           </div>
           <div className="min-w-0">
-            <p className="text-sm font-semibold text-foreground truncate">
+            <p className="text-sm font-semibold text-foreground truncate smooth-underline">
               {testimonial.name}
             </p>
             <p className="text-xs text-muted-foreground truncate">
@@ -204,7 +209,7 @@ export default function TestimonialsSection() {
             {trustedBy.map((company) => (
               <span
                 key={company}
-                className="rounded-full bg-muted px-3 py-1 text-xs font-medium text-muted-foreground border border-border/50"
+                className="glass-gold rounded-full px-3 py-1 text-xs font-medium text-muted-foreground"
               >
                 {company}
               </span>
@@ -226,7 +231,7 @@ export default function TestimonialsSection() {
         </div>
 
         {/* Desktop: 3-column grid */}
-        <div className="hidden gap-6 md:grid md:grid-cols-2 lg:grid-cols-3">
+        <div className="hidden gap-6 md:grid md:grid-cols-2 lg:grid-cols-3 stagger-in">
           {testimonials.map((testimonial, index) => (
             <TestimonialCard
               key={testimonial.name}

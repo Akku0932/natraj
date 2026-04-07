@@ -101,6 +101,17 @@ const inlineStats = [
   { value: '16', label: 'Categories' },
 ]
 
+/** Shared mouse tracking handler for spotlight-card CSS variables */
+function useSpotlightMouse() {
+  return useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    e.currentTarget.style.setProperty('--mouse-x', `${x}%`)
+    e.currentTarget.style.setProperty('--mouse-y', `${y}%`)
+  }, [])
+}
+
 function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
@@ -112,8 +123,8 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
       const rect = e.currentTarget.getBoundingClientRect()
       const centerX = rect.left + rect.width / 2
       const centerY = rect.top + rect.height / 2
-      const rotateX = ((e.clientY - centerY) / (rect.height / 2)) * -6
-      const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 6
+      const rotateX = ((e.clientY - centerY) / (rect.height / 2)) * -8
+      const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 8
       x.set(rotateX)
       y.set(rotateY)
     },
@@ -140,6 +151,7 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
 export default function AboutSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
+  const spotlightMouse = useSpotlightMouse()
 
   // Timeline scroll-based progress bar
   const timelineRef = useRef<HTMLDivElement>(null)
@@ -185,60 +197,78 @@ export default function AboutSection() {
         <div className="absolute inset-0 bg-warm-gray" />
         <div className="gold-gradient-subtle absolute inset-0" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.7 }}
-              className="text-center"
-            >
-              <div className="mx-auto mb-8 flex justify-center gap-2">
-                <MapPin className="h-5 w-5 text-gold" />
-                <span className="text-sm font-medium text-gold">Delhi, India</span>
-              </div>
-              <p className="text-lg leading-relaxed text-foreground/80 md:text-xl">
-                Founded with a vision to deliver premium electrical control panels,{' '}
-                <strong className="text-foreground">Natraj Electricals</strong> has grown into one of
-                Delhi&apos;s most trusted names in electrical panel manufacturing. As an{' '}
-                <strong className="text-foreground">ISO 9001:2015 certified</strong> company, we
-                specialize in a wide range of electrical panels designed for industrial and
-                commercial applications.
-              </p>
-
-              {/* Inline stats row with gold separators */}
+          {/* Animated gradient border wrapper */}
+          <div className="animated-gradient-border">
+            <div className="mx-auto max-w-3xl rounded-[calc(1rem-2px)] p-6 sm:p-10" style={{ background: 'var(--color-warm-gray)' }}>
               <motion.div
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-                className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-6"
+                transition={{ duration: 0.7 }}
+                className="text-center"
               >
-                {inlineStats.map((stat, i) => (
-                  <div key={stat.label} className="flex items-center gap-2">
-                    <div className="text-center">
-                      <span className="text-xl sm:text-2xl font-bold gradient-text">{stat.value}</span>
-                      <span className="ml-1 text-sm text-muted-foreground">{stat.label}</span>
-                    </div>
-                    {i < inlineStats.length - 1 && (
-                      <div className="h-4 w-[2px] rounded-full bg-gold/30" />
-                    )}
-                  </div>
-                ))}
-              </motion.div>
+                <div className="mx-auto mb-8 flex justify-center gap-2">
+                  <MapPin className="h-5 w-5 text-gold" />
+                  <span className="text-sm font-medium text-gold">Delhi, India</span>
+                </div>
 
-              <p className="mt-8 text-lg leading-relaxed text-foreground/80 md:text-xl">
-                With over <strong className="gradient-text">25 years</strong> of expertise, we
-                combine traditional craftsmanship with modern engineering to create panels that are
-                safe, reliable, and built to last. Our commitment to{' '}
-                <strong className="text-foreground">quality, innovation, and customer satisfaction</strong>{' '}
-                drives everything we do — from the initial design consultation to the final delivery
-                and after-sales support.
-              </p>
-            </motion.div>
+                {/* Decorative "Est. 1998" badge */}
+                <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gradient-to-r from-gold/5 to-copper/5 px-5 py-2 shadow-sm">
+                  <div className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+                  <span className="text-xs font-semibold uppercase tracking-[0.15em] text-gold">Est. 1998</span>
+                  <div className="h-1.5 w-1.5 rounded-full bg-gold animate-pulse" />
+                </div>
+
+                <p className="text-lg leading-relaxed text-foreground/80 md:text-xl">
+                  Founded with a vision to deliver premium electrical control panels,{' '}
+                  <strong className="text-foreground">Natraj Electricals</strong> has grown into one of
+                  Delhi&apos;s most trusted names in electrical panel manufacturing. As an{' '}
+                  <strong className="text-foreground">ISO 9001:2015 certified</strong> company, we
+                  specialize in a wide range of electrical panels designed for industrial and
+                  commercial applications.
+                </p>
+
+                {/* Inline stats row with gold separators */}
+                <motion.div
+                  initial={{ opacity: 0, y: 15 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="mt-10 flex flex-wrap items-center justify-center gap-x-4 gap-y-3 sm:gap-x-6"
+                >
+                  {inlineStats.map((stat, i) => (
+                    <div key={stat.label} className="flex items-center gap-2">
+                      <div className="text-center">
+                        <span className="text-xl sm:text-2xl font-bold gradient-text text-gold-glow">{stat.value}</span>
+                        <span className="ml-1 text-sm text-muted-foreground">{stat.label}</span>
+                      </div>
+                      {i < inlineStats.length - 1 && (
+                        <div className="h-4 w-[2px] rounded-full bg-gold/30" />
+                      )}
+                    </div>
+                  ))}
+                </motion.div>
+
+                <p className="mt-8 text-lg leading-relaxed text-foreground/80 md:text-xl">
+                  With over <strong className="gradient-text">25 years</strong> of expertise, we
+                  combine traditional craftsmanship with modern engineering to create panels that are
+                  safe, reliable, and built to last. Our commitment to{' '}
+                  <strong className="text-foreground">quality, innovation, and customer satisfaction</strong>{' '}
+                  drives everything we do — from the initial design consultation to the final delivery
+                  and after-sales support.
+                </p>
+              </motion.div>
+            </div>
           </div>
         </div>
       </section>
+
+      {/* Premium Divider: between story and mission */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="premium-divider py-2">
+          <div className="h-1.5 w-1.5 rotate-45 shrink-0 rounded-sm bg-gold/40" />
+        </div>
+      </div>
 
       {/* Mission & Vision */}
       <section className="relative overflow-hidden py-20 md:py-28">
@@ -252,7 +282,8 @@ export default function AboutSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="glass rounded-2xl p-8 md:p-10"
+              onMouseMove={spotlightMouse}
+              className="glass spotlight-card rounded-2xl p-8 md:p-10"
             >
               <div className="mb-6 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3">
                 <Target className="h-6 w-6 text-gold" />
@@ -272,7 +303,8 @@ export default function AboutSection() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="glass rounded-2xl p-8 md:p-10"
+              onMouseMove={spotlightMouse}
+              className="glass spotlight-card rounded-2xl p-8 md:p-10"
             >
               <div className="mb-6 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3">
                 <Eye className="h-6 w-6 text-gold" />
@@ -310,9 +342,9 @@ export default function AboutSection() {
             {/* Timeline base line (always visible, faded) */}
             <div className="absolute left-4 top-0 bottom-0 w-px bg-white/5 md:left-1/2 md:-translate-x-px" />
 
-            {/* Animated progress bar that fills as user scrolls */}
+            {/* Animated progress bar that fills as user scrolls — with gold glow pulse */}
             <motion.div
-              className="absolute left-4 top-0 w-px bg-gradient-to-b from-gold/60 via-gold/40 to-gold/20 md:left-1/2 md:-translate-x-px"
+              className="absolute left-4 top-0 w-1 bg-gradient-to-b from-gold/60 via-gold/40 to-gold/20 md:left-1/2 md:-translate-x-px animate-pulse-gold"
               style={{ height: timelineHeight }}
             />
 
@@ -345,7 +377,7 @@ export default function AboutSection() {
                     <motion.div
                       whileHover={{ scale: 1.02 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                      className={`relative overflow-hidden rounded-xl p-5 md:p-6 transition-all duration-300 ${
+                      className={`glow-hover relative overflow-hidden rounded-xl p-5 md:p-6 transition-all duration-300 ${
                         milestone.current
                           ? 'bg-gold/10 border border-gold/30 shadow-lg shadow-gold/10'
                           : 'bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] hover:border-gold/20'
@@ -425,6 +457,13 @@ export default function AboutSection() {
           </div>
         </div>
       </section>
+
+      {/* Premium Divider: between timeline and values */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="premium-divider py-2">
+          <div className="h-1.5 w-1.5 rotate-45 shrink-0 rounded-sm bg-gold/40" />
+        </div>
+      </div>
 
       {/* The Natraj Advantage - Comparison Table */}
       <section className="relative overflow-hidden py-20 md:py-28">
@@ -548,7 +587,7 @@ export default function AboutSection() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: '-80px' }}
-            className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
+            className="stagger-in grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4"
           >
             {values.map((value) => {
               const Icon = value.icon
@@ -557,7 +596,7 @@ export default function AboutSection() {
                   key={value.title}
                   variants={itemVariants}
                 >
-                  <TiltCard className="glass group rounded-2xl p-6 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/10">
+                  <TiltCard className="glass card-shine group rounded-2xl p-6 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/10">
                     <div className="mx-auto mb-4 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110">
                       <Icon className="h-6 w-6 text-gold" />
                     </div>

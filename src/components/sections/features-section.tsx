@@ -156,7 +156,7 @@ export default function FeaturesSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
           >
-            Why Choose <span className="gradient-text">Natraj</span>
+            <span className="text-reveal-hover" data-text="Why Choose Natraj">Why Choose <span className="gradient-text">Natraj</span></span>
           </motion.h2>
           <motion.div
             initial={{ scaleX: 0 }}
@@ -181,43 +181,45 @@ export default function FeaturesSection() {
               <motion.div
                 key={feature.title}
                 variants={cardVariants}
-                className="glass card-shine group relative rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-gold/10"
+                className="animated-gradient-border"
               >
-                {/* Hover glow effect */}
-                <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
-                  style={{ boxShadow: '0 0 30px rgba(200,150,62,0.15), 0 0 60px rgba(200,150,62,0.05)' }}
-                />
+                <div className="glass card-shine spotlight-card group relative rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-gold/10">
+                  {/* Hover glow effect */}
+                  <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
+                    style={{ boxShadow: '0 0 30px rgba(200,150,62,0.15), 0 0 60px rgba(200,150,62,0.05)' }}
+                  />
 
-                {/* Icon with float animation */}
-                <div className="mb-5 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110">
-                  <motion.div
-                    animate={{ y: [0, -4, 0] }}
-                    transition={{
-                      duration: 3,
-                      delay: index * 0.3,
-                      repeat: Infinity,
-                      ease: 'easeInOut',
-                    }}
-                  >
-                    <Icon className="h-6 w-6 text-gold" />
-                  </motion.div>
+                  {/* Icon with float animation and breathing glow */}
+                  <div className="mb-5 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110 animate-breathe">
+                    <motion.div
+                      animate={{ y: [0, -4, 0] }}
+                      transition={{
+                        duration: 3,
+                        delay: index * 0.3,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    >
+                      <Icon className="h-6 w-6 text-gold" />
+                    </motion.div>
+                  </div>
+
+                  {/* Content */}
+                  <div className="relative">
+                    <h3 className="mb-1 text-lg font-semibold text-foreground transition-colors group-hover:text-gold smooth-underline inline-block">
+                      {feature.title}
+                    </h3>
+                    <span className="mb-3 inline-block text-sm font-bold gradient-text text-gold-glow">
+                      <AnimatedStat value={feature.stat} />
+                    </span>
+                    <p className="text-sm leading-relaxed text-muted-foreground">
+                      {feature.description}
+                    </p>
+                  </div>
+
+                  {/* Bottom accent line */}
+                  <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent transition-all duration-500 group-hover:via-gold/40" />
                 </div>
-
-                {/* Content */}
-                <div className="relative">
-                  <h3 className="mb-1 text-lg font-semibold text-foreground transition-colors group-hover:text-gold">
-                    {feature.title}
-                  </h3>
-                  <span className="mb-3 inline-block text-sm font-bold gradient-text">
-                    <AnimatedStat value={feature.stat} />
-                  </span>
-                  <p className="text-sm leading-relaxed text-muted-foreground">
-                    {feature.description}
-                  </p>
-                </div>
-
-                {/* Bottom accent line */}
-                <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent transition-all duration-500 group-hover:via-gold/40" />
               </motion.div>
             )
           })}

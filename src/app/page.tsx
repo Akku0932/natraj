@@ -14,6 +14,7 @@ import { ProductDetailModal } from '@/components/product-detail-modal'
 import { ProductComparisonModal } from '@/components/product-comparison-modal'
 import { LoadingScreen } from '@/components/loading-screen'
 import { ScrollProgress } from '@/components/scroll-progress'
+import { AnnouncementBanner } from '@/components/announcement-banner'
 import HeroSection from '@/components/sections/hero-section'
 import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
@@ -30,6 +31,8 @@ import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
 import { CookieConsent } from '@/components/cookie-consent'
+import { QuickSearchModal } from '@/components/quick-search-modal'
+import { RecentlyViewedSection } from '@/components/recently-viewed-section'
 import { SectionTransition } from '@/components/section-transition'
 
 const pageVariants = {
@@ -50,6 +53,7 @@ export default function Home() {
     <>
       <LoadingScreen />
       <ScrollProgress />
+      <AnnouncementBanner />
       <Navbar />
       <main className="min-h-screen">
         <AnimatePresence mode="wait">
@@ -107,6 +111,7 @@ export default function Home() {
             >
               <Breadcrumbs items={[{ label: 'Home', page: 'home' }, { label: 'Products' }]} />
               <ProductsSection />
+              <RecentlyViewedSection />
             </motion.div>
           )}
 
@@ -789,6 +794,7 @@ export default function Home() {
       <ProductDetailModal />
       <ProductComparisonModal />
       <CookieConsent />
+      <QuickSearchModal />
     </>
   )
 }
