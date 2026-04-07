@@ -109,6 +109,13 @@ export default function FeaturedProductsSection() {
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="mb-14 flex flex-col items-center text-center md:mb-16">
+          <motion.div
+            initial={{ opacity: 0, scaleX: 0 }}
+            whileInView={{ opacity: 1, scaleX: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="mx-auto mb-6 h-px w-16 bg-gradient-to-r from-transparent via-gold/60 to-transparent"
+          />
           <motion.span
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -170,8 +177,10 @@ export default function FeaturedProductsSection() {
                 <motion.div
                   key={product.id}
                   variants={cardVariants}
-                  className="glass group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
+                  className="glass group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5 hover:border-gold/40"
                 >
+                  {/* Gold gradient glow at bottom on hover */}
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-24 bg-gradient-to-t from-gold/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                   {/* Image */}
                   <div className="relative aspect-square overflow-hidden bg-muted transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-gold/10">
                     {hasImage ? (
@@ -209,11 +218,11 @@ export default function FeaturedProductsSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="p-5">
+                  <div className="relative z-10 p-5">
                     {/* Category */}
                     <button
                       onClick={() => handleCategoryClick(product.category.slug)}
-                      className="mb-2 inline-block text-[11px] font-semibold uppercase tracking-wider text-gold transition-colors hover:text-gold/80"
+                      className="mb-2 inline-block border-l-2 border-gold/40 pl-2 text-xs font-semibold uppercase tracking-widest text-gold transition-colors hover:text-gold/80"
                     >
                       {product.category.name}
                     </button>
@@ -225,13 +234,31 @@ export default function FeaturedProductsSection() {
 
                     {/* Price */}
                     {product.price ? (
-                      <p className="text-lg font-bold text-foreground">
+                      <p className="inline-block rounded-md bg-gold/5 px-2.5 py-1 text-lg font-bold text-foreground">
                         ₹{product.price.toLocaleString('en-IN')}
                         <span className="ml-1 text-xs font-normal text-muted-foreground">excl. GST</span>
                       </p>
                     ) : (
-                      <p className="text-sm font-medium text-gold">Contact for Price</p>
+                      <p className="inline-block rounded-full border border-gold/30 bg-gold/5 px-3 py-1 text-sm font-medium text-gold">Contact for Price</p>
                     )}
+
+                    {/* Quick Glance Features */}
+                    {(() => {
+                      try {
+                        const feats = JSON.parse(product.features || '[]')
+                        if (feats.length === 0) return null
+                        return (
+                          <div className="mt-3 flex flex-wrap gap-1.5">
+                            {feats.slice(0, 3).map((feat: string, i: number) => (
+                              <span key={i} className="inline-flex items-center text-[10px] text-muted-foreground/70">
+                                <span className="mr-1 h-1 w-1 rounded-full bg-gold/50" />
+                                {feat}
+                              </span>
+                            ))}
+                          </div>
+                        )
+                      } catch { return null }
+                    })()}
 
                     {/* Actions */}
                     <div className="mt-4 flex gap-2">
@@ -245,14 +272,15 @@ export default function FeaturedProductsSection() {
                       <Button
                         asChild
                         size="sm"
-                        className="bg-green-600 text-white hover:bg-green-700 border-0"
+                        className="relative bg-green-600 text-white hover:bg-green-700 hover:scale-105 border-0 transition-transform duration-200"
                       >
                         <a
                           href={`https://wa.me/919868225911?text=${encodeURIComponent(`Hi, I'm interested in: ${product.name}`)}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <MessageCircle className="h-4 w-4" />
+                          <span className="absolute inset-0 rounded-md animate-ping-once bg-green-400/40" />
+                          <MessageCircle className="relative h-4 w-4" />
                         </a>
                       </Button>
                     </div>

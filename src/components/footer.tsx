@@ -106,7 +106,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative overflow-hidden bg-charcoal/95 text-white/80 backdrop-blur-xl">
+    <footer className="relative overflow-hidden border-t border-border/30 bg-charcoal/95 text-white/80 backdrop-blur-xl">
       {/* Premium gold gradient top border */}
       <div className="h-1 w-full gold-gradient" />
 
@@ -222,11 +222,18 @@ export function Footer() {
               >
                 <div className="flex items-center gap-3">
                   <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1 }}
-                    transition={{ type: 'spring', stiffness: 500, damping: 15, delay: 0.1 }}
+                    initial={{ scale: 0, rotate: -45 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ type: 'spring', stiffness: 500, damping: 12, delay: 0.1 }}
+                    className="flex items-center justify-center"
                   >
-                    <CheckCircle2 className="h-6 w-6 text-green-400" />
+                    <motion.div
+                      initial={{ scale: 0.5, opacity: 0.4 }}
+                      animate={{ scale: [0.5, 1.3, 1], opacity: [0.4, 0.8, 0] }}
+                      transition={{ duration: 1, delay: 0.2, ease: 'easeOut' }}
+                      className="absolute h-10 w-10 rounded-full bg-green-400/20"
+                    />
+                    <CheckCircle2 className="relative h-6 w-6 text-green-400" />
                   </motion.div>
                   <div>
                     <p className="text-sm font-semibold text-gold-light">

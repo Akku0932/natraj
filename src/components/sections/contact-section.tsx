@@ -289,6 +289,8 @@ Message: ${formData.message.trim()}`
               className="lg:col-span-3"
             >
               <div className="glass rounded-2xl p-8 md:p-10">
+                {/* Gold accent line above header */}
+                <div className="mb-4 h-[3px] w-16 rounded-full bg-gradient-to-r from-gold to-copper" />
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h2 className="text-2xl font-bold text-foreground">Send Us a Message</h2>
                   {/* 24h response badge */}
@@ -662,10 +664,10 @@ Message: ${formData.message.trim()}`
                       variants={itemVariants}
                       whileHover={{ scale: 1.02 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                      className="relative glass overflow-hidden rounded-xl p-5 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-md hover:shadow-gold/5"
+                      className="group relative overflow-hidden rounded-xl border border-border/40 bg-background/60 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10"
                     >
                       {/* Gold gradient top border accent */}
-                      <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold to-transparent" />
+                      <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       <div className="flex gap-4">
                         <div className={`inline-flex shrink-0 rounded-lg bg-gradient-to-br ${info.color} p-3`}>
                           <Icon className="h-5 w-5 text-gold" />

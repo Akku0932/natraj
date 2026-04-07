@@ -307,8 +307,8 @@ export function Navbar() {
                         </motion.div>
                         {currentPage === link.page && (
                           <motion.div
-                            layoutId="activeNav"
-                            className="absolute bottom-0 left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full gold-gradient"
+                            layoutId="activeNavIndicator"
+                            className="absolute -bottom-1 left-2 right-2 h-0.5 bg-gold rounded-full"
                             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                           />
                         )}
@@ -436,8 +436,8 @@ export function Navbar() {
                     </span>
                     {currentPage === link.page && (
                       <motion.div
-                        layoutId="activeNav"
-                        className="absolute bottom-0 left-1/2 h-0.5 w-6 -translate-x-1/2 rounded-full gold-gradient"
+                        layoutId="activeNavIndicator"
+                        className="absolute -bottom-1 left-2 right-2 h-0.5 bg-gold rounded-full"
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
@@ -450,7 +450,7 @@ export function Navbar() {
             <div className="hidden md:flex md:items-center md:gap-3">
               <button
                 onClick={handleCopyPhone}
-                className="flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-gold"
+                className="hidden lg:flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-gold"
                 aria-label="Copy phone number"
               >
                 {copiedPhone ? (
@@ -499,13 +499,21 @@ export function Navbar() {
                   {mounted && getThemeLabel()}
                 </TooltipContent>
               </Tooltip>
-              <Button
-                onClick={() => handleNavClick('contact')}
-                className="gold-gradient border-0 text-white shadow-lg shadow-gold/30 hover:shadow-gold/40 transition-all duration-300"
-                size="sm"
+              <motion.div
+                initial={{ scale: 0.9 }}
+                animate={{ scale: 1 }}
+                transition={{ type: 'spring', stiffness: 200, damping: 15 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
-                Get Quote
-              </Button>
+                <Button
+                  onClick={() => handleNavClick('contact')}
+                  className="gold-gradient border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300"
+                  size="sm"
+                >
+                  Get Quote
+                </Button>
+              </motion.div>
             </div>
 
             {/* Mobile: Theme Toggle + Menu */}
@@ -532,6 +540,13 @@ export function Navbar() {
                   </TooltipContent>
                 </Tooltip>
               )}
+              <a
+                href="tel:9868225911"
+                className="flex items-center justify-center h-9 w-9 rounded-md transition-colors hover:text-gold hover:bg-accent"
+                aria-label="Call us"
+              >
+                <Phone className="h-4 w-4" />
+              </a>
               <Button
                 variant="ghost"
                 size="icon"
@@ -543,6 +558,8 @@ export function Navbar() {
             </div>
           </div>
         </nav>
+        {/* Gradient line below navbar */}
+        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
       </motion.header>
 
       {/* Mobile Sheet Drawer */}
@@ -565,53 +582,56 @@ export function Navbar() {
 
           <div className="flex flex-col gap-1 px-4">
             {navLinks.map((link, index) => (
-              <motion.button
+              <motion.div
                 key={link.page}
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.08, duration: 0.3 }}
-                onClick={() => handleNavClick(link.page)}
-                className={`relative flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 ${
-                  currentPage === link.page
-                    ? 'bg-gold/10 text-gold'
-                    : 'text-foreground/70 hover:bg-accent hover:text-foreground'
-                }`}
+                transition={{ delay: index * 0.05 }}
               >
-                <span className="flex items-center gap-2">
-                  {link.label}
-                  {link.page === 'products' && (wishlistCount > 0 || compareCount > 0) && (
-                    <span className="ml-1 flex items-center gap-1">
-                      {wishlistCount > 0 && (
-                        <span className="relative flex items-center justify-center">
-                          <Heart className="h-3.5 w-3.5 text-red-400 fill-red-400" />
-                          <CountBadge count={wishlistCount} variant="red" />
-                        </span>
-                      )}
-                      {compareCount > 0 && (
-                        <span className="relative flex items-center justify-center">
-                          <GitCompareArrows className="h-3.5 w-3.5 text-gold" />
-                          <CountBadge count={compareCount} variant="gold" />
-                        </span>
-                      )}
-                    </span>
+                <button
+                  onClick={() => handleNavClick(link.page)}
+                  className={`relative flex w-full items-center rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 ${
+                    currentPage === link.page
+                      ? 'bg-gold/10 text-gold'
+                      : 'text-foreground/70 hover:bg-accent hover:text-foreground'
+                  }`}
+                >
+                  <span className="flex items-center gap-2">
+                    {link.label}
+                    {link.page === 'products' && (wishlistCount > 0 || compareCount > 0) && (
+                      <span className="ml-1 flex items-center gap-1">
+                        {wishlistCount > 0 && (
+                          <span className="relative flex items-center justify-center">
+                            <Heart className="h-3.5 w-3.5 text-red-400 fill-red-400" />
+                            <CountBadge count={wishlistCount} variant="red" />
+                          </span>
+                        )}
+                        {compareCount > 0 && (
+                          <span className="relative flex items-center justify-center">
+                            <GitCompareArrows className="h-3.5 w-3.5 text-gold" />
+                            <CountBadge count={compareCount} variant="gold" />
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </span>
+                  {currentPage === link.page && (
+                    <motion.div
+                      layoutId="activeMobileNav"
+                      className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full gold-gradient"
+                      transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+                    />
                   )}
-                </span>
-                {currentPage === link.page && (
-                  <motion.div
-                    layoutId="activeMobileNav"
-                    className="absolute left-0 top-1/2 h-8 w-1 -translate-y-1/2 rounded-r-full gold-gradient"
-                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                  />
-                )}
-              </motion.button>
+                </button>
+              </motion.div>
             ))}
           </div>
 
           <div className="mt-4 px-4">
             <motion.button
-              initial={{ opacity: 0, x: 20 }}
+              initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: navLinks.length * 0.08, duration: 0.3 }}
+              transition={{ delay: navLinks.length * 0.05 }}
               onClick={() => handleNavClick('sitemap')}
               className="relative flex items-center rounded-lg px-4 py-3 text-base font-medium transition-colors duration-200 text-foreground/70 hover:bg-accent hover:text-foreground"
             >
@@ -624,9 +644,9 @@ export function Navbar() {
             {/* Theme toggle in mobile drawer */}
             {mounted && (
               <motion.button
-                initial={{ opacity: 0, x: 20 }}
+                initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: (navLinks.length + 1) * 0.08, duration: 0.3 }}
+                transition={{ delay: (navLinks.length + 1) * 0.05 }}
                 onClick={cycleTheme}
                 className="relative flex w-full items-center gap-3 rounded-lg px-4 py-3 text-sm font-medium text-foreground/70 transition-colors duration-200 hover:bg-accent hover:text-foreground"
               >

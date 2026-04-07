@@ -14,6 +14,8 @@ import {
 } from '@/components/ui/dialog'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Textarea } from '@/components/ui/textarea'
 import { Skeleton } from '@/components/ui/skeleton'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
@@ -31,6 +33,8 @@ import {
   ShoppingBag,
   CheckCircle2,
   Wrench,
+  MessageSquare,
+  Send,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -72,6 +76,12 @@ export function ProductDetailModal() {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxZoomed, setLightboxZoomed] = useState(false)
+
+  // Enquiry form state
+  const [enquiryName, setEnquiryName] = useState('')
+  const [enquiryPhone, setEnquiryPhone] = useState('')
+  const [enquiryMessage, setEnquiryMessage] = useState('')
+  const [enquirySubmitted, setEnquirySubmitted] = useState(false)
 
   // Parse images from JSON string
   const images: string[] = (() => {
@@ -137,6 +147,10 @@ export function ProductDetailModal() {
             setError(null)
             setCurrentImageIndex(0)
             setQuantity(1)
+            setEnquiryName('')
+            setEnquiryPhone('')
+            setEnquiryMessage('')
+            setEnquirySubmitted(false)
             addToRecentlyViewed(selectedProduct)
           }
         } catch (err) {
@@ -262,15 +276,54 @@ export function ProductDetailModal() {
     }
   }
 
+  // Enquiry form submit handler
+  const handleEnquirySubmit = async () => {
+    if (!product || !enquiryName || !enquiryPhone) return
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: enquiryName,
+          phone: enquiryPhone,
+          email: `${enquiryPhone}@whatsapp.enquiry`,
+          subject: `Product Enquiry: ${product.name}`,
+          message: [
+            `Product: ${product.name}`,
+            `Category: ${product.category.name}`,
+            product.price ? `Price: ₹${product.price.toLocaleString('en-IN')}` : 'Price: Contact for price',
+            enquiryMessage ? `Customer Message: ${enquiryMessage}` : '',
+          ].filter(Boolean).join('\n'),
+        }),
+      })
+
+      if (!res.ok) throw new Error('Failed to submit enquiry')
+
+      toast({ title: 'Enquiry sent successfully!', description: `We'll get back to you about ${product.name}` })
+      setEnquirySubmitted(true)
+    } catch {
+      toast({ title: 'Failed to send enquiry', variant: 'destructive' })
+    }
+  }
+
   // Build WhatsApp "Add to Quote" message with product details
   const buildQuoteMessage = () => {
     if (!product) return ''
+    let featuresStr = ''
+    try {
+      const feats = JSON.parse(product.features || '[]')
+      if (feats.length > 0) featuresStr = feats.slice(0, 3).map(f => `  • ${f}`).join('\n')
+    } catch {}
+
     const lines = [
-      `Hi! I'm interested in ordering:`,
+      `Hi! I'm interested in:`,
       ``,
       `📦 Product: ${product.name}`,
       `🏷️ Category: ${product.category.name}`,
     ]
+    if (product.usage) lines.push(`📌 Usage: ${product.usage}`)
+    if (featuresStr) lines.push(`✨ Key Features:\n${featuresStr}`)
     if (product.price) {
       lines.push(`💰 Price: ₹${product.price.toLocaleString('en-IN')} (excl. GST)`)
     } else {
@@ -521,6 +574,16 @@ export function ProductDetailModal() {
                           <Package className="h-4 w-4 text-gold" />
                           Specifications
                         </div>
+                        {Object.keys(specs).length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {Object.entries(specs).slice(0, 4).map(([key, value]) => (
+                              <span key={key} className="inline-flex items-center rounded-full border border-border/50 bg-muted/30 px-3 py-1 text-xs text-muted-foreground">
+                                <span className="mr-1.5 font-medium capitalize text-foreground/70">{key.replace(/_/g, ' ')}:</span>
+                                {String(value).length > 30 ? String(value).split(',')[0] + '...' : String(value)}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         {Object.keys(specs).length > 0 ? (
                           <div className="overflow-hidden rounded-lg border border-border/50">
                             <table className="w-full text-sm">
@@ -636,6 +699,43 @@ export function ProductDetailModal() {
                           Add {quantity} Item{quantity !== 1 ? 's' : ''} to Quote
                         </a>
                       </Button>
+
+                      {/* Quick Enquiry Form */}
+                      <div className="space-y-3 pt-2 border-t border-border/50">
+                        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <MessageSquare className="h-4 w-4 text-gold" />
+                          Quick Enquiry
+                        </div>
+                        <Input
+                          placeholder="Your Name"
+                          value={enquiryName}
+                          onChange={(e) => setEnquiryName(e.target.value)}
+                          className="border-border/50 text-sm"
+                        />
+                        <Input
+                          placeholder="Phone Number"
+                          type="tel"
+                          value={enquiryPhone}
+                          onChange={(e) => setEnquiryPhone(e.target.value)}
+                          className="border-border/50 text-sm"
+                        />
+                        <Textarea
+                          placeholder="Your message (optional)"
+                          value={enquiryMessage}
+                          onChange={(e) => setEnquiryMessage(e.target.value)}
+                          rows={2}
+                          className="border-border/50 text-sm resize-none"
+                        />
+                        <Button
+                          onClick={handleEnquirySubmit}
+                          variant="outline"
+                          className="w-full border-gold/30 text-gold hover:bg-gold/10"
+                          disabled={!enquiryName || !enquiryPhone || enquirySubmitted}
+                        >
+                          <Send className="mr-2 h-4 w-4" />
+                          {enquirySubmitted ? 'Enquiry Sent!' : 'Send Enquiry'}
+                        </Button>
+                      </div>
                     </div>
 
                     {/* Action buttons */}

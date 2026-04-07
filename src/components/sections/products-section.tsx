@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap, LayoutGrid } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -95,6 +95,8 @@ export default function ProductsSection() {
   const [sortBy, setSortBy] = useState<SortOption>('featured')
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const retryCountRef = useRef(0)
+  const [retryAttempt, setRetryAttempt] = useState(0)
 
   const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen, wishlist, toggleWishlist, isInWishlist } = useStore()
 
@@ -120,7 +122,10 @@ export default function ProductsSection() {
   const fetchProducts = useCallback(async () => {
     setLoadingProducts(true)
     setError(null)
-    try {
+    retryCountRef.current = 0
+    setRetryAttempt(0)
+
+    const doFetch = async () => {
       const params = new URLSearchParams()
       if (selectedCategory && selectedCategory !== 'all') {
         params.set('category', selectedCategory)
@@ -132,14 +137,40 @@ export default function ProductsSection() {
       if (res.ok) {
         const data = await res.json()
         setProducts(data)
-      } else {
-        setError('Failed to load products')
+        return true
       }
+      setError('Failed to load products')
+      return false
+    }
+
+    try {
+      await doFetch()
     } catch (err) {
-      setError('Network error. Please check your connection.')
       console.error('Failed to fetch products:', err)
+
+      // Auto-retry up to 3 times with 2s delay
+      for (let attempt = 1; attempt <= 3; attempt++) {
+        retryCountRef.current = attempt
+        setRetryAttempt(attempt)
+        setError(`Network error. Retrying... (attempt ${attempt}/3)`)
+        await new Promise(resolve => setTimeout(resolve, 2000))
+        try {
+          const success = await doFetch()
+          if (success) {
+            retryCountRef.current = 0
+            setRetryAttempt(0)
+            return
+          }
+        } catch (retryErr) {
+          console.error(`Retry attempt ${attempt} failed:`, retryErr)
+        }
+      }
+
+      setError('Network error. Please check your connection and try again.')
     } finally {
       setLoadingProducts(false)
+      retryCountRef.current = 0
+      setRetryAttempt(0)
     }
   }, [selectedCategory, searchQuery])
 
@@ -148,6 +179,7 @@ export default function ProductsSection() {
   }, [fetchProducts])
 
   const sortedProducts = useMemo(() => sortProducts(products, sortBy), [products, sortBy])
+  const totalProducts = useMemo(() => categories.reduce((sum, cat) => sum + cat.productCount, 0), [categories])
 
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug === 'all' ? null : slug)
@@ -197,6 +229,9 @@ export default function ProductsSection() {
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-white/60">
             Explore our comprehensive range of premium electrical control panels
+          </p>
+          <p className="mx-auto mt-2 text-sm text-white/40">
+            {totalProducts} products across {categories.length} categories
           </p>
         </div>
       </section>
@@ -256,7 +291,7 @@ export default function ProductsSection() {
                 }`}
               >
                 {cat.name}
-                <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">
+                <span className="ml-1.5 rounded-full bg-gold/20 px-2 py-0.5 text-[10px] font-semibold">
                   {cat.productCount}
                 </span>
               </Button>
@@ -326,18 +361,27 @@ export default function ProductsSection() {
           {error ? (
             <div className="py-20 text-center">
               <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-red-50 ring-1 ring-red-200 dark:bg-red-900/20 dark:ring-red-800/50">
-                <AlertCircle className="h-10 w-10 text-red-400" />
+                <AlertCircle className="h-10 w-10 text-red-400 animate-pulse" />
               </div>
               <h3 className="text-lg font-semibold text-foreground">Something went wrong</h3>
-              <p className="mt-2 text-muted-foreground">{error}</p>
-              <Button
-                onClick={fetchProducts}
-                variant="outline"
-                className="mt-4 border-gold/30 text-gold hover:bg-gold/10"
-              >
-                <RefreshCw className="mr-2 h-4 w-4" />
-                Try Again
-              </Button>
+              <p className="mt-2 text-muted-foreground">
+                {error}
+                {retryAttempt > 0 && (
+                  <span className="ml-1 inline-flex items-center rounded-full bg-amber-100 px-2 py-0.5 text-xs font-medium text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">
+                    Attempt {retryAttempt}/3
+                  </span>
+                )}
+              </p>
+              <div className="mt-4 flex items-center justify-center gap-3">
+                <Button
+                  onClick={fetchProducts}
+                  variant="outline"
+                  className="border-gold/30 text-gold hover:bg-gold/10"
+                >
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Retry Now
+                </Button>
+              </div>
             </div>
           ) : loadingProducts ? (
             /* Loading skeleton */
@@ -357,25 +401,42 @@ export default function ProductsSection() {
             </div>
           ) : sortedProducts.length === 0 ? (
             <div className="py-20 text-center">
-              <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-gold/10 to-gold/5 ring-1 ring-gold/20">
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-gold/20 to-gold/5">
+              <div className="mx-auto mb-6 flex h-28 w-28 items-center justify-center rounded-full border-2 border-dashed border-gold/40 bg-gradient-to-br from-gold/10 to-gold/5 animate-[spin_12s_linear_infinite] ring-1 ring-gold/20">
+                <div className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-gold/20 to-gold/5">
                   <Package className="h-8 w-8 text-gold/70" />
                 </div>
               </div>
               <h3 className="text-lg font-semibold text-foreground">No products match your search</h3>
               <p className="mt-2 text-muted-foreground">
-                Try adjusting your search query or browse all categories
+                We couldn't find any products matching your criteria. Try adjusting your search query or browse our categories to discover our full range of electrical control panels.
               </p>
-              <Button
-                onClick={() => {
-                  clearSearch()
-                  setSelectedCategory(null)
-                }}
-                variant="outline"
-                className="mt-4 border-gold/30 text-gold hover:bg-gold/10"
-              >
-                View All Products
-              </Button>
+              <div className="mt-4 flex items-center justify-center gap-3">
+                <Button
+                  onClick={() => {
+                    clearSearch()
+                    setSelectedCategory(null)
+                  }}
+                  variant="outline"
+                  className="border-gold/30 text-gold hover:bg-gold/10"
+                >
+                  View All Products
+                </Button>
+                <Button
+                  onClick={() => {
+                    clearSearch()
+                    setSelectedCategory(null)
+                    const categoriesSection = document.getElementById('categories')
+                    if (categoriesSection) {
+                      categoriesSection.scrollIntoView({ behavior: 'smooth' })
+                    }
+                  }}
+                  variant="outline"
+                  className="border-gold/30 text-gold hover:bg-gold/10"
+                >
+                  <LayoutGrid className="mr-2 h-4 w-4" />
+                  Browse Categories
+                </Button>
+              </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
