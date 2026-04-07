@@ -1287,3 +1287,99 @@ img, video, canvas, iframe, [role="img"] {
   backdrop-filter: blur(8px) saturate(1.6);
   -webkit-backdrop-filter: blur(8px) saturate(1.6);
 }
+
+/* ============================================================
+   Round 7 CSS Utilities
+   ============================================================ */
+
+/* Neon glow text for CTAs */
+@keyframes neon-glow {
+  0%, 100% { text-shadow: 0 0 10px rgba(200, 150, 62, 0.4), 0 0 20px rgba(200, 150, 62, 0.2); }
+  50% { text-shadow: 0 0 20px rgba(200, 150, 62, 0.6), 0 0 40px rgba(200, 150, 62, 0.3), 0 0 60px rgba(200, 150, 62, 0.1); }
+}
+.neon-text-glow {
+  animation: neon-glow 3s ease-in-out infinite;
+}
+
+/* Reveal on scroll - elements fade up when in view */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+.reveal-up.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Horizontal gold line with animated width */
+.gold-line-animated {
+  position: relative;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 62, 0.3), transparent);
+}
+.gold-line-animated::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, #C8963E, transparent);
+  transform: translateX(-50%);
+  transition: width 1s ease;
+}
+.gold-line-animated:hover::after {
+  width: 100%;
+}
+
+/* Pulsing dot indicator */
+@keyframes pulse-dot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.5); opacity: 0.7; }
+}
+.pulse-dot {
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Tilt card effect */
+.tilt-card {
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+}
+
+/* Gradient text warm variant */
+.gradient-text-warm {
+  background: linear-gradient(135deg, #C8963E, #E8C77B, #D4A853);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass card hover elevation */
+.glass-card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+}
+.dark .glass-card-hover:hover {
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3), 0 0 20px rgba(200, 150, 62, 0.05);
+}
+
+/* Animated counter shimmer for stat numbers */
+@keyframes counter-shimmer {
+  0% { background-position: -100% center; }
+  100% { background-position: 200% center; }
+}
+
+/* Smooth scroll snap container */
+.snap-scroll {
+  scroll-snap-type: y proximity;
+  -webkit-overflow-scrolling: touch;
+}
+.snap-scroll > * {
+  scroll-snap-align: start;
+}

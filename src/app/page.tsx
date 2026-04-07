@@ -32,6 +32,8 @@ import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
 import IndustryApplications from '@/components/sections/industry-applications'
+import PartnerLogosSection from '@/components/sections/partner-logos-section'
+import ServiceAreasSection from '@/components/sections/service-areas-section'
 import { CookieConsent } from '@/components/cookie-consent'
 import { QuickSearchModal } from '@/components/quick-search-modal'
 import { RecentlyViewedSection } from '@/components/recently-viewed-section'
@@ -97,6 +99,12 @@ export default function Home() {
               </LazySection>
               <SectionTransition variant="gradient" />
               <CertificationsSection />
+              <LazySection minHeight="600px">
+                <PartnerLogosSection />
+              </LazySection>
+              <LazySection minHeight="500px">
+                <ServiceAreasSection />
+              </LazySection>
             </motion.div>
           )}
 
