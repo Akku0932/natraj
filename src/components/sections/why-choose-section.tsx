@@ -3,7 +3,6 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Calendar, Award, Settings, Truck, Headphones, TrendingDown } from 'lucide-react'
-import { FloatingParticles } from '@/components/floating-particles'
 
 const advantages = [
   {
@@ -43,18 +42,17 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.2,
+      staggerChildren: 0.1,
+      delayChildren: 0.15,
     },
   },
 }
 
 const itemVariants = {
-  hidden: { opacity: 0, y: 30, scale: 0.95 },
+  hidden: { opacity: 0, y: 25 },
   visible: {
     opacity: 1,
     y: 0,
-    scale: 1,
     transition: {
       duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
@@ -72,15 +70,9 @@ export function WhyChooseSection() {
       id="why-choose"
       className="relative overflow-hidden py-20 md:py-28"
     >
-      {/* Dark charcoal background */}
+      {/* Dark background */}
       <div className="absolute inset-0 bg-charcoal" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,150,62,0.06)_0%,transparent_70%)]" />
-
-      {/* Gold dot-pattern background overlay */}
-      <div className="absolute inset-0 dot-pattern opacity-40" />
-
-      {/* Floating particles */}
-      <FloatingParticles count={4} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
@@ -111,7 +103,7 @@ export function WhyChooseSection() {
           </motion.p>
         </div>
 
-        {/* Advantage cards grid */}
+        {/* Advantage cards - CLEAN, no excessive effects */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
@@ -123,24 +115,19 @@ export function WhyChooseSection() {
               key={advantage.title}
               variants={itemVariants}
               whileHover={{
-                scale: 1.02,
                 borderColor: 'rgba(200, 150, 62, 0.3)',
-                boxShadow: '0 0 30px rgba(200, 150, 62, 0.15)',
+                boxShadow: '0 4px 20px rgba(200, 150, 62, 0.1)',
               }}
-              transition={{ type: 'spring', stiffness: 300, damping: 20 }}
-              className="card-shine group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 md:p-8 transition-colors duration-300"
+              transition={{ type: 'spring', stiffness: 300, damping: 25 }}
+              className="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.03] p-6 md:p-8 transition-colors duration-300"
             >
-              {/* Icon in gold-tinted circle */}
               <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-gold/10">
                 <advantage.icon className="h-6 w-6 text-gold" />
               </div>
 
-              {/* Title */}
               <h3 className="mb-2 text-lg font-semibold text-white">
                 {advantage.title}
               </h3>
-
-              {/* Description */}
               <p className="text-sm leading-relaxed text-white/60">
                 {advantage.description}
               </p>

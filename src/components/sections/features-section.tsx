@@ -1,9 +1,8 @@
 'use client'
 
-import { useRef, useEffect, useState, useCallback } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Award, Shield, Wrench, Settings, Truck, Headphones } from 'lucide-react'
-import { FloatingParticles } from '@/components/floating-particles'
 
 const features = [
   {
@@ -76,7 +75,6 @@ function AnimatedStat({ value }: { value: string }) {
     function animate(currentTime: number) {
       const elapsed = currentTime - startTime
       const progress = Math.min(elapsed / duration, 1)
-      // Ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3)
       const currentNum = eased * num
 
@@ -113,12 +111,12 @@ const containerVariants = {
 }
 
 const cardVariants = {
-  hidden: { opacity: 0, y: 40 },
+  hidden: { opacity: 0, y: 30 },
   visible: {
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.5,
       ease: [0.22, 1, 0.36, 1],
     },
   },
@@ -133,9 +131,6 @@ export default function FeaturesSection() {
       {/* Background */}
       <div className="absolute inset-0 bg-warm-gray" />
       <div className="gold-gradient-subtle absolute inset-0" />
-
-      {/* Floating particles */}
-      <FloatingParticles count={6} />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
@@ -156,18 +151,12 @@ export default function FeaturesSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
           >
-            <span className="text-reveal-hover" data-text="Why Choose Natraj">Why Choose <span className="gradient-text">Natraj</span></span>
+            Why Choose <span className="gradient-text">Natraj</span>
           </motion.h2>
-          <motion.div
-            initial={{ scaleX: 0 }}
-            whileInView={{ scaleX: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="section-divider mx-auto mt-6 w-24"
-          />
+          <div className="section-divider mx-auto mt-6 w-24" />
         </div>
 
-        {/* Feature Cards Grid */}
+        {/* Feature Cards Grid - CLEAN, no excessive effects */}
         <motion.div
           ref={ref}
           variants={containerVariants}
@@ -175,51 +164,32 @@ export default function FeaturesSection() {
           animate={isInView ? 'visible' : 'hidden'}
           className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
         >
-          {features.map((feature, index) => {
+          {features.map((feature) => {
             const Icon = feature.icon
             return (
               <motion.div
                 key={feature.title}
                 variants={cardVariants}
-                className="animated-gradient-border"
+                className="glass group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
               >
-                <div className="glass card-shine spotlight-card group relative rounded-2xl p-8 transition-all duration-500 hover:-translate-y-2 hover:shadow-xl hover:shadow-gold/10">
-                  {/* Hover glow effect */}
-                  <div className="absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-500 group-hover:opacity-100 pointer-events-none"
-                    style={{ boxShadow: '0 0 30px rgba(200,150,62,0.15), 0 0 60px rgba(200,150,62,0.05)' }}
-                  />
-
-                  {/* Icon with float animation and breathing glow */}
-                  <div className="mb-5 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110 animate-breathe">
-                    <motion.div
-                      animate={{ y: [0, -4, 0] }}
-                      transition={{
-                        duration: 3,
-                        delay: index * 0.3,
-                        repeat: Infinity,
-                        ease: 'easeInOut',
-                      }}
-                    >
-                      <Icon className="h-6 w-6 text-gold" />
-                    </motion.div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="relative">
-                    <h3 className="mb-1 text-lg font-semibold text-foreground transition-colors group-hover:text-gold smooth-underline inline-block">
-                      {feature.title}
-                    </h3>
-                    <span className="mb-3 inline-block text-sm font-bold gradient-text text-gold-glow">
-                      <AnimatedStat value={feature.stat} />
-                    </span>
-                    <p className="text-sm leading-relaxed text-muted-foreground">
-                      {feature.description}
-                    </p>
-                  </div>
-
-                  {/* Bottom accent line */}
-                  <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent transition-all duration-500 group-hover:via-gold/40" />
+                {/* Icon */}
+                <div className="mb-5 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-105">
+                  <Icon className="h-6 w-6 text-gold" />
                 </div>
+
+                {/* Content */}
+                <h3 className="mb-1 text-lg font-semibold text-foreground transition-colors group-hover:text-gold">
+                  {feature.title}
+                </h3>
+                <span className="mb-3 inline-block text-sm font-bold gradient-text">
+                  <AnimatedStat value={feature.stat} />
+                </span>
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {feature.description}
+                </p>
+
+                {/* Bottom accent line */}
+                <div className="absolute bottom-0 left-8 right-8 h-px bg-gradient-to-r from-transparent via-gold/0 to-transparent transition-all duration-300 group-hover:via-gold/30" />
               </motion.div>
             )
           })}
