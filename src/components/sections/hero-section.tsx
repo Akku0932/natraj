@@ -40,6 +40,9 @@ export default function HeroSection() {
   const ctaY = useTransform(scrollYProgress, [0.08, 0.22, 0.32], [30, 0, -25])
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0.5, 0.7], [1, 0])
 
+  // Parallax: background moves slower (0.5x) than scroll
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '-50%'])
+
   // Preload frames progressively
   useEffect(() => {
     const preloadInitialFrames = () => {
@@ -110,17 +113,20 @@ export default function HeroSection() {
     >
       {/* Sticky frame container */}
       <div className="sticky top-0 h-screen w-full overflow-hidden bg-charcoal">
-        {/* Frame image */}
-        <div className="absolute inset-0 flex items-center justify-center">
+        {/* Frame image with parallax */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center will-change-transform"
+          style={{ y: bgY }}
+        >
           <img
             ref={imgRef}
             src={getFramePath(currentFrame)}
             alt="Natraj Electricals - Premium Electrical Panels"
-            className="h-full w-full object-cover will-change-transform"
+            className="h-[150%] w-full object-cover"
             loading="eager"
             draggable={false}
           />
-        </div>
+        </motion.div>
 
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-charcoal/70 via-charcoal/40 to-charcoal/80" />
@@ -147,8 +153,13 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Center: Main heading - CLEAN supplier-focused */}
+        {/* Center: Main heading with glass card overlay */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4">
+          {/* Semi-transparent glass card behind text for readability */}
+          <motion.div
+            className="mx-auto w-full max-w-3xl rounded-3xl border border-white/[0.08] bg-black/20 p-8 backdrop-blur-sm sm:p-10 md:p-14"
+            style={{ opacity: titleOpacity }}
+          >
           {/* Trusted Since 1998 with decorative gold lines */}
           <motion.div
             style={{ opacity: titleOpacity, y: titleY }}
@@ -180,7 +191,7 @@ export default function HeroSection() {
           {/* CTA Buttons */}
           <motion.div
             style={{ opacity: ctaOpacity, y: ctaY }}
-            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+            className="mt-8 flex flex-col items-center gap-4 sm:flex-row"
           >
             <Button
               onClick={() => setCurrentPage('products')}
@@ -203,7 +214,7 @@ export default function HeroSection() {
           {/* Trust Indicator Badges */}
           <motion.div
             style={{ opacity: ctaOpacity, y: ctaY }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-3"
+            className="mt-6 flex flex-wrap items-center justify-center gap-3"
           >
             {[
               { icon: Shield, label: 'ISO 9001:2015 Certified', delay: 0.4 },
@@ -222,8 +233,8 @@ export default function HeroSection() {
               </motion.div>
             ))}
           </motion.div>
+          </motion.div>
         </div>
-
         {/* Bottom: Scroll to explore indicator */}
         <div
           style={{ opacity: scrollIndicatorOpacity }}

@@ -232,7 +232,7 @@ export function Navbar() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'glass-nav shadow-lg shadow-black/[0.06]'
+            ? 'glass-nav shadow-lg shadow-black/[0.06] [box-shadow:0_4px_20px_-2px_rgba(0,0,0,0.08),0_8px_32px_-4px_rgba(200,150,62,0.06)]'
             : 'bg-transparent'
         }`}
       >
@@ -250,7 +250,7 @@ export function Navbar() {
                 height={40}
                 className={`h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 ${
                   scrolled ? 'drop-shadow-[0_1px_4px_rgba(200,150,62,0.2)]' : ''
-                } group-hover:drop-shadow-[0_0_8px_rgba(200,150,62,0.4)]`}
+                } group-hover:drop-shadow-[0_0_12px_rgba(200,150,62,0.5)] group-hover:brightness-[1.05] group-hover:saturate-[1.2]`}
                 priority
               />
             </button>
@@ -560,15 +560,22 @@ export function Navbar() {
             </div>
           </div>
         </nav>
-        {/* Gradient line below navbar */}
-        <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+        {/* Gradient line below navbar — subtle when idle, accent when scrolled */}
+        <motion.div
+          animate={{
+            opacity: scrolled ? 1 : 0.4,
+            scaleY: scrolled ? 1.5 : 1,
+          }}
+          transition={{ duration: 0.4, ease: 'easeOut' }}
+          className="absolute bottom-0 left-0 right-0 origin-bottom h-px bg-gradient-to-r from-transparent via-gold/40 to-transparent"
+        />
       </motion.header>
 
       {/* Mobile Sheet Drawer */}
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent
           side="right"
-          className="w-[300px] bg-background/95 backdrop-blur-xl border-l border-gold/10 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
+          className="w-[300px] sheet-slide-ease-out bg-background/95 backdrop-blur-xl border-l border-gold/10 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
         >
           <SheetHeader className="pt-8 pb-4">
             <SheetTitle className="flex items-center gap-2">
