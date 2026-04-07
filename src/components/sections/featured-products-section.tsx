@@ -134,15 +134,20 @@ export default function FeaturedProductsSection() {
           >
             Handpicked <span className="gradient-text">Featured Products</span>
           </motion.h2>
-          <motion.p
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="mx-auto mt-4 max-w-xl text-muted-foreground"
+            className="mx-auto mt-4 max-w-xl overflow-hidden"
           >
-            Quality products from India&apos;s leading brands — carefully selected for reliability and performance.
-          </motion.p>
+            <div className="animate-ticker whitespace-nowrap">
+              <span className="mx-4 text-muted-foreground">Handpicked from India&apos;s leading brands — carefully selected for reliability and performance.</span>
+              <span className="mx-4 text-muted-foreground">Handpicked from India&apos;s leading brands — carefully selected for reliability and performance.</span>
+              <span className="mx-4 text-muted-foreground">Handpicked from India&apos;s leading brands — carefully selected for reliability and performance.</span>
+              <span className="mx-4 text-muted-foreground">Handpicked from India&apos;s leading brands — carefully selected for reliability and performance.</span>
+            </div>
+          </motion.div>
           <div className="section-divider mx-auto mt-6 w-24" />
         </div>
 
@@ -177,7 +182,7 @@ export default function FeaturedProductsSection() {
                 <motion.div
                   key={product.id}
                   variants={cardVariants}
-                  className="glass card-shine shimmer-hover group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10 hover:border-gold/40"
+                  className="glass card-shine shimmer-hover product-card-glow group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10 hover:border-gold/40"
                 >
                   {/* Gold gradient glow at bottom on hover */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-24 bg-gradient-to-t from-gold/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -188,7 +193,7 @@ export default function FeaturedProductsSection() {
                         src={images[0]}
                         alt={product.name}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-110"
+                        className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
@@ -218,7 +223,7 @@ export default function FeaturedProductsSection() {
                   </div>
 
                   {/* Content */}
-                  <div className="relative z-10 p-5">
+                  <div className="relative z-10 p-6">
                     {/* Category */}
                     <button
                       onClick={() => handleCategoryClick(product.category.slug)}
@@ -232,9 +237,9 @@ export default function FeaturedProductsSection() {
                       {product.name}
                     </h3>
 
-                    {/* Price */}
+                    {/* Price with gold glow on hover */}
                     {product.price ? (
-                      <p className="inline-block rounded-md bg-gold/5 px-2.5 py-1 text-lg font-bold text-foreground">
+                      <p className="inline-block rounded-md bg-gold/5 px-2.5 py-1 text-lg font-bold text-foreground transition-all duration-300 group-hover:text-glow-gold">
                         ₹{product.price.toLocaleString('en-IN')}
                         <span className="ml-1 text-xs font-normal text-muted-foreground">excl. GST</span>
                       </p>

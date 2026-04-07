@@ -1810,3 +1810,236 @@ img, video, canvas, iframe, [role="img"] {
 .gold-glow-subtle:hover {
   box-shadow: 0 0 20px rgba(200, 150, 62, 0.15), 0 0 40px rgba(200, 150, 62, 0.05);
 }
+
+/* ============================================================
+   Task 33-b — Micro-Interaction CSS Utilities
+   ============================================================ */
+
+/* Product card gold glow on hover */
+.product-card-glow {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.product-card-glow:hover {
+  box-shadow: 0 4px 20px -4px rgba(200, 150, 62, 0.15), 0 0 0 1px rgba(200, 150, 62, 0.1);
+}
+
+/* Subtle text glow effect */
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(200, 150, 62, 0.3);
+}
+
+/* Smooth card reveal animation */
+.card-reveal {
+  opacity: 0;
+  transform: translateY(12px);
+  animation: cardReveal 0.5s ease forwards;
+}
+@keyframes cardReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Gold shimmer loading skeleton */
+.skeleton-gold {
+  background: linear-gradient(90deg, rgba(200,150,62,0.05) 25%, rgba(200,150,62,0.1) 50%, rgba(200,150,62,0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Hover underline animation */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #c8963e, #d4a853);
+  transition: width 0.3s ease;
+}
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* Button press effect */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Focus ring for interactive elements */
+.focus-ring-gold:focus-visible {
+  outline: 2px solid #c8963e;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Ticker/marquee for featured subtitle text */
+@keyframes ticker-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.animate-ticker {
+  display: inline-flex;
+  animation: ticker-scroll 20s linear infinite;
+}
+.animate-ticker:hover {
+  animation-play-state: paused;
+}
+
+/* Pulse animation for stat numbers after counting */
+@keyframes stat-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+.stat-pulse-done {
+  animation: stat-pulse 0.6s ease-in-out;
+}
+
+/* ============================================================
+   Round 13 — Micro-Interaction Polish (Task 33-b)
+   ============================================================ */
+
+/* Product card gold glow on hover */
+.product-card-glow {
+  transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.product-card-glow:hover {
+  box-shadow: 0 4px 20px -4px rgba(200, 150, 62, 0.15), 0 0 0 1px rgba(200, 150, 62, 0.1);
+}
+
+/* Subtle text glow effect */
+.text-glow-gold {
+  text-shadow: 0 0 20px rgba(200, 150, 62, 0.3);
+}
+
+/* Smooth card reveal animation */
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.card-reveal {
+  animation: cardReveal 0.5s ease forwards;
+}
+
+/* Gold shimmer loading skeleton */
+@keyframes skeletonShimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+.skeleton-gold {
+  background: linear-gradient(90deg, rgba(200,150,62,0.05) 25%, rgba(200,150,62,0.1) 50%, rgba(200,150,62,0.05) 75%);
+  background-size: 200% 100%;
+  animation: skeletonShimmer 1.5s ease-in-out infinite;
+}
+
+/* Hover underline animation */
+.hover-underline {
+  position: relative;
+}
+.hover-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #c8963e, #d4a853);
+  transition: width 0.3s ease;
+}
+.hover-underline:hover::after {
+  width: 100%;
+}
+
+/* Button press effect */
+.btn-press:active {
+  transform: scale(0.97);
+}
+
+/* Status indicator - green dot for "Open Now" */
+.status-open::before {
+  content: '';
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #22c55e;
+  margin-right: 6px;
+  animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* Price hover gold glow */
+.price-glow {
+  transition: text-shadow 0.3s ease;
+}
+.price-glow:hover {
+  text-shadow: 0 0 12px rgba(200, 150, 62, 0.3);
+}
+
+/* WhatsApp CTA enhanced pulse */
+@keyframes whatsapp-pulse-ring {
+  0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.4); }
+  70% { box-shadow: 0 0 0 12px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+.whatsapp-pulse {
+  animation: whatsapp-pulse-ring 2s ease-in-out infinite;
+}
+
+/* Smooth image zoom container */
+.img-zoom-container {
+  overflow: hidden;
+}
+.img-zoom-container img {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.img-zoom-container:hover img {
+  transform: scale(1.05);
+}
+
+/* Badge count animation */
+@keyframes badge-pop {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+.badge-pop {
+  animation: badge-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Subtle breathing border for active elements */
+@keyframes border-breathe {
+  0%, 100% { border-color: rgba(200, 150, 62, 0.15); }
+  50% { border-color: rgba(200, 150, 62, 0.4); }
+}
+.border-breathe-gold {
+  animation: border-breathe 3s ease-in-out infinite;
+}
+
+/* Section fade-in on scroll */
+.section-fade-in {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.section-fade-in.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Gradient text hover brighten */
+.gradient-hover-brighten {
+  transition: filter 0.3s ease;
+}
+.gradient-hover-brighten:hover {
+  filter: brightness(1.2);
+}

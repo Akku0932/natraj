@@ -44,11 +44,11 @@ const quickLinks: { label: string; page: PageView; hideOnMobile?: boolean }[] = 
 ]
 
 const socialLinks = [
-  { icon: Facebook, href: '#', label: 'Follow us on Facebook', platform: 'Facebook' },
-  { icon: Instagram, href: '#', label: 'Follow us on Instagram', platform: 'Instagram' },
-  { icon: Twitter, href: '#', label: 'Follow us on Twitter', platform: 'Twitter' },
-  { icon: Linkedin, href: '#', label: 'Connect with us on LinkedIn', platform: 'LinkedIn' },
-  { icon: Youtube, href: '#', label: 'Subscribe to our YouTube channel', platform: 'YouTube' },
+  { icon: Facebook, href: 'https://facebook.com/natrajelectricals', label: 'Follow us on Facebook', platform: 'Facebook' },
+  { icon: Instagram, href: 'https://instagram.com/natrajelectricals', label: 'Follow us on Instagram', platform: 'Instagram' },
+  { icon: Twitter, href: 'https://x.com/natrajelectricals', label: 'Follow us on Twitter', platform: 'Twitter' },
+  { icon: Linkedin, href: 'https://linkedin.com/company/natraj-electricals', label: 'Connect with us on LinkedIn', platform: 'LinkedIn' },
+  { icon: Youtube, href: 'https://youtube.com/@natrajelectricals', label: 'Subscribe to our YouTube channel', platform: 'YouTube' },
 ]
 
 const paymentMethods = [

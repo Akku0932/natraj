@@ -10,6 +10,7 @@ interface AnimatedCounterProps {
   suffix?: string
   className?: string
   decimals?: number
+  onComplete?: () => void
 }
 
 function formatNumber(num: number, decimals = 0): string {
@@ -34,10 +35,12 @@ export function AnimatedCounter({
   suffix = '',
   className = '',
   decimals = 0,
+  onComplete,
 }: AnimatedCounterProps) {
   const ref = useRef<HTMLSpanElement>(null)
   const rafRef = useRef<number | null>(null)
   const [displayValue, setDisplayValue] = useState(0)
+  const [countDone, setCountDone] = useState(false)
   const isInView = useInView(ref, { once: true })
 
   const animate = useCallback(
@@ -62,12 +65,16 @@ export function AnimatedCounter({
         } else {
           // Ensure final value is exact
           setDisplayValue(value)
+          if (!countDone) {
+            setCountDone(true)
+            onComplete?.()
+          }
         }
       }
 
       rafRef.current = requestAnimationFrame(step)
     },
-    [value, duration, decimals]
+    [value, duration, decimals, countDone, onComplete]
   )
 
   useEffect(() => {
@@ -92,7 +99,7 @@ export function AnimatedCounter({
   const formatted = formatNumber(displayValue, decimals)
 
   return (
-    <span ref={ref} className={className}>
+    <span ref={ref} className={`${className}${countDone ? ' stat-pulse-done' : ''}`}>
       {prefix}
       {formatted}
       {suffix}

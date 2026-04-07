@@ -32,6 +32,8 @@ import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
 import IndustryApplications from '@/components/sections/industry-applications'
 import ServiceAreasSection from '@/components/sections/service-areas-section'
+import WarrantySupportSection from '@/components/sections/warranty-support-section'
+import TechPartnersSection from '@/components/sections/tech-partners-section'
 import BlogSection from '@/components/sections/blog-section'
 import CategoriesShowcase from '@/components/sections/categories-showcase'
 import ProductCategoriesSection from '@/components/sections/product-categories-section'
@@ -101,7 +103,13 @@ export default function Home() {
               </LazySection>
               <CertificationsSection />
               <LazySection minHeight="500px">
+                <WarrantySupportSection />
+              </LazySection>
+              <LazySection minHeight="500px">
                 <ServiceAreasSection />
+              </LazySection>
+              <LazySection minHeight="500px">
+                <TechPartnersSection />
               </LazySection>
               <SectionTransition variant="gold-line" />
               <LazySection minHeight="500px">

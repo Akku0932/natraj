@@ -9,7 +9,7 @@ import {
   Clock,
   Send,
   CheckCircle,
-  AlertCircle,
+ AlertCircle,
   Clock3,
   MessageCircle,
   ExternalLink,
@@ -17,6 +17,8 @@ import {
   ChevronRight,
   Headphones,
   FileText,
+  MailIcon,
+  CircleDot,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -31,6 +33,23 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
+
+/* Animated envelope icon component */
+function AnimatedEnvelope({ className }: { className?: string }) {
+  return (
+    <span className={`relative inline-flex ${className ?? ''}`}>
+      <MailIcon className="h-5 w-5 text-gold transition-transform duration-500" style={{ animation: 'breathe 3s ease-in-out infinite' }} />
+      <motion.span
+        className="absolute -right-1 -top-1"
+        initial={{ scale: 0, opacity: 0 }}
+        animate={{ scale: [0, 1.2, 1], opacity: [0, 1, 1] }}
+        transition={{ duration: 0.3, repeat: Infinity, repeatDelay: 3 }}
+      >
+        <CircleDot className="h-2.5 w-2.5 text-green-500" fill="currentColor" />
+      </motion.span>
+    </span>
+  )
+}
 
 const contactInfo = [
   {
@@ -50,13 +69,14 @@ const contactInfo = [
     title: 'Email Address',
     lines: ['natrajenterprises14@gmail.com'],
     color: 'from-gold/20 to-copper/20',
+    customIcon: 'envelope',
   },
-  {
+ {
     icon: Clock,
     title: 'Business Hours',
     lines: ['Mon - Sat: 9:00 AM - 7:00 PM', 'Sunday: Closed'],
     color: 'from-gold/20 to-copper/20',
-  },
+ },
 ]
 
 const containerVariants = {
@@ -768,7 +788,7 @@ Message: ${formData.message.trim()}`
                 animate={isInView ? 'visible' : 'hidden'}
                 className="space-y-4"
               >
-                {contactInfo.map((info) => {
+                {contactInfo.map((info, index) => {
                   const Icon = info.icon
                   return (
                     <motion.div
@@ -777,14 +797,19 @@ Message: ${formData.message.trim()}`
                       whileHover={{ scale: 1.02 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
                       className="group relative overflow-hidden rounded-xl border border-border/40 bg-background/60 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10 card-hover-gold-border"
+                      style={{ animationDelay: `${index * 0.12}s` }}
                     >
                       {/* Gold gradient top border accent */}
                       <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
                       <div className="flex gap-4">
                         <div className={`inline-flex shrink-0 rounded-lg bg-gradient-to-br ${info.color} p-3`}>
-                          <Icon className="h-5 w-5 text-gold" />
+                          {info.customIcon === 'envelope' ? (
+                            <AnimatedEnvelope />
+                          ) : (
+                            <Icon className="h-5 w-5 text-gold" />
+                          )}
                         </div>
-                        <div>
+                        <div className="min-w-0">
                           <h3 className="font-semibold text-foreground">{info.title}</h3>
                           {info.lines.map((line, i) => (
                             <p key={i} className="text-sm text-muted-foreground">
@@ -798,12 +823,32 @@ Message: ${formData.message.trim()}`
                 })}
               </motion.div>
 
+              {/* Business Hours Badge */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ duration: 0.5, delay: 0.7 }}
+                className="mt-4 rounded-xl border border-green-500/20 bg-green-50 p-4 dark:bg-green-900/20"
+              >
+                <div className="flex items-center gap-2.5">
+                  <span className="relative flex h-2.5 w-2.5">
+                    <span className="absolute inset-0 rounded-full bg-green-500 animate-ping" />
+                    <span className="relative inline-block h-2.5 w-2.5 rounded-full bg-green-500" />
+                  </span>
+                  <span className="text-sm font-semibold text-green-700 dark:text-green-400">Open Now</span>
+                </div>
+                <p className="mt-2 text-center text-xs text-muted-foreground">
+                  <Clock className="mr-1 inline h-3 w-3" />
+                  Mon–Sat: 9 AM – 7 PM IST
+                </p>
+              </motion.div>
+
               {/* Quick CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={isInView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.5, delay: 0.5 }}
-                className="mt-6 rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-6 text-center"
+                className="mt-4 rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-6 text-center"
               >
                 <h3 className="mb-2 font-semibold text-foreground">Need Immediate Assistance?</h3>
                 <p className="mb-4 text-sm text-muted-foreground">

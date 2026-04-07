@@ -14,6 +14,7 @@ const stats = [
 export default function StatsSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-100px' })
+  const pulseTriggered = useRef<Record<string, boolean>>({})
 
   return (
     <section ref={ref} className="relative overflow-hidden py-20 md:py-28">

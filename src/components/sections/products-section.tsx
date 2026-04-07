@@ -506,7 +506,7 @@ export default function ProductsSection() {
                 return (
                   <div
                     key={product.id}
-                    className="group overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 hover:-translate-y-1 hover:border-gold/30"
+                    className="group product-card-glow overflow-hidden rounded-2xl border border-border/50 border-b-2 border-b-gold/0 bg-card transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 hover:-translate-y-1 hover:border-gold/30 hover:border-b-gold/40"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     {/* Image */}
@@ -517,7 +517,7 @@ export default function ProductsSection() {
                             src={firstImage}
                             alt={product.name}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-110"
+                            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             loading="lazy"
                             onError={() => {
@@ -554,29 +554,13 @@ export default function ProductsSection() {
                         )}
                       </div>
 
-                      {/* Compare icon */}
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          toggleCompare(product.slug)
-                        }}
-                        className={`absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
-                          compareList.includes(product.slug)
-                            ? 'bg-gold text-white shadow-lg shadow-gold/30'
-                            : 'bg-black/30 text-white hover:bg-gold/80'
-                        }`}
-                        aria-label="Compare product"
-                      >
-                        <GitCompare className="h-4 w-4" />
-                      </button>
-
-                      {/* Wishlist icon */}
+                      {/* Wishlist icon — top-right corner */}
                       <button
                         onClick={(e) => {
                           e.stopPropagation()
                           toggleWishlist(product.slug)
                         }}
-                        className={`absolute bottom-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                        className={`absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
                           isInWishlist(product.slug)
                             ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
                             : 'bg-black/30 text-white border border-white/20 hover:bg-red-500/80 hover:border-red-500'
@@ -586,8 +570,24 @@ export default function ProductsSection() {
                         <Heart className={`h-4 w-4 ${isInWishlist(product.slug) ? 'fill-white' : ''}`} />
                       </button>
 
-                      {/* Quick View button */}
-                      <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+                      {/* Compare icon */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleCompare(product.slug)
+                        }}
+                        className={`absolute right-12 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                          compareList.includes(product.slug)
+                            ? 'bg-gold text-white shadow-lg shadow-gold/30'
+                            : 'bg-black/30 text-white hover:bg-gold/80'
+                        }`}
+                        aria-label="Compare product"
+                      >
+                        <GitCompare className="h-4 w-4" />
+                      </button>
+
+                      {/* Quick View button — slides in from bottom on card hover */}
+                      <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 translate-y-4 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                         <Button
                           onClick={() => handleViewDetails(product.slug)}
                           size="sm"
@@ -616,7 +616,7 @@ export default function ProductsSection() {
                       {/* Price & CTA */}
                       <div className="flex items-center justify-between">
                         {product.price ? (
-                          <span className="text-lg font-bold text-gold">
+                          <span className="text-lg font-bold text-gold transition-all duration-300 group-hover:text-glow-gold">
                             ₹{product.price.toLocaleString()}
                           </span>
                         ) : (
