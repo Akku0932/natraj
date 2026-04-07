@@ -1,6 +1,7 @@
 'use client'
 
-import { Zap, Phone, Mail, MapPin, Shield } from 'lucide-react'
+import Image from 'next/image'
+import { Phone, Mail, MapPin, Shield } from 'lucide-react'
 import { useStore, type PageView } from '@/store/use-store'
 
 const quickLinks: { label: string; page: PageView }[] = [
@@ -39,15 +40,13 @@ export function Footer() {
           {/* Column 1: Company Info */}
           <div className="space-y-4">
             <div className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gold-gradient shadow-lg shadow-gold/20">
-                <Zap className="h-5 w-5 text-white" fill="white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-lg font-bold text-white">Natraj</span>
-                <span className="text-[10px] font-medium tracking-wider text-white/50 uppercase">
-                  Electrical Control Panels
-                </span>
-              </div>
+              <Image
+                src="/images/logo.PNG"
+                alt="Natraj Electricals"
+                width={140}
+                height={40}
+                className="h-9 w-auto object-contain brightness-0 invert"
+              />
             </div>
 
             <div className="flex items-center gap-2 rounded-lg bg-white/5 px-3 py-2 border border-white/10 w-fit">

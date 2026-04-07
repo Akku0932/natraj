@@ -65,15 +65,28 @@ export function ProductDetailModal() {
     }
   })()
 
-  // Parse specifications
+  // Parse specifications - could be a JSON object or plain text
   const specs: Record<string, string> = (() => {
+    if (!product?.specifications) return {}
     try {
-      const parsed = product?.specifications ? JSON.parse(product.specifications) : {}
+      const parsed = JSON.parse(product.specifications)
       return typeof parsed === 'object' && parsed !== null && !Array.isArray(parsed)
         ? (parsed as Record<string, string>)
         : {}
     } catch {
       return {}
+    }
+  })()
+
+  // Check if specs is a plain text string (not valid JSON object)
+  const isPlainTextSpecs = (() => {
+    if (!product?.specifications) return false
+    try {
+      const parsed = JSON.parse(product.specifications)
+      return typeof parsed === 'string'
+    } catch {
+      // Not valid JSON at all - it's plain text
+      return true
     }
   })()
 
@@ -308,27 +321,35 @@ export function ProductDetailModal() {
                   <Separator />
 
                   {/* Specifications */}
-                  {Object.keys(specs).length > 0 && (
+                  {(Object.keys(specs).length > 0 || isPlainTextSpecs) && (
                     <div>
                       <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
                         <Package className="h-4 w-4 text-gold" />
                         Specifications
                       </div>
-                      <div className="space-y-2">
-                        {Object.entries(specs).map(([key, value]) => (
-                          <div
-                            key={key}
-                            className="flex items-start justify-between gap-4 rounded-lg bg-muted/50 px-3 py-2"
-                          >
-                            <span className="text-sm font-medium text-foreground/70 capitalize">
-                              {key.replace(/_/g, ' ')}
-                            </span>
-                            <span className="text-sm font-medium text-foreground text-right">
-                              {value}
-                            </span>
-                          </div>
-                        ))}
-                      </div>
+                      {Object.keys(specs).length > 0 ? (
+                        <div className="space-y-2">
+                          {Object.entries(specs).map(([key, value]) => (
+                            <div
+                              key={key}
+                              className="flex items-start justify-between gap-4 rounded-lg bg-muted/50 px-3 py-2"
+                            >
+                              <span className="text-sm font-medium text-foreground/70 capitalize">
+                                {key.replace(/_/g, ' ')}
+                              </span>
+                              <span className="text-sm font-medium text-foreground text-right">
+                                {value}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="rounded-lg bg-muted/50 px-4 py-3">
+                          <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
+                            {product?.specifications}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
 

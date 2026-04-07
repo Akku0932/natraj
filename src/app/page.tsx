@@ -5,6 +5,7 @@ import { useStore } from '@/store/use-store'
 import { Navbar } from '@/components/navbar'
 import { Footer } from '@/components/footer'
 import { WhatsAppButton } from '@/components/whatsapp-button'
+import { BackToTopButton } from '@/components/back-to-top-button'
 import { TermsModal } from '@/components/terms-modal'
 import { PrivacyModal } from '@/components/privacy-modal'
 import { ProductDetailModal } from '@/components/product-detail-modal'
@@ -15,6 +16,7 @@ import CategoriesPreview from '@/components/sections/categories-preview'
 import CTASection from '@/components/sections/cta-section'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
+import TestimonialsSection from '@/components/sections/testimonials-section'
 import ContactSection from '@/components/sections/contact-section'
 
 const pageVariants = {
@@ -48,6 +50,7 @@ export default function Home() {
               <HeroSection />
               <FeaturesSection />
               <StatsSection />
+              <TestimonialsSection />
               <CategoriesPreview />
               <CTASection />
             </motion.div>
@@ -146,6 +149,7 @@ export default function Home() {
       </main>
       <Footer />
       <WhatsAppButton />
+      <BackToTopButton />
       <TermsModal />
       <PrivacyModal />
       <ProductDetailModal />

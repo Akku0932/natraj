@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -24,6 +24,7 @@ interface Product {
   specifications: string
   price: number | null
   images: string
+  featured: boolean
   category: {
     name: string
     slug: string
@@ -306,11 +307,17 @@ export default function ProductsSection() {
                             <div className="text-4xl text-muted-foreground/30">⚡</div>
                           </div>
                         )}
-                        {/* Category badge */}
-                        <div className="absolute left-3 top-3">
+                        {/* Badges */}
+                        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
                           <Badge className="bg-gold/90 text-white hover:bg-gold text-xs">
                             {product.category.name}
                           </Badge>
+                          {product.featured && (
+                            <Badge className="bg-copper text-white hover:bg-copper text-xs gap-1">
+                              <Star className="h-3 w-3 fill-white" />
+                              Featured
+                            </Badge>
+                          )}
                         </div>
                       </div>
 

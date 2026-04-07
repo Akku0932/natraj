@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Zap, Phone } from 'lucide-react'
+import { Menu, X, Phone } from 'lucide-react'
 import { useStore, type PageView } from '@/store/use-store'
 import { Button } from '@/components/ui/button'
 import {
@@ -60,17 +61,14 @@ export function Navbar() {
               onClick={() => handleNavClick('home')}
               className="flex items-center gap-2 group"
             >
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl gold-gradient shadow-lg shadow-gold/20 group-hover:shadow-gold/40 transition-shadow duration-300">
-                <Zap className="h-5 w-5 text-white" fill="white" />
-              </div>
-              <div className="flex flex-col">
-                <span className="gradient-text text-lg font-bold leading-tight tracking-tight md:text-xl">
-                  Natraj
-                </span>
-                <span className="hidden text-[10px] font-medium tracking-wider text-muted-foreground uppercase sm:block">
-                  Electrical Control Panels
-                </span>
-              </div>
+              <Image
+                src="/images/logo.PNG"
+                alt="Natraj Electricals"
+                width={140}
+                height={40}
+                className="h-9 w-auto object-contain md:h-11 transition-opacity duration-300 group-hover:opacity-90"
+                priority
+              />
             </button>
 
             {/* Desktop Nav Links */}
@@ -141,10 +139,13 @@ export function Navbar() {
         >
           <SheetHeader className="pt-8 pb-4">
             <SheetTitle className="flex items-center gap-2">
-              <div className="flex h-9 w-9 items-center justify-center rounded-lg gold-gradient">
-                <Zap className="h-4 w-4 text-white" fill="white" />
-              </div>
-              <span className="gradient-text text-lg font-bold">Natraj</span>
+              <Image
+                src="/images/logo.PNG"
+                alt="Natraj Electricals"
+                width={120}
+                height={36}
+                className="h-8 w-auto object-contain"
+              />
             </SheetTitle>
           </SheetHeader>
 
