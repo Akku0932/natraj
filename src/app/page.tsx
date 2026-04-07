@@ -29,6 +29,8 @@ import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
 import IndustryApplications from '@/components/sections/industry-applications'
 import ServiceAreasSection from '@/components/sections/service-areas-section'
+import BlogSection from '@/components/sections/blog-section'
+import CategoriesShowcase from '@/components/sections/categories-showcase'
 import { CookieConsent } from '@/components/cookie-consent'
 import { QuickSearchModal } from '@/components/quick-search-modal'
 import { RecentlyViewedSection } from '@/components/recently-viewed-section'
@@ -68,6 +70,9 @@ export default function Home() {
             >
               <HeroSection />
               <FeaturedProductsSection />
+              <LazySection minHeight="600px">
+                <CategoriesShowcase />
+              </LazySection>
               <SectionTransition variant="gold-line" />
               <FeaturesSection />
               <StatsSection />
@@ -86,6 +91,10 @@ export default function Home() {
               <CertificationsSection />
               <LazySection minHeight="500px">
                 <ServiceAreasSection />
+              </LazySection>
+              <SectionTransition variant="gold-line" />
+              <LazySection minHeight="500px">
+                <BlogSection />
               </LazySection>
             </motion.div>
           )}

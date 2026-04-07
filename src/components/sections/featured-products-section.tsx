@@ -177,7 +177,7 @@ export default function FeaturedProductsSection() {
                 <motion.div
                   key={product.id}
                   variants={cardVariants}
-                  className="glass group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5 hover:border-gold/40"
+                  className="glass card-shine shimmer-hover group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10 hover:border-gold/40"
                 >
                   {/* Gold gradient glow at bottom on hover */}
                   <div className="pointer-events-none absolute inset-x-0 bottom-0 z-0 h-24 bg-gradient-to-t from-gold/[0.06] to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
@@ -188,7 +188,7 @@ export default function FeaturedProductsSection() {
                         src={images[0]}
                         alt={product.name}
                         fill
-                        className="object-cover transition-transform duration-500"
+                        className="object-cover transition-transform duration-500 group-hover:scale-110"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
@@ -265,7 +265,7 @@ export default function FeaturedProductsSection() {
                       <Button
                         onClick={() => handleViewProduct(product.slug)}
                         variant="outline"
-                        className="flex-1 border-border/50 text-sm hover:bg-accent"
+                        className="flex-1 border-gold/30 text-sm text-gold hover:bg-gold hover:text-white hover:border-gold"
                       >
                         View Details
                       </Button>

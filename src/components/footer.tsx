@@ -16,6 +16,13 @@ import {
   Send,
   CheckCircle2,
   Heart,
+  Lock,
+  User,
+  CreditCard,
+  Banknote,
+  Wallet,
+  Landmark,
+  Smartphone,
 } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useStore, type PageView } from '@/store/use-store'
@@ -39,6 +46,14 @@ const socialLinks = [
   { icon: Youtube, href: '#', label: 'YouTube' },
 ]
 
+const paymentMethods = [
+  { icon: Smartphone, label: 'UPI' },
+  { icon: Landmark, label: 'NEFT/RTGS' },
+  { icon: Banknote, label: 'Cash' },
+  { icon: Wallet, label: 'Cheque' },
+  { icon: CreditCard, label: 'Credit Card' },
+]
+
 export function Footer() {
   const { setCurrentPage, setTermsOpen, setPrivacyOpen } = useStore()
   const { toast } = useToast()
@@ -46,6 +61,10 @@ export function Footer() {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [subscribeSuccess, setSubscribeSuccess] = useState(false)
   const [emailFocused, setEmailFocused] = useState(false)
+  const [quoteName, setQuoteName] = useState('')
+  const [quotePhone, setQuotePhone] = useState('')
+  const [isQuoteSubmitting, setIsQuoteSubmitting] = useState(false)
+  const [quoteSuccess, setQuoteSuccess] = useState(false)
 
   const handleQuickLink = (page: PageView) => {
     setCurrentPage(page)
@@ -99,6 +118,50 @@ export function Footer() {
     }
   }
 
+  const handleQuickQuote = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    if (!quoteName.trim() || !quotePhone.trim()) return
+
+    setIsQuoteSubmitting(true)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: quoteName.trim(),
+          phone: quotePhone.trim(),
+          message: 'Quick callback request from footer form',
+        }),
+      })
+
+      if (res.ok) {
+        toast({
+          title: 'Callback requested!',
+          description: 'Our team will call you back shortly.',
+          variant: 'default',
+        })
+        setQuoteName('')
+        setQuotePhone('')
+        setQuoteSuccess(true)
+        setTimeout(() => setQuoteSuccess(false), 5000)
+      } else {
+        toast({
+          title: 'Request failed',
+          description: 'Please try again later.',
+          variant: 'destructive',
+        })
+      }
+    } catch {
+      toast({
+        title: 'Network error',
+        description: 'Could not reach the server. Please try again.',
+        variant: 'destructive',
+      })
+    } finally {
+      setIsQuoteSubmitting(false)
+    }
+  }
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
@@ -129,8 +192,80 @@ export function Footer() {
       <div className="pointer-events-none absolute -bottom-40 right-1/4 h-80 w-80 rounded-full bg-gold/[0.03] blur-[100px]" />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Quick Quote Form - sits above main footer grid */}
+        <div className="border-b border-white/10 py-10 lg:py-12">
+          <div className="mx-auto max-w-2xl text-center">
+            <h3 className="text-lg font-semibold text-white sm:text-xl">
+              Need a <span className="gradient-text">Quick Quote?</span>
+            </h3>
+            <p className="mt-1.5 text-sm text-white/50">
+              Leave your details and our team will call you back within 30 minutes.
+            </p>
+            {quoteSuccess ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="mt-5 inline-flex items-center gap-2 rounded-xl border border-green-500/30 bg-green-500/[0.08] px-6 py-3"
+              >
+                <CheckCircle2 className="h-5 w-5 text-green-400" />
+                <span className="text-sm font-medium text-green-300">
+                  Request received! We&apos;ll call you back soon.
+                </span>
+              </motion.div>
+            ) : (
+              <form onSubmit={handleQuickQuote} className="mt-5 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
+                <div className="relative w-full sm:w-auto sm:flex-1 sm:max-w-[200px]">
+                  <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                  <Input
+                    type="text"
+                    placeholder="Your Name"
+                    value={quoteName}
+                    onChange={(e) => setQuoteName(e.target.value)}
+                    required
+                    disabled={isQuoteSubmitting}
+                    className="h-10 w-full rounded-lg border-white/10 bg-white/[0.06] pl-9 pr-3 text-sm text-white placeholder:text-white/30 focus-visible:border-gold/50 focus-visible:ring-0 disabled:opacity-50"
+                  />
+                </div>
+                <div className="relative w-full sm:w-auto sm:flex-1 sm:max-w-[200px]">
+                  <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-white/30" />
+                  <Input
+                    type="tel"
+                    placeholder="Phone Number"
+                    value={quotePhone}
+                    onChange={(e) => setQuotePhone(e.target.value)}
+                    required
+                    disabled={isQuoteSubmitting}
+                    className="h-10 w-full rounded-lg border-white/10 bg-white/[0.06] pl-9 pr-3 text-sm text-white placeholder:text-white/30 focus-visible:border-gold/50 focus-visible:ring-0 disabled:opacity-50"
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  disabled={isQuoteSubmitting || !quoteName.trim() || !quotePhone.trim()}
+                  className="h-10 w-full rounded-lg gold-gradient border-0 px-6 text-sm font-semibold text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300 disabled:opacity-50 sm:w-auto"
+                >
+                  {isQuoteSubmitting ? (
+                    <span className="inline-flex items-center gap-2">
+                      <motion.div
+                        animate={{ rotate: 360 }}
+                        transition={{ repeat: Infinity, duration: 1, ease: 'linear' }}
+                      >
+                        <Send className="h-4 w-4" />
+                      </motion.div>
+                      Sending...
+                    </span>
+                  ) : (
+                    <span className="inline-flex items-center gap-2">
+                      <Phone className="h-4 w-4" />
+                      Get Callback
+                    </span>
+                  )}
+                </Button>
+              </form>
+            )}
+          </div>
+        </div>
         {/* Main footer content */}
-        <div className="grid grid-cols-1 gap-10 py-14 sm:grid-cols-2 lg:grid-cols-4 lg:py-20 lg:gap-12">
+        <div className="grid grid-cols-1 gap-8 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:py-16 lg:gap-12">
           {/* Column 1: Company Info */}
           <div className="space-y-5 sm:col-span-2 lg:col-span-1">
             <div className="flex items-center gap-2">
@@ -209,8 +344,13 @@ export function Footer() {
             <h3 className="text-sm font-semibold tracking-wider text-gold-light uppercase">
               Stay Updated
             </h3>
-            <p className="text-sm leading-relaxed text-white/50">
-              Get the latest news about our products and offers.
+            <div className="flex items-center gap-2">
+              <p className="text-sm leading-relaxed text-white/50">
+                Get the latest news about our products and offers.
+              </p>
+            </div>
+            <p className="text-xs font-medium text-gold/60">
+              Join 2,500+ subscribers
             </p>
 
             {subscribeSuccess ? (
@@ -292,8 +432,9 @@ export function Footer() {
                     </Button>
                   </div>
                 </div>
-                <p className="text-xs text-white/30">
-                  No spam, ever. Unsubscribe anytime.
+                <p className="flex items-center gap-1.5 text-xs text-white/30">
+                  <Lock className="h-3 w-3" />
+                  <span>We respect your privacy. No spam, ever.</span>
                 </p>
               </form>
             )}
@@ -348,6 +489,26 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Payment Methods Section */}
+        <div className="border-t border-white/10 py-6">
+          <div className="flex flex-col items-center gap-3 sm:flex-row sm:justify-center sm:gap-4">
+            <span className="text-xs font-semibold uppercase tracking-wider text-white/40">
+              Payment Methods:
+            </span>
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              {paymentMethods.map((method) => (
+                <span
+                  key={method.label}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-xs font-medium text-white/60"
+                >
+                  <method.icon className="h-3 w-3 text-gold/50" />
+                  {method.label}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
         {/* Animated gold line above bottom bar */}
         <div className="relative h-px w-full overflow-hidden bg-white/10">
           <motion.div
@@ -365,7 +526,7 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="py-8">
+        <div className="py-5 sm:py-6">
           <div className="flex flex-col items-center justify-between gap-5 sm:flex-row">
             {/* Back to top + Copyright */}
             <div className="flex items-center gap-4">
@@ -413,8 +574,8 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Back to top link at the very bottom */}
-          <div className="mt-6 flex justify-center">
+          {/* Back to top link at the very bottom - hidden on mobile (already have button above) */}
+          <div className="mt-4 hidden justify-center sm:flex">
             <button
               onClick={scrollToTop}
               aria-label="Back to top"

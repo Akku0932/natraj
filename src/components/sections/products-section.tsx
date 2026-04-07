@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap, LayoutGrid } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap, LayoutGrid, IndianRupee } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -43,6 +43,31 @@ interface Product {
 }
 
 type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'
+type PriceRangeKey = 'all' | 'under-1000' | '1000-5000' | '5000-10000' | '10000-25000' | 'above-25000'
+
+const PRICE_RANGES: { key: PriceRangeKey; label: string }[] = [
+  { key: 'all', label: 'All Prices' },
+  { key: 'under-1000', label: 'Under ₹1,000' },
+  { key: '1000-5000', label: '₹1,000 - ₹5,000' },
+  { key: '5000-10000', label: '₹5,000 - ₹10,000' },
+  { key: '10000-25000', label: '₹10,000 - ₹25,000' },
+  { key: 'above-25000', label: 'Above ₹25,000' },
+]
+
+function filterByPriceRange(products: Product[], rangeKey: PriceRangeKey): Product[] {
+  if (rangeKey === 'all') return products
+  return products.filter((p) => {
+    const price = p.price ?? 0
+    switch (rangeKey) {
+      case 'under-1000': return price < 1000
+      case '1000-5000': return price >= 1000 && price <= 5000
+      case '5000-10000': return price >= 5000 && price <= 10000
+      case '10000-25000': return price >= 10000 && price <= 25000
+      case 'above-25000': return price > 25000
+      default: return true
+    }
+  })
+}
 
 const SORT_OPTIONS: { value: SortOption; label: string }[] = [
   { value: 'featured', label: 'Featured' },
@@ -93,6 +118,7 @@ export default function ProductsSection() {
   const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
+  const [priceRange, setPriceRange] = useState<PriceRangeKey>('all')
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const retryCountRef = useRef(0)
@@ -178,7 +204,8 @@ export default function ProductsSection() {
     fetchProducts()
   }, [fetchProducts])
 
-  const sortedProducts = useMemo(() => sortProducts(products, sortBy), [products, sortBy])
+  const filteredProducts = useMemo(() => filterByPriceRange(products, priceRange), [products, priceRange])
+  const sortedProducts = useMemo(() => sortProducts(filteredProducts, sortBy), [filteredProducts, sortBy])
   const totalProducts = useMemo(() => categories.reduce((sum, cat) => sum + cat.productCount, 0), [categories])
 
   const handleCategoryChange = (slug: string) => {
@@ -265,6 +292,7 @@ export default function ProductsSection() {
             </Button>
           </form>
 
+          {/* Category Filter Pills */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <Button
               onClick={() => handleCategoryChange('all')}
@@ -297,6 +325,26 @@ export default function ProductsSection() {
               </Button>
             ))}
           </div>
+
+          {/* Price Range Filter */}
+          <div className="mt-3 flex items-center gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            <IndianRupee className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <div className="flex gap-2">
+              {PRICE_RANGES.map((range) => (
+                <button
+                  key={range.key}
+                  onClick={() => setPriceRange(range.key)}
+                  className={`shrink-0 rounded-full px-3 py-1.5 text-xs font-medium transition-all duration-200 ${
+                    priceRange === range.key
+                      ? 'bg-gold text-white shadow-md shadow-gold/20'
+                      : 'border border-border/50 text-muted-foreground hover:border-gold/30 hover:text-gold bg-background'
+                  }`}
+                >
+                  {range.label}
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
@@ -324,6 +372,14 @@ export default function ProductsSection() {
                       </span>
                     </>
                   )}
+                  {priceRange !== 'all' && (
+                    <>
+                      {' '}at{' '}
+                      <span className="font-medium text-foreground">
+                        {PRICE_RANGES.find((r) => r.key === priceRange)?.label}
+                      </span>
+                    </>
+                  )}
                 </>
               )}
             </p>
@@ -340,13 +396,14 @@ export default function ProductsSection() {
                   ))}
                 </SelectContent>
               </Select>
-              {(searchQuery || selectedCategory) && (
+              {(searchQuery || selectedCategory || priceRange !== 'all') && (
                 <Button
                   variant="ghost"
                   size="sm"
                   onClick={() => {
                     clearSearch()
                     setSelectedCategory(null)
+                    setPriceRange('all')
                   }}
                   className="text-muted-foreground hover:text-foreground"
                 >
@@ -415,6 +472,7 @@ export default function ProductsSection() {
                   onClick={() => {
                     clearSearch()
                     setSelectedCategory(null)
+                    setPriceRange('all')
                   }}
                   variant="outline"
                   className="border-gold/30 text-gold hover:bg-gold/10"
@@ -425,6 +483,7 @@ export default function ProductsSection() {
                   onClick={() => {
                     clearSearch()
                     setSelectedCategory(null)
+                    setPriceRange('all')
                     const categoriesSection = document.getElementById('categories')
                     if (categoriesSection) {
                       categoriesSection.scrollIntoView({ behavior: 'smooth' })
@@ -458,7 +517,7 @@ export default function ProductsSection() {
                             src={firstImage}
                             alt={product.name}
                             fill
-                            className="object-cover transition-transform duration-500"
+                            className="object-cover transition-transform duration-500 group-hover:scale-110"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             loading="lazy"
                             onError={() => {

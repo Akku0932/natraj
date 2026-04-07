@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ArrowRight, Mouse } from 'lucide-react'
+import { ArrowRight, Mouse, Shield, Clock, Truck } from 'lucide-react'
 import { useStore } from '@/store/use-store'
 import { Button } from '@/components/ui/button'
 
@@ -125,6 +125,18 @@ export default function HeroSection() {
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 z-10 bg-gradient-to-b from-charcoal/70 via-charcoal/40 to-charcoal/80" />
 
+        {/* Subtle grain/noise texture overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 z-[11]"
+          style={{
+            opacity: 0.04,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E")`,
+            backgroundRepeat: 'repeat',
+            backgroundSize: '128px 128px',
+            mixBlendMode: 'overlay',
+          }}
+        />
+
         {/* Top: Logo - with extra padding to avoid navbar overlap */}
         <div className="absolute left-0 right-0 top-0 z-20 flex justify-center pt-28 md:pt-32">
           <div className="rounded-full border border-white/10 bg-black/30 px-8 py-3 backdrop-blur-md">
@@ -137,12 +149,17 @@ export default function HeroSection() {
 
         {/* Center: Main heading - CLEAN supplier-focused */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4">
-          <motion.p
+          {/* Trusted Since 1998 with decorative gold lines */}
+          <motion.div
             style={{ opacity: titleOpacity, y: titleY }}
-            className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-gold-light/80 md:text-base"
+            className="mb-4 flex items-center gap-4"
           >
-            Trusted Since 1998
-          </motion.p>
+            <span className="h-px w-8 bg-gradient-to-r from-transparent to-gold/60 sm:w-12 md:w-16" />
+            <p className="text-sm font-medium uppercase tracking-[0.3em] text-gold-light/80 md:text-base">
+              Trusted Since 1998
+            </p>
+            <span className="h-px w-8 bg-gradient-to-l from-transparent to-gold/60 sm:w-12 md:w-16" />
+          </motion.div>
           <motion.h2
             style={{ opacity: titleOpacity, y: titleY }}
             className="text-center text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl hero-text-shadow"
@@ -181,6 +198,29 @@ export default function HeroSection() {
             >
               Contact Us
             </Button>
+          </motion.div>
+
+          {/* Trust Indicator Badges */}
+          <motion.div
+            style={{ opacity: ctaOpacity, y: ctaY }}
+            className="mt-8 flex flex-wrap items-center justify-center gap-3"
+          >
+            {[
+              { icon: Shield, label: 'ISO 9001:2015 Certified', delay: 0.4 },
+              { icon: Clock, label: '25+ Years Experience', delay: 0.55 },
+              { icon: Truck, label: 'Pan-India Delivery', delay: 0.7 },
+            ].map((badge) => (
+              <motion.div
+                key={badge.label}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: badge.delay, ease: 'easeOut' }}
+                className="inline-flex items-center gap-1.5 rounded-full border border-gold/20 bg-white/[0.06] px-3.5 py-1.5 text-xs font-medium text-gold-light/90 backdrop-blur-md"
+              >
+                <badge.icon className="h-3.5 w-3.5 text-gold/70" />
+                <span>{badge.label}</span>
+              </motion.div>
+            ))}
           </motion.div>
         </div>
 
