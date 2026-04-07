@@ -97,7 +97,6 @@ export default function Home() {
               <LazySection minHeight="500px">
                 <FaqSection />
               </LazySection>
-              <SectionTransition variant="gradient" />
               <CertificationsSection />
               <LazySection minHeight="600px">
                 <PartnerLogosSection />

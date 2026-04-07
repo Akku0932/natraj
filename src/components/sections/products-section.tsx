@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -86,13 +86,14 @@ export default function ProductsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
   const [loadingProducts, setLoadingProducts] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
   const [sortBy, setSortBy] = useState<SortOption>('featured')
   const debounceTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen, setCurrentPage, wishlist, toggleWishlist, isInWishlist } = useStore()
+  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen, compareList, toggleCompare, clearCompare, setCompareOpen, wishlist, toggleWishlist, isInWishlist } = useStore()
 
   // Fetch categories on mount
   useEffect(() => {
@@ -115,6 +116,7 @@ export default function ProductsSection() {
   // Fetch products when category or search changes
   const fetchProducts = useCallback(async () => {
     setLoadingProducts(true)
+    setError(null)
     try {
       const params = new URLSearchParams()
       if (selectedCategory && selectedCategory !== 'all') {
@@ -127,8 +129,11 @@ export default function ProductsSection() {
       if (res.ok) {
         const data = await res.json()
         setProducts(data)
+      } else {
+        setError('Failed to load products')
       }
     } catch (err) {
+      setError('Network error. Please check your connection.')
       console.error('Failed to fetch products:', err)
     } finally {
       setLoadingProducts(false)
@@ -145,7 +150,7 @@ export default function ProductsSection() {
     setSelectedCategory(slug === 'all' ? null : slug)
   }
 
-  // Debounced search: auto-search 300ms after user stops typing
+  // Debounced search
   useEffect(() => {
     if (debounceTimer.current) {
       clearTimeout(debounceTimer.current)
@@ -184,31 +189,18 @@ export default function ProductsSection() {
       <section className="relative overflow-hidden bg-charcoal py-20 md:py-28">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(200,150,62,0.1)_0%,transparent_60%)]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <motion.h1
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl font-bold text-white sm:text-5xl md:text-6xl"
-          >
+          <h1 className="text-4xl font-bold text-white sm:text-5xl md:text-6xl">
             Our <span className="gradient-text">Products</span>
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto mt-4 max-w-2xl text-lg text-white/60"
-          >
+          </h1>
+          <p className="mx-auto mt-4 max-w-2xl text-lg text-white/60">
             Explore our comprehensive range of premium electrical control panels
-          </motion.p>
+          </p>
         </div>
       </section>
-
-      {/* Breadcrumb handled by page.tsx */}
 
       {/* Search & Filter Section */}
       <section className="sticky top-16 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl md:top-20">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
             <div className="group relative flex-1">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground transition-colors group-focus-within:text-gold" />
@@ -235,7 +227,6 @@ export default function ProductsSection() {
             </Button>
           </form>
 
-          {/* Category Tabs */}
           <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
             <Button
               onClick={() => handleCategoryChange('all')}
@@ -328,16 +319,34 @@ export default function ProductsSection() {
             </div>
           </div>
 
-          {/* Loading skeleton */}
-          {loadingProducts ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {Array.from({ length: 6 }).map((_, i) => (
+          {/* Error state */}
+          {error ? (
+            <div className="py-20 text-center">
+              <div className="mx-auto mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-red-50 ring-1 ring-red-200 dark:bg-red-900/20 dark:ring-red-800/50">
+                <AlertCircle className="h-10 w-10 text-red-400" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground">Something went wrong</h3>
+              <p className="mt-2 text-muted-foreground">{error}</p>
+              <Button
+                onClick={fetchProducts}
+                variant="outline"
+                className="mt-4 border-gold/30 text-gold hover:bg-gold/10"
+              >
+                <RefreshCw className="mr-2 h-4 w-4" />
+                Try Again
+              </Button>
+            </div>
+          ) : loadingProducts ? (
+            /* Loading skeleton */
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
                 <div key={i} className="overflow-hidden rounded-2xl border border-border/50">
                   <Skeleton className="aspect-[4/3] w-full" />
                   <div className="p-5 space-y-3">
                     <Skeleton className="h-4 w-24" />
                     <Skeleton className="h-5 w-3/4" />
                     <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-4 w-2/3" />
                     <Skeleton className="h-9 w-full" />
                   </div>
                 </div>
@@ -350,7 +359,7 @@ export default function ProductsSection() {
                   <Package className="h-8 w-8 text-gold/70" />
                 </div>
               </div>
-              <h3 className="text-lg font-semibold text-foreground">Hmm, no products match your search</h3>
+              <h3 className="text-lg font-semibold text-foreground">No products match your search</h3>
               <p className="mt-2 text-muted-foreground">
                 Try adjusting your search query or browse all categories
               </p>
@@ -366,145 +375,146 @@ export default function ProductsSection() {
               </Button>
             </div>
           ) : (
-            <motion.div
-              layout
-              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-            >
-              <AnimatePresence mode="popLayout">
-                {sortedProducts.map((product, index) => {
-                  const images = JSON.parse(product.images || '[]') as string[]
-                  const firstImage = images.length > 0 ? images[0] : null
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {sortedProducts.map((product, index) => {
+                const images = JSON.parse(product.images || '[]') as string[]
+                const firstImage = images.length > 0 ? images[0] : null
 
-                  return (
-                    <motion.div
-                      key={product.id}
-                      layout
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="product-card glow-hover card-shine group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5"
-                    >
-                      {/* Gold gradient bottom border on hover */}
-                      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold/0 via-gold to-gold/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 -z-10" />
+                return (
+                  <div
+                    key={product.id}
+                    className="group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5 hover:-translate-y-1"
+                    style={{ animationDelay: `${index * 0.05}s` }}
+                  >
+                    {/* Image */}
+                    <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
+                      {firstImage ? (
+                        <>
+                          <img
+                            src={firstImage}
+                            alt={product.name}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            loading="lazy"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement
+                              target.style.display = 'none'
+                              const parent = target.parentElement
+                              if (parent) {
+                                const fallback = parent.querySelector('.image-fallback')
+                                if (fallback) (fallback as HTMLElement).style.display = 'flex'
+                              }
+                            }}
+                          />
+                          {/* Gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                        </>
+                      ) : null}
+                      {/* Fallback placeholder */}
+                      <div className="image-fallback absolute inset-0 flex h-full w-full items-center justify-center bg-gradient-to-br from-gold/5 to-gold/10" style={{ display: firstImage ? 'none' : 'flex' }}>
+                        <div className="text-center">
+                          <Zap className="mx-auto h-10 w-10 text-gold/30" />
+                          <p className="mt-2 text-xs text-muted-foreground/50">{product.name}</p>
+                        </div>
+                      </div>
 
-                      {/* Image */}
-                      <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
-                        {firstImage ? (
-                          <>
-                            <img
-                              src={firstImage}
-                              alt={product.name}
-                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                              loading="lazy"
-                            />
-                            {/* Gradient overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
-                            {/* Shimmer shine sweep on hover */}
-                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              <div className="shimmer-sweep absolute inset-0" />
-                            </div>
-                          </>
-                        ) : (
-                          <div className="flex h-full items-center justify-center">
-                            <div className="text-4xl text-muted-foreground/30">⚡</div>
-                          </div>
-                        )}
-
-                        {/* Badges */}
-                        <div className="absolute left-3 top-3 flex flex-col gap-1.5 z-10">
-                          <Badge className="bg-gold/90 text-white hover:bg-gold text-xs">
-                            {product.category.name}
+                      {/* Badges */}
+                      <div className="absolute left-3 top-3 flex flex-col gap-1.5 z-10">
+                        <Badge className="bg-gold/90 text-white hover:bg-gold text-xs">
+                          {product.category.name}
+                        </Badge>
+                        {product.featured && (
+                          <Badge className="bg-copper text-white hover:bg-copper text-xs gap-1">
+                            <Star className="h-3 w-3 fill-white" />
+                            Featured
                           </Badge>
-                          {product.featured && (
-                            <Badge className="bg-copper text-white hover:bg-copper text-xs gap-1">
-                              <Star className="h-3 w-3 fill-white" />
-                              Featured
-                            </Badge>
-                          )}
-                        </div>
-
-                        {/* Compare icon - top right */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            toggleCompare(product.slug)
-                          }}
-                          className={`absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
-                            compareList.includes(product.slug)
-                              ? 'bg-gold text-white shadow-lg shadow-gold/30'
-                              : 'bg-black/30 text-white hover:bg-gold/80'
-                          }`}
-                          aria-label="Compare product"
-                        >
-                          <GitCompare className="h-4 w-4" />
-                        </button>
-
-                        {/* Wishlist heart icon - bottom left of image */}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            toggleWishlist(product.slug)
-                          }}
-                          className={`absolute bottom-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
-                            isInWishlist(product.slug)
-                              ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
-                              : 'bg-black/30 text-white border border-white/20 hover:bg-red-500/80 hover:border-red-500'
-                          }`}
-                          aria-label="Add to wishlist"
-                        >
-                          <Heart className={`h-4 w-4 ${isInWishlist(product.slug) ? 'fill-white' : ''}`} />
-                        </button>
-
-                        {/* Quick View button - overlay on hover */}
-                        <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
-                          <Button
-                            onClick={() => handleViewDetails(product.slug)}
-                            size="sm"
-                            className="bg-white/90 text-charcoal backdrop-blur-md shadow-lg border-0 hover:bg-white hover:shadow-xl transform transition-transform hover:scale-105"
-                          >
-                            <Eye className="mr-2 h-4 w-4" />
-                            Quick View
-                          </Button>
-                        </div>
+                        )}
                       </div>
 
-                      {/* Content */}
-                      <div className="p-5">
-                        <h3 className="mb-2 line-clamp-1 font-semibold text-foreground transition-colors group-hover:text-gold">
-                          {product.name}
-                        </h3>
-                        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
-                          {product.description || product.category.name}
-                        </p>
+                      {/* Compare icon */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleCompare(product.slug)
+                        }}
+                        className={`absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                          compareList.includes(product.slug)
+                            ? 'bg-gold text-white shadow-lg shadow-gold/30'
+                            : 'bg-black/30 text-white hover:bg-gold/80'
+                        }`}
+                        aria-label="Compare product"
+                      >
+                        <GitCompare className="h-4 w-4" />
+                      </button>
 
-                        {/* Price & CTA */}
-                        <div className="flex items-center justify-between">
-                          {product.price ? (
-                            <span className="text-lg font-bold text-gold">
-                              ₹{product.price.toLocaleString()}
-                            </span>
-                          ) : (
-                            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-sm font-medium text-gold">
-                              Request Quote
-                            </span>
-                          )}
-                          <Button
-                            onClick={() => handleViewDetails(product.slug)}
-                            size="sm"
-                            variant="outline"
-                            className="border-gold/30 text-gold hover:bg-gold hover:text-white transition-colors"
-                          >
-                            View Details
-                            <ChevronRight className="ml-1 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
-                          </Button>
-                        </div>
+                      {/* Wishlist icon */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          toggleWishlist(product.slug)
+                        }}
+                        className={`absolute bottom-3 left-3 z-10 flex h-8 w-8 items-center justify-center rounded-full backdrop-blur-sm transition-all hover:scale-110 ${
+                          isInWishlist(product.slug)
+                            ? 'bg-red-500 text-white shadow-lg shadow-red-500/30'
+                            : 'bg-black/30 text-white border border-white/20 hover:bg-red-500/80 hover:border-red-500'
+                        }`}
+                        aria-label="Add to wishlist"
+                      >
+                        <Heart className={`h-4 w-4 ${isInWishlist(product.slug) ? 'fill-white' : ''}`} />
+                      </button>
+
+                      {/* Quick View button */}
+                      <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                        <Button
+                          onClick={() => handleViewDetails(product.slug)}
+                          size="sm"
+                          className="bg-white/90 text-charcoal backdrop-blur-md shadow-lg border-0 hover:bg-white hover:shadow-xl"
+                        >
+                          <Eye className="mr-2 h-4 w-4" />
+                          Quick View
+                        </Button>
                       </div>
-                    </motion.div>
-                  )
-                })}
-              </AnimatePresence>
-            </motion.div>
+                    </div>
+
+                    {/* Content */}
+                    <div className="p-5">
+                      <div className="mb-1 flex items-center gap-2">
+                        <span className="text-xs font-medium text-gold/80 uppercase tracking-wider">
+                          {product.category.name}
+                        </span>
+                      </div>
+                      <h3 className="mb-2 line-clamp-1 text-base font-semibold text-foreground transition-colors group-hover:text-gold">
+                        {product.name}
+                      </h3>
+                      <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed">
+                        {product.description || `${product.category.name} - Premium quality electrical panel by Natraj Electricals`}
+                      </p>
+
+                      {/* Price & CTA */}
+                      <div className="flex items-center justify-between">
+                        {product.price ? (
+                          <span className="text-lg font-bold text-gold">
+                            ₹{product.price.toLocaleString()}
+                          </span>
+                        ) : (
+                          <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-xs font-medium text-gold">
+                            Request Quote
+                          </span>
+                        )}
+                        <Button
+                          onClick={() => handleViewDetails(product.slug)}
+                          size="sm"
+                          variant="outline"
+                          className="border-gold/30 text-gold hover:bg-gold hover:text-white transition-colors"
+                        >
+                          View Details
+                          <ChevronRight className="ml-1 h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
           )}
         </div>
       </section>
@@ -546,27 +556,6 @@ export default function ProductsSection() {
           </motion.div>
         )}
       </AnimatePresence>
-
-      {/* Shimmer animation CSS */}
-      <style jsx global>{`
-        @keyframes shimmer-sweep {
-          0% { transform: translateX(-100%) rotate(25deg); }
-          100% { transform: translateX(200%) rotate(25deg); }
-        }
-        .shimmer-sweep {
-          background: linear-gradient(
-            90deg,
-            transparent 0%,
-            rgba(255, 255, 255, 0.08) 25%,
-            rgba(255, 255, 255, 0.2) 50%,
-            rgba(255, 255, 255, 0.08) 75%,
-            transparent 100%
-          );
-          animation: shimmer-sweep 0.8s ease-in-out;
-          transform: translateX(-100%) rotate(25deg);
-          width: 50%;
-        }
-      `}</style>
     </div>
   )
 }

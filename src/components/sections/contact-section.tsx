@@ -119,6 +119,32 @@ export default function ContactSection() {
     return Object.keys(newErrors).length === 0
   }
 
+  const handleWhatsAppSubmit = () => {
+    if (!formData.name.trim()) {
+      setErrors({ name: 'Name is required' })
+      return
+    }
+    if (!formData.message.trim()) {
+      setErrors({ message: 'Message is required' })
+      return
+    }
+
+    const whatsappMessage = `Hello, I'm ${formData.name.trim()}
+Phone: ${formData.phone.trim() || 'Not provided'}
+Email: ${formData.email.trim() || 'Not provided'}
+Message: ${formData.message.trim()}`
+
+    const encodedMessage = encodeURIComponent(whatsappMessage)
+    const whatsappUrl = `https://wa.me/919868225911?text=${encodedMessage}`
+
+    window.open(whatsappUrl, '_blank', 'noopener,noreferrer')
+
+    toast({
+      title: 'Opening WhatsApp...',
+      description: 'Your message will be sent via WhatsApp.',
+    })
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
@@ -580,25 +606,36 @@ export default function ContactSection() {
                       )}
                     </div>
 
-                    {/* Submit */}
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full bg-gold text-white hover:bg-gold-dark sm:w-auto"
-                      size="lg"
-                    >
-                      {isSubmitting ? (
-                        <span className="flex items-center gap-2">
-                          <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                          Sending...
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-2">
-                          <Send className="h-4 w-4" />
-                          Send Message
-                        </span>
-                      )}
-                    </Button>
+                    {/* Submit Buttons */}
+                    <div className="flex flex-col gap-3 sm:flex-row">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        className="flex-1 bg-gold text-white hover:bg-gold-dark"
+                        size="lg"
+                      >
+                        {isSubmitting ? (
+                          <span className="flex items-center gap-2">
+                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                            Sending...
+                          </span>
+                        ) : (
+                          <span className="flex items-center gap-2">
+                            <Send className="h-4 w-4" />
+                            Send Message
+                          </span>
+                        )}
+                      </Button>
+                      <Button
+                        type="button"
+                        onClick={handleWhatsAppSubmit}
+                        className="flex-1 bg-green-600 text-white hover:bg-green-700"
+                        size="lg"
+                      >
+                        <MessageCircle className="mr-2 h-4 w-4" />
+                        Send via WhatsApp
+                      </Button>
+                    </div>
                   </form>
                 )}
               </div>

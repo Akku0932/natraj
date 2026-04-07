@@ -7,11 +7,12 @@ import {
   Menu, X, Phone, Sun, Moon, Zap, Plug, RefreshCw, Thermometer,
   Droplets, Network, Wind, ToggleLeft, LayoutGrid, Waves,
   BarChart3, Activity, Power, SunIcon, Box, ChevronRight,
-  Sparkles, ArrowRight, Loader2, Heart, GitCompareArrows, Monitor,
+  Sparkles, ArrowRight, Loader2, Heart, GitCompareArrows, Monitor, Copy, Check,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 import { useStore, type PageView } from '@/store/use-store'
 import { useTheme } from 'next-themes'
+import { useToast } from '@/hooks/use-toast'
 import { Button } from '@/components/ui/button'
 import {
   Tooltip,
@@ -116,6 +117,8 @@ export function Navbar() {
   const compareCount = compareList.length
   const wishlistCount = wishlist.length
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme()
+  const { toast } = useToast()
+  const [copiedPhone, setCopiedPhone] = useState(false)
 
   // Theme cycling: system -> light -> dark -> system
   const cycleTheme = useCallback(() => {
@@ -191,6 +194,28 @@ export function Navbar() {
 
   const handleNavClick = (page: PageView) => {
     setCurrentPage(page)
+  }
+
+  const handleCopyPhone = async (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    try {
+      await navigator.clipboard.writeText('+91 98682 25911')
+      setCopiedPhone(true)
+      toast({
+        title: 'Phone number copied!',
+        description: '+91 98682 25911',
+        duration: 2000,
+      })
+      setTimeout(() => setCopiedPhone(false), 2000)
+    } catch {
+      toast({
+        title: 'Could not copy',
+        description: 'Please copy the number manually',
+        variant: 'destructive',
+        duration: 2000,
+      })
+    }
   }
 
   const handleCategoryClick = (slug: string) => {
@@ -418,13 +443,18 @@ export function Navbar() {
 
             {/* Desktop CTA */}
             <div className="hidden md:flex md:items-center md:gap-3">
-              <a
-                href="tel:9868225911"
+              <button
+                onClick={handleCopyPhone}
                 className="flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-gold"
+                aria-label="Copy phone number"
               >
-                <Phone className="h-4 w-4" />
+                {copiedPhone ? (
+                  <Check className="h-4 w-4 text-green-500" />
+                ) : (
+                  <Phone className="h-4 w-4" />
+                )}
                 <span className="hidden lg:inline">+91 98682 25911</span>
-              </a>
+              </button>
               {/* Dark Mode Toggle */}
               <Tooltip>
                 <TooltipTrigger asChild>
