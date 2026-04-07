@@ -13,6 +13,8 @@ import {
   MapPin,
   Check,
   X as XIcon,
+  Linkedin,
+  Twitter,
 } from 'lucide-react'
 import { FloatingParticles } from '@/components/floating-particles'
 
@@ -73,6 +75,33 @@ const values = [
   },
 ]
 
+const teamMembers = [
+  {
+    name: 'Rajesh Kumar',
+    initials: 'RK',
+    title: 'Founder & Managing Director',
+    description: 'With over 25 years of industry experience, Rajesh founded Natraj Electricals with a vision to revolutionize electrical panel manufacturing in India.',
+    linkedin: '#',
+    twitter: '#',
+  },
+  {
+    name: 'Amit Sharma',
+    initials: 'AS',
+    title: 'Head of Engineering',
+    description: 'A seasoned engineer specializing in control panel design and automation, Amit leads our innovation initiatives and ensures top-notch quality standards.',
+    linkedin: '#',
+    twitter: '#',
+  },
+  {
+    name: 'Priya Mehta',
+    initials: 'PM',
+    title: 'Director of Operations',
+    description: 'Priya oversees end-to-end operations, from procurement to delivery, ensuring every Natraj panel meets our promise of excellence and reliability.',
+    linkedin: '#',
+    twitter: '#',
+  },
+]
+
 const containerVariants = {
   hidden: {},
   visible: {
@@ -112,7 +141,7 @@ function useSpotlightMouse() {
   }, [])
 }
 
-function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+function TiltCard({ children, className = '', onMouseMove: onExternalMouseMove }: { children: React.ReactNode; className?: string; onMouseMove?: (e: React.MouseEvent<HTMLDivElement>) => void }) {
   const x = useMotionValue(0)
   const y = useMotionValue(0)
   const springX = useSpring(x, { stiffness: 300, damping: 20 })
@@ -127,8 +156,9 @@ function TiltCard({ children, className = '' }: { children: React.ReactNode; cla
       const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 8
       x.set(rotateX)
       y.set(rotateY)
+      onExternalMouseMove?.(e)
     },
-    [x, y]
+    [x, y, onExternalMouseMove]
   )
 
   const handleMouseLeave = useCallback(() => {
@@ -283,7 +313,7 @@ export default function AboutSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
               onMouseMove={spotlightMouse}
-              className="glass spotlight-card rounded-2xl p-8 md:p-10"
+              className="glass spotlight-card card-shine rounded-2xl p-8 md:p-10"
             >
               <div className="mb-6 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3">
                 <Target className="h-6 w-6 text-gold" />
@@ -304,7 +334,7 @@ export default function AboutSection() {
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: 0.1 }}
               onMouseMove={spotlightMouse}
-              className="glass spotlight-card rounded-2xl p-8 md:p-10"
+              className="glass spotlight-card card-shine rounded-2xl p-8 md:p-10"
             >
               <div className="mb-6 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3">
                 <Eye className="h-6 w-6 text-gold" />
@@ -318,6 +348,94 @@ export default function AboutSection() {
               </p>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Premium Divider: between mission and leadership */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="premium-divider py-2">
+          <div className="h-1.5 w-1.5 rotate-45 shrink-0 rounded-sm bg-gold/40" />
+        </div>
+      </div>
+
+      {/* Team / Leadership */}
+      <section className="relative overflow-hidden py-20 md:py-28">
+        <div className="absolute inset-0 bg-background" />
+        <FloatingParticles count={3} className="z-0" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mb-16 text-center"
+          >
+            <span className="mb-4 inline-block text-sm font-medium uppercase tracking-[0.2em] text-gold">
+              Our Leadership
+            </span>
+            <h2 className="text-3xl font-bold sm:text-4xl">
+              Meet the <span className="gradient-text">Team</span>
+            </h2>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: '-60px' }}
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"
+          >
+            {teamMembers.map((member) => (
+              <motion.div
+                key={member.name}
+                variants={itemVariants}
+              >
+                <TiltCard className="glass spotlight-card card-shine group rounded-2xl p-8 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-xl hover:shadow-gold/10"
+                  onMouseMove={spotlightMouse}
+                >
+                  {/* Avatar circle with initials */}
+                  <div className="mx-auto mb-5 relative">
+                    <motion.div
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ type: 'spring', stiffness: 300, damping: 20 }}
+                      className="mx-auto flex h-20 w-20 items-center justify-center rounded-full border-2 border-gold/50 bg-gradient-to-br from-gold/10 to-copper/10"
+                    >
+                      <span className="text-2xl font-bold gradient-text">{member.initials}</span>
+                    </motion.div>
+                    {/* Subtle ring glow */}
+                    <div className="absolute inset-0 -z-10 mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-gold/10 blur-lg opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+                  </div>
+
+                  <h3 className="text-lg font-bold text-foreground">{member.name}</h3>
+                  <p className="mt-1 text-sm font-medium text-gold">{member.title}</p>
+                  <p className="mt-3 text-sm text-muted-foreground leading-relaxed">{member.description}</p>
+
+                  {/* Social links */}
+                  <div className="mt-5 flex items-center justify-center gap-3">
+                    <motion.a
+                      href={member.linkedin}
+                      aria-label={`${member.name} LinkedIn`}
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.9 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-border/50 bg-background/50 text-muted-foreground transition-all duration-300 hover:border-gold/50 hover:bg-gold/10 hover:text-gold"
+                    >
+                      <Linkedin className="h-3.5 w-3.5" />
+                    </motion.a>
+                    <motion.a
+                      href={member.twitter}
+                      aria-label={`${member.name} Twitter`}
+                      whileHover={{ scale: 1.15 }}
+                      whileTap={{ scale: 0.9 }}
+                      transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+                      className="flex h-8 w-8 items-center justify-center rounded-full border border-border/50 bg-background/50 text-muted-foreground transition-all duration-300 hover:border-gold/50 hover:bg-gold/10 hover:text-gold"
+                    >
+                      <Twitter className="h-3.5 w-3.5" />
+                    </motion.a>
+                  </div>
+                </TiltCard>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -458,7 +576,7 @@ export default function AboutSection() {
         </div>
       </section>
 
-      {/* Premium Divider: between timeline and values */}
+      {/* Premium Divider: between timeline and advantage */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="premium-divider py-2">
           <div className="h-1.5 w-1.5 rotate-45 shrink-0 rounded-sm bg-gold/40" />
@@ -563,6 +681,13 @@ export default function AboutSection() {
         </div>
       </section>
 
+      {/* Premium Divider: between advantage and values */}
+      <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="premium-divider py-2">
+          <div className="h-1.5 w-1.5 rotate-45 shrink-0 rounded-sm bg-gold/40" />
+        </div>
+      </div>
+
       {/* Core Values */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div className="absolute inset-0 bg-warm-gray" />
@@ -600,7 +725,7 @@ export default function AboutSection() {
                     <div className="mx-auto mb-4 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110">
                       <Icon className="h-6 w-6 text-gold" />
                     </div>
-                    <h3 className="mb-2 font-semibold text-foreground">{value.title}</h3>
+                    <h3 className="mb-2 font-semibold gradient-text">{value.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
                   </TiltCard>
                 </motion.div>

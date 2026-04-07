@@ -1038,3 +1038,252 @@ img, video, canvas, iframe, [role="img"] {
   border: 1px solid rgba(200, 150, 62, 0.06);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
+
+/* ============================================================
+   Premium Animations & Utility Classes — Task 4-c Additions
+   Lazy Section Loader Enhancements & New CSS Utilities
+   ============================================================ */
+
+/* ----------------------------------------------------------
+   1. Premium Card Gradient Overlay on Hover
+   Radial gradient that appears on hover expanding from center
+   ---------------------------------------------------------- */
+.card-gradient-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.card-gradient-overlay::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 120%;
+  height: 120%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(200, 150, 62, 0.10) 0%,
+    rgba(232, 199, 123, 0.06) 30%,
+    rgba(184, 115, 51, 0.03) 60%,
+    transparent 80%
+  );
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0;
+  transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.5s ease;
+}
+.card-gradient-overlay:hover::after {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+.dark .card-gradient-overlay::after {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(200, 150, 62, 0.12) 0%,
+    rgba(232, 199, 123, 0.07) 30%,
+    rgba(184, 115, 51, 0.04) 60%,
+    transparent 80%
+  );
+}
+
+/* ----------------------------------------------------------
+   2. Text Stroke Outline for Headings
+   Webkit text stroke for gold outline text effect
+   ---------------------------------------------------------- */
+.text-stroke {
+  -webkit-text-stroke: 1.5px #C8963E;
+  color: transparent !important;
+  -webkit-text-fill-color: transparent;
+}
+.dark .text-stroke {
+  -webkit-text-stroke-color: #E8C77B;
+}
+
+/* ----------------------------------------------------------
+   3. Animated Dashed Border
+   Rotating dashed border animation for special callout boxes
+   ---------------------------------------------------------- */
+@property --dash-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes dash-rotate {
+  0% { --dash-angle: 0deg; }
+  100% { --dash-angle: 360deg; }
+}
+
+.animated-dashed-border {
+  position: relative;
+  border-radius: 0.75rem;
+}
+.animated-dashed-border::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  padding: 2px;
+  background: conic-gradient(
+    from var(--dash-angle, 0deg),
+    #C8963E 0deg,
+    transparent 40deg,
+    transparent 80deg,
+    #C8963E 120deg,
+    transparent 160deg,
+    transparent 200deg,
+    #C8963E 240deg,
+    transparent 280deg,
+    transparent 320deg,
+    #C8963E 360deg
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: dash-rotate 8s linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ----------------------------------------------------------
+   4. Smooth Expand / Collapse
+   max-height transition for accordion-like reveals
+   ---------------------------------------------------------- */
+.expand-content {
+  max-height: 0;
+  overflow: hidden;
+  opacity: 0;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.4s ease;
+}
+.expand-content[data-expanded="true"] {
+  max-height: 2000px; /* Generous ceiling — adjust as needed */
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------
+   5. Elevated Shadow on Scroll
+   Adds shadow when element is scrolled past its top edge
+   ---------------------------------------------------------- */
+.elevated-on-scroll {
+  transition: box-shadow 0.3s ease;
+  box-shadow: none;
+}
+.elevated-on-scroll[data-scrolled="true"] {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.08),
+    0 10px 15px -3px rgba(0, 0, 0, 0.06),
+    0 0 0 1px rgba(200, 150, 62, 0.08);
+}
+.dark .elevated-on-scroll[data-scrolled="true"] {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.3),
+    0 10px 15px -3px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(200, 150, 62, 0.06);
+}
+
+/* ----------------------------------------------------------
+   6. Gold Gradient Text for Links
+   Gold gradient text with underline animation on hover
+   ---------------------------------------------------------- */
+.link-gold {
+  position: relative;
+  display: inline;
+  background: linear-gradient(135deg, #C8963E, #E8C77B, #B87333);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-weight: 500;
+  cursor: pointer;
+}
+.link-gold::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 100%;
+  height: 1.5px;
+  background: linear-gradient(90deg, #C8963E, #E8C77B);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.link-gold:hover::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+.dark .link-gold {
+  background: linear-gradient(135deg, #E8C77B, #F0D89A, #C8963E);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ----------------------------------------------------------
+   7. Parallax Container — Depth Effect
+   .parallax-slow  — slower scroll movement (farther away)
+   .parallax-fast — faster scroll movement (closer)
+   Use with transform-style: preserve-3d on the parent
+   ---------------------------------------------------------- */
+.parallax-slow {
+  transform: translateZ(-40px) scale(1.04);
+  will-change: transform;
+}
+.parallax-fast {
+  transform: translateZ(20px) scale(0.96);
+  will-change: transform;
+}
+
+/* ----------------------------------------------------------
+   8. Focus Visible Gold Ring
+   Consistent gold focus ring for all interactive elements
+   ---------------------------------------------------------- */
+.focus-gold-ring:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 2px var(--background, #fff),
+    0 0 0 4px rgba(200, 150, 62, 0.5),
+    0 0 12px rgba(200, 150, 62, 0.15);
+}
+.dark .focus-gold-ring:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--background, #1a1a1a),
+    0 0 0 4px rgba(232, 199, 123, 0.5),
+    0 0 12px rgba(232, 199, 123, 0.15);
+}
+
+/* ----------------------------------------------------------
+   9. Text Gradient Copper
+   Copper / bronze gradient text variant
+   ---------------------------------------------------------- */
+.gradient-text-copper {
+  background: linear-gradient(135deg, #B87333 0%, #CD7F32 30%, #DA9100 60%, #C88A32 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.dark .gradient-text-copper {
+  background: linear-gradient(135deg, #DA9100 0%, #E8A84C 30%, #F0C070 60%, #D49A40 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ----------------------------------------------------------
+   10. Backdrop Saturation Effect
+   backdrop-filter saturate for image cards — makes images
+   pop while keeping background visible
+   ---------------------------------------------------------- */
+.saturate-backdrop {
+  backdrop-filter: blur(8px) saturate(1.4);
+  -webkit-backdrop-filter: blur(8px) saturate(1.4);
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.dark .saturate-backdrop {
+  background: rgba(10, 10, 10, 0.5);
+  border: 1px solid rgba(200, 150, 62, 0.08);
+  backdrop-filter: blur(8px) saturate(1.6);
+  -webkit-backdrop-filter: blur(8px) saturate(1.6);
+}

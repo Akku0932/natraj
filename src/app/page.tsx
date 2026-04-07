@@ -1,7 +1,7 @@
 'use client'
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { ChevronRight, FileText, LayoutGrid, Zap, ArrowRight, MessageCircle, Mail } from 'lucide-react'
+import { ChevronRight, ArrowRight, FileText, LayoutGrid, Zap, MessageCircle, Mail } from 'lucide-react'
 import { useStore } from '@/store/use-store'
 import { Breadcrumbs } from '@/components/breadcrumbs'
 import { Navbar } from '@/components/navbar'
@@ -21,6 +21,7 @@ import StatsSection from '@/components/sections/stats-section'
 import CategoriesPreview from '@/components/sections/categories-preview'
 import CTASection from '@/components/sections/cta-section'
 import CatalogDownloadSection from '@/components/sections/catalog-section'
+import FeaturedMarquee from '@/components/sections/featured-marquee'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
@@ -30,10 +31,12 @@ import ProcessSection from '@/components/sections/process-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
+import IndustryApplications from '@/components/sections/industry-applications'
 import { CookieConsent } from '@/components/cookie-consent'
 import { QuickSearchModal } from '@/components/quick-search-modal'
 import { RecentlyViewedSection } from '@/components/recently-viewed-section'
 import { SectionTransition } from '@/components/section-transition'
+import LazySection from '@/components/lazy-section'
 
 const pageVariants = {
   initial: { opacity: 0, y: 20, scale: 0.98, filter: 'blur(4px)' },
@@ -71,15 +74,27 @@ export default function Home() {
               <FeaturesSection />
               <StatsSection />
               <ClientsSection />
-              <TestimonialsSection />
-              <WhyChooseSection />
+              <LazySection minHeight="500px">
+                <TestimonialsSection />
+              </LazySection>
+              <LazySection minHeight="400px">
+                <WhyChooseSection />
+              </LazySection>
               <SectionTransition variant="dots" />
               <ProcessSection />
               <SectionTransition variant="gold-line" />
+              <LazySection minHeight="600px">
+                <IndustryApplications />
+              </LazySection>
               <CategoriesPreview />
               <CatalogDownloadSection />
+              <LazySection minHeight="350px">
+                <FeaturedMarquee />
+              </LazySection>
               <CTASection />
-              <FaqSection />
+              <LazySection minHeight="500px">
+                <FaqSection />
+              </LazySection>
               <SectionTransition variant="gradient" />
               <CertificationsSection />
             </motion.div>

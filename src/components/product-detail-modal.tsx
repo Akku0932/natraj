@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/store/use-store'
@@ -29,6 +30,7 @@ import {
   MessageCircle,
   Share,
   ShoppingBag,
+  CheckCircle2,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -68,6 +70,17 @@ export function ProductDetailModal() {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxZoomed, setLightboxZoomed] = useState(false)
+
+  // Image zoom-on-hover state
+  const [isZooming, setIsZooming] = useState(false)
+  const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 })
+  const [zoomPanelStyle, setZoomPanelStyle] = useState<React.CSSProperties>({})
+  const [mounted, setMounted] = useState(false)
+  const imageContainerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   // Parse images from JSON string
   const images: string[] = (() => {
@@ -122,6 +135,7 @@ export function ProductDetailModal() {
             setError(null)
             setCurrentImageIndex(0)
             setQuantity(1)
+            setIsZooming(false)
             addToRecentlyViewed(selectedProduct)
           }
         } catch (err) {
@@ -145,6 +159,7 @@ export function ProductDetailModal() {
         setCurrentImageIndex(0)
         setLightboxOpen(false)
         setLightboxZoomed(false)
+        setIsZooming(false)
       }, 200)
       return () => clearTimeout(timer)
     }
@@ -156,6 +171,7 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev + 1) % images.length)
       setLightboxZoomed(false)
+      setIsZooming(false)
     }
   }
 
@@ -163,6 +179,7 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
       setLightboxZoomed(false)
+      setIsZooming(false)
     }
   }
 
@@ -198,6 +215,84 @@ export function ProductDetailModal() {
       document.body.style.overflow = ''
     }
   }, [lightboxOpen, handleLightboxKeyDown])
+
+  // ---- Image Zoom on Hover ----
+  const handleImageMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
+    if (!imageContainerRef.current) return
+    const rect = imageContainerRef.current.getBoundingClientRect()
+    const x = ((e.clientX - rect.left) / rect.width) * 100
+    const y = ((e.clientY - rect.top) / rect.height) * 100
+    setZoomPosition({ x, y })
+
+    const mainW = rect.width
+    const mainH = rect.height
+    const gap = 10
+    const isMobile = window.innerWidth < 1024
+
+    let panelLeft: number
+    let panelTop: number
+    let panelW: number
+    let panelH: number
+
+    if (isMobile) {
+      // Position below on mobile
+      panelLeft = rect.left
+      panelTop = rect.bottom + gap
+      panelW = mainW
+      const bottomSpace = window.innerHeight - panelTop - gap
+      panelH = Math.min(mainH * 0.6, Math.max(bottomSpace, 120))
+    } else {
+      // Position to the right on desktop
+      panelH = mainH
+      const rightSpace = window.innerWidth - rect.right - gap
+      const leftSpace = rect.left - gap
+
+      if (rightSpace >= mainW) {
+        panelLeft = rect.right + gap
+        panelW = mainW
+      } else if (leftSpace >= mainW) {
+        panelLeft = rect.left - gap - mainW
+        panelW = mainW
+      } else if (rightSpace >= 200) {
+        panelLeft = rect.right + gap
+        panelW = rightSpace
+      } else if (leftSpace >= 200) {
+        panelLeft = rect.left - gap - leftSpace
+        panelW = leftSpace
+      } else {
+        // Fallback: overlap slightly
+        panelLeft = rect.right - mainW * 0.4
+        panelW = mainW
+      }
+      panelTop = rect.top
+    }
+
+    // Calculate background positioning for 2x zoom
+    const bgW = mainW * 2
+    const bgH = mainH * 2
+    const bgX = panelW / 2 - (x / 100) * mainW * 2
+    const bgY = panelH / 2 - (y / 100) * mainH * 2
+
+    setZoomPanelStyle({
+      position: 'fixed',
+      top: panelTop,
+      left: panelLeft,
+      width: panelW,
+      height: panelH,
+      backgroundImage: `url(${images[currentImageIndex]})`,
+      backgroundSize: `${bgW}px ${bgH}px`,
+      backgroundPosition: `${bgX}px ${bgY}px`,
+      backgroundRepeat: 'no-repeat',
+    })
+  }, [images, currentImageIndex])
+
+  const handleImageMouseEnter = useCallback(() => {
+    setIsZooming(true)
+  }, [])
+
+  const handleImageMouseLeave = useCallback(() => {
+    setIsZooming(false)
+  }, [])
 
   // Navigate to products page with category filter
   const handleCategoryClick = () => {
@@ -245,6 +340,28 @@ export function ProductDetailModal() {
     } else {
       toast({ title: 'Sharing is not supported', variant: 'destructive' })
     }
+  }
+
+  // Build WhatsApp "Add to Quote" message with product details
+  const buildQuoteMessage = () => {
+    if (!product) return ''
+    const lines = [
+      `Hi! I'm interested in ordering:`,
+      ``,
+      `📦 Product: ${product.name}`,
+      `🏷️ Category: ${product.category.name}`,
+    ]
+    if (product.price) {
+      lines.push(`💰 Price: ₹${product.price.toLocaleString('en-IN')} (excl. GST)`)
+    } else {
+      lines.push(`💰 Price: Request Quote`)
+    }
+    lines.push(`🔢 Quantity: ${quantity}`)
+    if (product.price) {
+      lines.push(`💵 Total: ₹${(product.price * quantity).toLocaleString('en-IN')} (excl. GST)`)
+    }
+    lines.push(``, `Thank you!`)
+    return lines.join('\n')
   }
 
   return (
@@ -316,64 +433,138 @@ export function ProductDetailModal() {
                   {/* Image Section */}
                   <div className="relative w-full sm:w-1/2 shrink-0">
                     {images.length > 0 ? (
-                      <div className="relative aspect-square overflow-hidden rounded-lg bg-muted">
-                        <Image
-                          src={images[currentImageIndex]}
-                          alt={`${product.name} - Image ${currentImageIndex + 1}`}
-                          fill
-                          className="object-cover"
-                          sizes="(max-width: 640px) 100vw, 50vw"
-                          priority
-                        />
-
-                        {/* Zoom button */}
-                        <button
-                          onClick={() => {
-                            setLightboxOpen(true)
-                            setLightboxZoomed(false)
-                          }}
-                          className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 hover:scale-110"
-                          aria-label="Open lightbox"
+                      <>
+                        {/* Main Image with Zoom on Hover */}
+                        <div
+                          ref={imageContainerRef}
+                          className="relative aspect-square overflow-hidden rounded-lg bg-muted"
+                          onMouseMove={handleImageMouseMove}
+                          onMouseEnter={handleImageMouseEnter}
+                          onMouseLeave={handleImageMouseLeave}
+                          style={{ cursor: isZooming ? 'none' : 'zoom-in' }}
                         >
-                          <ZoomIn className="h-4 w-4" />
-                        </button>
-
-                        {/* Image navigation */}
-                        {images.length > 1 && (
-                          <>
-                            <button
-                              onClick={prevImage}
-                              className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
-                              aria-label="Previous image"
+                          {/* Image with fade animation on thumbnail click */}
+                          <AnimatePresence mode="wait">
+                            <motion.div
+                              key={currentImageIndex}
+                              initial={{ opacity: 0 }}
+                              animate={{ opacity: 1 }}
+                              exit={{ opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="absolute inset-0"
                             >
-                              <ChevronLeft className="h-4 w-4" />
-                            </button>
-                            <button
-                              onClick={nextImage}
-                              className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
-                              aria-label="Next image"
-                            >
-                              <ChevronRight className="h-4 w-4" />
-                            </button>
+                              <Image
+                                src={images[currentImageIndex]}
+                                alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="(max-width: 640px) 100vw, 50vw"
+                                priority
+                              />
+                            </motion.div>
+                          </AnimatePresence>
 
-                            {/* Image dots */}
-                            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
-                              {images.map((_, idx) => (
-                                <button
-                                  key={idx}
-                                  onClick={() => setCurrentImageIndex(idx)}
-                                  className={`h-1.5 rounded-full transition-all duration-200 ${
-                                    idx === currentImageIndex
-                                      ? 'w-6 bg-gold'
-                                      : 'w-1.5 bg-white/50 hover:bg-white/80'
-                                  }`}
-                                  aria-label={`Go to image ${idx + 1}`}
-                                />
-                              ))}
+                          {/* Zoom lens cursor indicator */}
+                          {isZooming && (
+                            <div
+                              className="absolute pointer-events-none z-10 border-2 border-gold/70 bg-gold/5 rounded-full"
+                              style={{
+                                width: '100px',
+                                height: '100px',
+                                left: `calc(${zoomPosition.x}% - 50px)`,
+                                top: `calc(${zoomPosition.y}% - 50px)`,
+                                boxShadow: '0 0 0 1px rgba(0,0,0,0.1), 0 0 20px rgba(200,150,62,0.15)',
+                                transition: 'none',
+                              }}
+                            >
+                              {/* Crosshair inside lens */}
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="h-px w-6 bg-gold/40" />
+                              </div>
+                              <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="h-6 w-px bg-gold/40" />
+                              </div>
                             </div>
-                          </>
+                          )}
+
+                          {/* Zoom button */}
+                          <button
+                            onClick={() => {
+                              setLightboxOpen(true)
+                              setLightboxZoomed(false)
+                            }}
+                            className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60 hover:scale-110"
+                            aria-label="Open lightbox"
+                          >
+                            <ZoomIn className="h-4 w-4" />
+                          </button>
+
+                          {/* Image navigation */}
+                          {images.length > 1 && (
+                            <>
+                              <button
+                                onClick={prevImage}
+                                className="absolute left-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+                                aria-label="Previous image"
+                              >
+                                <ChevronLeft className="h-4 w-4" />
+                              </button>
+                              <button
+                                onClick={nextImage}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 flex h-8 w-8 items-center justify-center rounded-full bg-black/40 text-white backdrop-blur-sm transition-colors hover:bg-black/60"
+                                aria-label="Next image"
+                              >
+                                <ChevronRight className="h-4 w-4" />
+                              </button>
+
+                              {/* Image dots */}
+                              <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+                                {images.map((_, idx) => (
+                                  <button
+                                    key={idx}
+                                    onClick={() => setCurrentImageIndex(idx)}
+                                    className={`h-1.5 rounded-full transition-all duration-200 ${
+                                      idx === currentImageIndex
+                                        ? 'w-6 bg-gold'
+                                        : 'w-1.5 bg-white/50 hover:bg-white/80'
+                                    }`}
+                                    aria-label={`Go to image ${idx + 1}`}
+                                  />
+                                ))}
+                              </div>
+                            </>
+                          )}
+                        </div>
+
+                        {/* Zoom Panel - rendered via portal to escape overflow clipping */}
+                        {mounted && isZooming && typeof window !== 'undefined' && createPortal(
+                          <AnimatePresence>
+                            <motion.div
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              exit={{ opacity: 0, scale: 0.95 }}
+                              transition={{ duration: 0.15 }}
+                              className="fixed z-[200] rounded-lg border-2 border-gold/40 bg-muted overflow-hidden shadow-2xl pointer-events-none"
+                              style={{
+                                ...zoomPanelStyle,
+                                backgroundRepeat: 'no-repeat',
+                              }}
+                            >
+                              {/* Gold corner accents */}
+                              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-gold/50 rounded-tl-lg" />
+                              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-gold/50 rounded-tr-lg" />
+                              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-gold/50 rounded-bl-lg" />
+                              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-gold/50 rounded-br-lg" />
+                              {/* 2x label */}
+                              <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
+                                <ZoomIn className="h-2.5 w-2.5" />
+                                2×
+                              </div>
+                            </motion.div>
+                          </AnimatePresence>,
+                          document.body
                         )}
-                      </div>
+                      </>
                     ) : (
                       <div className="flex aspect-square items-center justify-center rounded-lg bg-muted">
                         <div className="flex flex-col items-center gap-2 text-muted-foreground">
@@ -383,17 +574,17 @@ export function ProductDetailModal() {
                       </div>
                     )}
 
-                    {/* Thumbnail strip */}
+                    {/* Thumbnail Strip */}
                     {images.length > 1 && (
-                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+                      <div className="mt-3 flex gap-2 overflow-x-auto pb-1 scrollbar-thin">
                         {images.map((img, idx) => (
                           <button
                             key={idx}
                             onClick={() => setCurrentImageIndex(idx)}
-                            className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all ${
+                            className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition-all duration-200 ${
                               idx === currentImageIndex
-                                ? 'border-gold ring-1 ring-gold/30'
-                                : 'border-transparent opacity-60 hover:opacity-100'
+                                ? 'border-gold ring-2 ring-gold/30 scale-105'
+                                : 'border-transparent opacity-50 hover:opacity-80 hover:border-gold/30'
                             }`}
                           >
                             <Image
@@ -403,6 +594,10 @@ export function ProductDetailModal() {
                               className="object-cover"
                               sizes="64px"
                             />
+                            {/* Active indicator dot */}
+                            {idx === currentImageIndex && (
+                              <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-gold" />
+                            )}
                           </button>
                         ))}
                       </div>
@@ -451,23 +646,31 @@ export function ProductDetailModal() {
                           Specifications
                         </div>
                         {Object.keys(specs).length > 0 ? (
-                          <div className="space-y-2">
-                            {Object.entries(specs).map(([key, value]) => (
-                              <div
-                                key={key}
-                                className="flex items-start justify-between gap-4 rounded-lg bg-muted/50 px-3 py-2"
-                              >
-                                <span className="text-sm font-medium text-foreground/70 capitalize">
-                                  {key.replace(/_/g, ' ')}
-                                </span>
-                                <span className="text-sm font-medium text-foreground text-right">
-                                  {value}
-                                </span>
-                              </div>
-                            ))}
+                          <div className="overflow-hidden rounded-lg border border-border/50">
+                            <table className="w-full text-sm">
+                              <tbody>
+                                {Object.entries(specs).map(([key, value], index) => (
+                                  <tr
+                                    key={key}
+                                    className={
+                                      index % 2 === 0
+                                        ? 'bg-muted/30'
+                                        : 'bg-muted/60'
+                                    }
+                                  >
+                                    <td className="py-2.5 px-3 font-medium text-foreground/70 capitalize">
+                                      {key.replace(/_/g, ' ')}
+                                    </td>
+                                    <td className="py-2.5 px-3 text-right font-semibold text-foreground">
+                                      {value}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
                           </div>
                         ) : (
-                          <div className="rounded-lg bg-muted/50 px-4 py-3">
+                          <div className="rounded-lg border border-border/50 bg-muted/30 px-4 py-3">
                             <p className="text-sm leading-relaxed text-muted-foreground whitespace-pre-wrap">
                               {product?.specifications}
                             </p>
@@ -523,18 +726,16 @@ export function ProductDetailModal() {
                         </div>
                       )}
 
-                      {/* Add to Quote Button */}
+                      {/* Add to Quote Button with pulse animation */}
                       <Button
                         asChild
-                        className="w-full bg-gradient-to-r from-gold to-amber-600 text-white border-0 shadow-lg shadow-gold/20 hover:from-gold/90 hover:to-amber-600/90 font-medium"
+                        className="w-full animate-pulse-gold bg-gradient-to-r from-gold via-amber-500 to-gold text-white border-0 shadow-lg shadow-gold/25 hover:from-gold/90 hover:via-amber-500/90 hover:to-gold/90 hover:shadow-gold/35 font-semibold text-sm"
                         onClick={() =>
                           toast({ title: 'Quote request opened on WhatsApp!' })
                         }
                       >
                         <a
-                          href={`https://wa.me/919868225911?text=${encodeURIComponent(
-                            `Hi! I'm interested in ordering:\n\nProduct: ${product.name}\nCategory: ${product.category.name}\n${product.price ? `Price: ₹${product.price.toLocaleString('en-IN')}` : 'Price: Request Quote'}\nQuantity: ${quantity}\n\nThank you!`
-                          )}`}
+                          href={`https://wa.me/919868225911?text=${encodeURIComponent(buildQuoteMessage())}`}
                           target="_blank"
                           rel="noopener noreferrer"
                         >
@@ -564,7 +765,7 @@ export function ProductDetailModal() {
                       </Button>
                       <Button
                         asChild
-                        className="flex-1 bg-green-600 text-white border-0 shadow-lg shadow-green-600/20 hover:bg-green-700"
+                        className="flex-1 bg-gradient-to-r from-green-600 to-green-500 text-white border-0 shadow-lg shadow-green-600/20 hover:from-green-700 hover:to-green-600"
                       >
                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                           <MessageCircle className="mr-2 h-4 w-4" />
