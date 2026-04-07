@@ -379,3 +379,29 @@ Stage Summary:
 - Footer: premium glass, social animations, newsletter success
 - About: team leadership, mission/vision card-shine, gradient values
 - All changes maintain gold/copper/charcoal design system consistency
+
+---
+Task ID: 21
+Agent: main-coordinator (session recovery)
+Task: Fix preview not showing, set up 15-minute cron review
+
+Work Log:
+- Diagnosed preview issue: Next.js 16 CORS blocking `/_next/*` resources from `*.space.z.ai` preview panel
+- Fixed `next.config.ts` allowedDevOrigins to include `https://*.space.z.ai`, `http://*.space.z.ai`, `*.space.z.ai`
+- Dev server starts successfully and serves pages (200 status) with no CORS warnings
+- ESLint: 0 errors, 0 warnings
+- Created 15-minute webDevReview cron job (ID: 69428) for continuous development
+
+Stage Summary:
+- CORS fix resolved preview panel issue
+- Cron job set up for continuous 15-minute review cycles
+- Server confirmed working with all routes: /, /api/categories, /api/products/[slug]
+
+Current Project Status:
+- PRODUCTION-READY corporate website (6 review cycles completed)
+- Dev server needs manual restart when sandbox kills idle processes
+- 15-minute cron job will handle continuous development going forward
+
+Unresolved Issues:
+1. Dev server gets killed by sandbox after ~30s idle (known sandbox behavior)
+2. Cron job will auto-restart and continue development
