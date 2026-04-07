@@ -29,6 +29,8 @@ interface Product {
   name: string
   slug: string
   description: string | null
+  usage: string | null
+  features: string
   specifications: string
   price: number | null
   images: string
@@ -384,7 +386,7 @@ export default function ProductsSection() {
                 return (
                   <div
                     key={product.id}
-                    className="group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5 hover:-translate-y-1"
+                    className="group overflow-hidden rounded-2xl border border-border/50 bg-card transition-all duration-300 hover:shadow-xl hover:shadow-gold/5 hover:-translate-y-1 hover:border-gold/30"
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     {/* Image */}
@@ -395,7 +397,7 @@ export default function ProductsSection() {
                             src={firstImage}
                             alt={product.name}
                             fill
-                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            className="object-cover transition-transform duration-500"
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             loading="lazy"
                             onError={() => {
@@ -465,7 +467,7 @@ export default function ProductsSection() {
                       </button>
 
                       {/* Quick View button */}
-                      <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                      <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
                         <Button
                           onClick={() => handleViewDetails(product.slug)}
                           size="sm"
@@ -488,7 +490,7 @@ export default function ProductsSection() {
                         {product.name}
                       </h3>
                       <p className="mb-4 line-clamp-2 text-sm text-muted-foreground leading-relaxed">
-                        {product.description || `${product.category.name} - Premium quality electrical panel by Natraj Electricals`}
+                        {product.description || product.usage || `${product.category.name} - Premium quality electrical panel`}
                       </p>
 
                       {/* Price & CTA */}

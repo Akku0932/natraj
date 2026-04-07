@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback } from 'react'
-import { createPortal } from 'react-dom'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '@/store/use-store'
@@ -31,6 +30,7 @@ import {
   Share,
   ShoppingBag,
   CheckCircle2,
+  Wrench,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -40,6 +40,8 @@ interface ProductData {
   slug: string
   description: string | null
   specifications: string
+  usage: string | null
+  features: string
   price: number | null
   categoryId: string
   category: {
@@ -70,17 +72,6 @@ export function ProductDetailModal() {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxZoomed, setLightboxZoomed] = useState(false)
-
-  // Image zoom-on-hover state
-  const [isZooming, setIsZooming] = useState(false)
-  const [zoomPosition, setZoomPosition] = useState({ x: 50, y: 50 })
-  const [zoomPanelStyle, setZoomPanelStyle] = useState<React.CSSProperties>({})
-  const [mounted, setMounted] = useState(false)
-  const imageContainerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
 
   // Parse images from JSON string
   const images: string[] = (() => {
@@ -117,6 +108,17 @@ export function ProductDetailModal() {
     }
   })()
 
+  // Parse features from JSON array string
+  const featuresList: string[] = (() => {
+    if (!product?.features) return []
+    try {
+      const parsed = JSON.parse(product.features)
+      return Array.isArray(parsed) ? parsed : []
+    } catch {
+      return []
+    }
+  })()
+
   // Track previous state for cleanup
   const prevOpenRef = useRef(productDetailOpen)
 
@@ -135,7 +137,6 @@ export function ProductDetailModal() {
             setError(null)
             setCurrentImageIndex(0)
             setQuantity(1)
-            setIsZooming(false)
             addToRecentlyViewed(selectedProduct)
           }
         } catch (err) {
@@ -159,7 +160,6 @@ export function ProductDetailModal() {
         setCurrentImageIndex(0)
         setLightboxOpen(false)
         setLightboxZoomed(false)
-        setIsZooming(false)
       }, 200)
       return () => clearTimeout(timer)
     }
@@ -171,7 +171,6 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev + 1) % images.length)
       setLightboxZoomed(false)
-      setIsZooming(false)
     }
   }
 
@@ -179,7 +178,6 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
       setLightboxZoomed(false)
-      setIsZooming(false)
     }
   }
 
@@ -215,84 +213,6 @@ export function ProductDetailModal() {
       document.body.style.overflow = ''
     }
   }, [lightboxOpen, handleLightboxKeyDown])
-
-  // ---- Image Zoom on Hover ----
-  const handleImageMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (!imageContainerRef.current) return
-    const rect = imageContainerRef.current.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    setZoomPosition({ x, y })
-
-    const mainW = rect.width
-    const mainH = rect.height
-    const gap = 10
-    const isMobile = window.innerWidth < 1024
-
-    let panelLeft: number
-    let panelTop: number
-    let panelW: number
-    let panelH: number
-
-    if (isMobile) {
-      // Position below on mobile
-      panelLeft = rect.left
-      panelTop = rect.bottom + gap
-      panelW = mainW
-      const bottomSpace = window.innerHeight - panelTop - gap
-      panelH = Math.min(mainH * 0.6, Math.max(bottomSpace, 120))
-    } else {
-      // Position to the right on desktop
-      panelH = mainH
-      const rightSpace = window.innerWidth - rect.right - gap
-      const leftSpace = rect.left - gap
-
-      if (rightSpace >= mainW) {
-        panelLeft = rect.right + gap
-        panelW = mainW
-      } else if (leftSpace >= mainW) {
-        panelLeft = rect.left - gap - mainW
-        panelW = mainW
-      } else if (rightSpace >= 200) {
-        panelLeft = rect.right + gap
-        panelW = rightSpace
-      } else if (leftSpace >= 200) {
-        panelLeft = rect.left - gap - leftSpace
-        panelW = leftSpace
-      } else {
-        // Fallback: overlap slightly
-        panelLeft = rect.right - mainW * 0.4
-        panelW = mainW
-      }
-      panelTop = rect.top
-    }
-
-    // Calculate background positioning for 2x zoom
-    const bgW = mainW * 2
-    const bgH = mainH * 2
-    const bgX = panelW / 2 - (x / 100) * mainW * 2
-    const bgY = panelH / 2 - (y / 100) * mainH * 2
-
-    setZoomPanelStyle({
-      position: 'fixed',
-      top: panelTop,
-      left: panelLeft,
-      width: panelW,
-      height: panelH,
-      backgroundImage: `url(${images[currentImageIndex]})`,
-      backgroundSize: `${bgW}px ${bgH}px`,
-      backgroundPosition: `${bgX}px ${bgY}px`,
-      backgroundRepeat: 'no-repeat',
-    })
-  }, [images, currentImageIndex])
-
-  const handleImageMouseEnter = useCallback(() => {
-    setIsZooming(true)
-  }, [])
-
-  const handleImageMouseLeave = useCallback(() => {
-    setIsZooming(false)
-  }, [])
 
   // Navigate to products page with category filter
   const handleCategoryClick = () => {
@@ -434,14 +354,9 @@ export function ProductDetailModal() {
                   <div className="relative w-full sm:w-1/2 shrink-0">
                     {images.length > 0 ? (
                       <>
-                        {/* Main Image with Zoom on Hover */}
+                        {/* Main Image */}
                         <div
-                          ref={imageContainerRef}
-                          className="relative aspect-square overflow-hidden rounded-lg bg-muted"
-                          onMouseMove={handleImageMouseMove}
-                          onMouseEnter={handleImageMouseEnter}
-                          onMouseLeave={handleImageMouseLeave}
-                          style={{ cursor: isZooming ? 'none' : 'zoom-in' }}
+                          className="relative aspect-square overflow-hidden rounded-lg bg-muted cursor-zoom-in"
                         >
                           {/* Image with fade animation on thumbnail click */}
                           <AnimatePresence mode="wait">
@@ -463,29 +378,6 @@ export function ProductDetailModal() {
                               />
                             </motion.div>
                           </AnimatePresence>
-
-                          {/* Zoom lens cursor indicator */}
-                          {isZooming && (
-                            <div
-                              className="absolute pointer-events-none z-10 border-2 border-gold/70 bg-gold/5 rounded-full"
-                              style={{
-                                width: '100px',
-                                height: '100px',
-                                left: `calc(${zoomPosition.x}% - 50px)`,
-                                top: `calc(${zoomPosition.y}% - 50px)`,
-                                boxShadow: '0 0 0 1px rgba(0,0,0,0.1), 0 0 20px rgba(200,150,62,0.15)',
-                                transition: 'none',
-                              }}
-                            >
-                              {/* Crosshair inside lens */}
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="h-px w-6 bg-gold/40" />
-                              </div>
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="h-6 w-px bg-gold/40" />
-                              </div>
-                            </div>
-                          )}
 
                           {/* Zoom button */}
                           <button
@@ -536,34 +428,6 @@ export function ProductDetailModal() {
                           )}
                         </div>
 
-                        {/* Zoom Panel - rendered via portal to escape overflow clipping */}
-                        {mounted && isZooming && typeof window !== 'undefined' && createPortal(
-                          <AnimatePresence>
-                            <motion.div
-                              initial={{ opacity: 0, scale: 0.95 }}
-                              animate={{ opacity: 1, scale: 1 }}
-                              exit={{ opacity: 0, scale: 0.95 }}
-                              transition={{ duration: 0.15 }}
-                              className="fixed z-[200] rounded-lg border-2 border-gold/40 bg-muted overflow-hidden shadow-2xl pointer-events-none"
-                              style={{
-                                ...zoomPanelStyle,
-                                backgroundRepeat: 'no-repeat',
-                              }}
-                            >
-                              {/* Gold corner accents */}
-                              <div className="absolute top-0 left-0 w-4 h-4 border-t-2 border-l-2 border-gold/50 rounded-tl-lg" />
-                              <div className="absolute top-0 right-0 w-4 h-4 border-t-2 border-r-2 border-gold/50 rounded-tr-lg" />
-                              <div className="absolute bottom-0 left-0 w-4 h-4 border-b-2 border-l-2 border-gold/50 rounded-bl-lg" />
-                              <div className="absolute bottom-0 right-0 w-4 h-4 border-b-2 border-r-2 border-gold/50 rounded-br-lg" />
-                              {/* 2x label */}
-                              <div className="absolute bottom-2 right-2 flex items-center gap-1 rounded-full bg-black/60 px-2 py-0.5 text-[10px] font-medium text-white backdrop-blur-sm">
-                                <ZoomIn className="h-2.5 w-2.5" />
-                                2×
-                              </div>
-                            </motion.div>
-                          </AnimatePresence>,
-                          document.body
-                        )}
                       </>
                     ) : (
                       <div className="flex aspect-square items-center justify-center rounded-lg bg-muted">
@@ -636,6 +500,18 @@ export function ProductDetailModal() {
                       </div>
                     )}
 
+                    {product.usage && (
+                      <div>
+                        <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <Wrench className="h-4 w-4 text-gold" />
+                          Usage
+                        </div>
+                        <p className="text-sm leading-relaxed text-muted-foreground">
+                          {product.usage}
+                        </p>
+                      </div>
+                    )}
+
                     <Separator />
 
                     {/* Specifications */}
@@ -676,6 +552,23 @@ export function ProductDetailModal() {
                             </p>
                           </div>
                         )}
+                      </div>
+                    )}
+
+                    {featuresList.length > 0 && (
+                      <div>
+                        <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-foreground">
+                          <CheckCircle2 className="h-4 w-4 text-gold" />
+                          Key Features
+                        </div>
+                        <ul className="space-y-1.5">
+                          {featuresList.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
+                              <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-gold" />
+                              {feature}
+                            </li>
+                          ))}
+                        </ul>
                       </div>
                     )}
 

@@ -1,7 +1,7 @@
 'use client'
 
 import { useRef, useState, useEffect, useCallback } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import { Star, ChevronLeft, ChevronRight, Trophy, Quote, Sparkles } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 

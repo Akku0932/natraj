@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight, Star, MessageCircle, Eye } from 'lucide-react'
+import { ArrowRight, Star, MessageCircle, Eye, Package } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useStore } from '@/store/use-store'
@@ -13,6 +13,8 @@ interface Product {
   name: string
   slug: string
   description: string | null
+  usage: string | null
+  features: string
   price: number | null
   featured: boolean
   category: {
@@ -47,6 +49,7 @@ const cardVariants = {
 export default function FeaturedProductsSection() {
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(false)
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-60px' })
   const { setProductDetailOpen, setSelectedProduct, setCurrentPage, setSelectedCategory } = useStore()
@@ -56,14 +59,23 @@ export default function FeaturedProductsSection() {
     async function fetchFeatured() {
       try {
         const res = await fetch('/api/products?featured=true&limit=6')
-        if (!res.ok) return
+        if (!res.ok) {
+          if (!cancelled) {
+            setError(true)
+            setLoading(false)
+          }
+          return
+        }
         const data = await res.json()
         if (!cancelled) {
           setProducts(data.slice(0, 6))
           setLoading(false)
         }
       } catch {
-        if (!cancelled) setLoading(false)
+        if (!cancelled) {
+          setError(true)
+          setLoading(false)
+        }
       }
     }
     fetchFeatured()
@@ -161,13 +173,13 @@ export default function FeaturedProductsSection() {
                   className="glass group relative overflow-hidden rounded-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
                 >
                   {/* Image */}
-                  <div className="relative aspect-square overflow-hidden bg-muted">
+                  <div className="relative aspect-square overflow-hidden bg-muted transition-shadow duration-300 group-hover:shadow-lg group-hover:shadow-gold/10">
                     {hasImage ? (
                       <Image
                         src={images[0]}
                         alt={product.name}
                         fill
-                        className="object-cover transition-transform duration-500 group-hover:scale-105"
+                        className="object-cover transition-transform duration-500"
                         sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                       />
                     ) : (
@@ -185,7 +197,7 @@ export default function FeaturedProductsSection() {
                     </div>
 
                     {/* Quick action overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center gap-3 bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/20 group-hover:opacity-100">
+                    <div className="absolute inset-0 flex items-center justify-center gap-3 opacity-0 transition-all duration-300 group-hover:opacity-100">
                       <button
                         onClick={(e) => { e.stopPropagation(); handleViewProduct(product.slug) }}
                         className="flex h-11 w-11 items-center justify-center rounded-full bg-white/90 text-foreground shadow-lg backdrop-blur-sm transition-transform hover:scale-110"
@@ -249,7 +261,31 @@ export default function FeaturedProductsSection() {
               )
             })}
           </motion.div>
-        ) : null}
+        ) : (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="flex flex-col items-center justify-center rounded-2xl border border-border/50 bg-muted/20 py-16"
+          >
+            <Package className="mb-4 h-14 w-14 text-muted-foreground/40" />
+            <p className="text-base font-medium text-muted-foreground">
+              {error ? 'Failed to load featured products' : 'No featured products available at the moment'}
+            </p>
+            <p className="mt-1.5 text-sm text-muted-foreground/70">
+              {error ? 'Please try again later or browse our full catalog' : 'Check our full product catalog for all available items'}
+            </p>
+            <Button
+              onClick={() => setCurrentPage('products')}
+              variant="outline"
+              className="mt-6 border-border/50 text-sm hover:bg-accent"
+            >
+              Browse All Products
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+          </motion.div>
+        )}
 
         {/* View All CTA */}
         <motion.div

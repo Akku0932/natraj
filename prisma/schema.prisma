@@ -24,6 +24,8 @@ model Product {
   slug          String   @unique
   description   String?
   specifications String
+  usage         String?
+  features      String   @default("[]")
   price         Int?
   categoryId    String
   category      Category @relation(fields: [categoryId], references: [id])
