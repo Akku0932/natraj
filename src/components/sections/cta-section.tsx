@@ -6,6 +6,7 @@ import { ArrowRight, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useStore } from '@/store/use-store'
 import { FloatingParticles } from '@/components/floating-particles'
+import { CtaCanvas } from '@/components/sections/cta-canvas'
 
 export default function CTASection() {
   const { setCurrentPage } = useStore()
@@ -19,6 +20,9 @@ export default function CTASection() {
 
   return (
     <section ref={sectionRef} className="animated-border relative overflow-hidden py-24 md:py-32">
+      {/* Interactive particle canvas */}
+      <CtaCanvas />
+
       {/* Gold gradient background */}
       <div className="absolute inset-0 gold-gradient" />
 

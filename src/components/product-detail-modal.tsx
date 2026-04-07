@@ -28,6 +28,7 @@ import {
   ZoomIn,
   MessageCircle,
   Share,
+  ShoppingBag,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -62,6 +63,7 @@ export function ProductDetailModal() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
+  const [quantity, setQuantity] = useState(1)
 
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -119,6 +121,7 @@ export function ProductDetailModal() {
             setLoading(false)
             setError(null)
             setCurrentImageIndex(0)
+            setQuantity(1)
             addToRecentlyViewed(selectedProduct)
           }
         } catch (err) {
@@ -472,6 +475,74 @@ export function ProductDetailModal() {
                         )}
                       </div>
                     )}
+
+                    {/* Quantity Selector & Add to Quote */}
+                    <div className="space-y-4 pt-2">
+                      {/* Quantity Selector */}
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-foreground">Quantity</span>
+                        <div className="flex items-center gap-1 rounded-lg border border-gold/30 bg-background">
+                          <button
+                            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                            disabled={quantity <= 1}
+                            className="flex h-9 w-9 items-center justify-center rounded-l-lg text-foreground transition-colors hover:bg-gold/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                            aria-label="Decrease quantity"
+                          >
+                            −
+                          </button>
+                          <div className="flex h-9 w-12 items-center justify-center">
+                            <motion.span
+                              key={quantity}
+                              initial={{ scale: 0.8, opacity: 0.5 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              transition={{ type: 'spring', stiffness: 300, damping: 15 }}
+                              className="text-sm font-semibold tabular-nums text-foreground"
+                            >
+                              {quantity}
+                            </motion.span>
+                          </div>
+                          <button
+                            onClick={() => setQuantity((q) => Math.min(100, q + 1))}
+                            disabled={quantity >= 100}
+                            className="flex h-9 w-9 items-center justify-center rounded-r-lg text-foreground transition-colors hover:bg-gold/10 disabled:opacity-40 disabled:cursor-not-allowed"
+                            aria-label="Increase quantity"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Total Price (if product has price) */}
+                      {product.price && (
+                        <div className="flex items-center justify-between rounded-lg border border-gold/20 bg-gold/5 px-4 py-2.5">
+                          <span className="text-sm text-muted-foreground">Total</span>
+                          <span className="text-lg font-bold text-foreground">
+                            ₹{(product.price * quantity).toLocaleString('en-IN')}
+                            <span className="ml-1 text-xs font-normal text-muted-foreground">(excl. GST)</span>
+                          </span>
+                        </div>
+                      )}
+
+                      {/* Add to Quote Button */}
+                      <Button
+                        asChild
+                        className="w-full bg-gradient-to-r from-gold to-amber-600 text-white border-0 shadow-lg shadow-gold/20 hover:from-gold/90 hover:to-amber-600/90 font-medium"
+                        onClick={() =>
+                          toast({ title: 'Quote request opened on WhatsApp!' })
+                        }
+                      >
+                        <a
+                          href={`https://wa.me/919868225911?text=${encodeURIComponent(
+                            `Hi! I'm interested in ordering:\n\nProduct: ${product.name}\nCategory: ${product.category.name}\n${product.price ? `Price: ₹${product.price.toLocaleString('en-IN')}` : 'Price: Request Quote'}\nQuantity: ${quantity}\n\nThank you!`
+                          )}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          <ShoppingBag className="mr-2 h-4 w-4" />
+                          Add {quantity} Item{quantity !== 1 ? 's' : ''} to Quote
+                        </a>
+                      </Button>
+                    </div>
 
                     {/* Action buttons */}
                     <div className="flex gap-3 pt-2">

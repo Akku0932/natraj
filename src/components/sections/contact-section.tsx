@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import { motion, useInView, useScroll, useTransform } from 'framer-motion'
 import {
   MapPin,
@@ -13,6 +13,8 @@ import {
   Clock3,
   MessageCircle,
   ExternalLink,
+  Check,
+  ChevronRight,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -71,6 +73,12 @@ const itemVariants = {
 /* Checkmark path animation for success state */
 const checkmarkPath = 'M6 12l4 4 8-8'
 
+const steps = [
+  { number: 1, label: 'Your Details' },
+  { number: 2, label: 'Your Message' },
+  { number: 3, label: 'Review & Send' },
+]
+
 export default function ContactSection() {
   const [formData, setFormData] = useState({
     name: '',
@@ -82,6 +90,8 @@ export default function ContactSection() {
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState(false)
+  const [currentStep, setCurrentStep] = useState(1)
+  const [showHint, setShowHint] = useState(false)
 
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: '-80px' })
@@ -113,6 +123,8 @@ export default function ContactSection() {
     e.preventDefault()
     if (!validate()) return
 
+    setCurrentStep(3)
+    setShowHint(false)
     setIsSubmitting(true)
     try {
       const res = await fetch('/api/contact', {
@@ -157,6 +169,45 @@ export default function ContactSection() {
       setErrors((prev) => ({ ...prev, [name]: '' }))
     }
   }
+
+  // Auto-advance step logic
+  const updateStep = useCallback(() => {
+    if (isSubmitting || submitSuccess) return
+    const hasName = formData.name.trim().length > 0
+    const hasEmail = formData.email.trim().length > 0
+    const hasMessage = formData.message.trim().length > 0
+
+    if (hasName && hasEmail && hasMessage) {
+      setCurrentStep(3)
+      setShowHint(false)
+    } else if (hasName && hasEmail) {
+      setCurrentStep(2)
+      setShowHint(true)
+    } else {
+      setCurrentStep(1)
+      setShowHint(false)
+    }
+  }, [formData, isSubmitting, submitSuccess])
+
+  useEffect(() => {
+    updateStep()
+  }, [updateStep])
+
+  // Auto-hide hint after 4 seconds
+  useEffect(() => {
+    if (showHint) {
+      const timer = setTimeout(() => setShowHint(false), 4000)
+      return () => clearTimeout(timer)
+    }
+  }, [showHint])
+
+  // Reset step on success clear
+  useEffect(() => {
+    if (!submitSuccess) {
+      setCurrentStep(1)
+      setShowHint(false)
+    }
+  }, [submitSuccess])
 
   return (
     <div className="min-h-screen">
@@ -225,9 +276,173 @@ export default function ContactSection() {
                     We typically respond within 24 hours
                   </motion.span>
                 </div>
-                <p className="mb-8 text-muted-foreground">
+                <p className="mb-6 text-muted-foreground">
                   Fill out the form below and we&apos;ll respond as soon as possible.
                 </p>
+
+                {/* Step Progress Indicator */}
+                {!submitSuccess && (
+                  <div className="mb-8">
+                    <div className="relative flex items-center justify-between">
+                      {/* Connecting line behind circles */}
+                      <div className="absolute left-[calc(16.67%+12px)] right-[calc(16.67%+12px)] top-[15px] h-[2px] bg-muted-foreground/20">
+                        <motion.div
+                          className="h-full bg-gold"
+                          initial={{ width: '0%' }}
+                          animate={{
+                            width: isSubmitting
+                              ? '100%'
+                              : `${Math.max(0, ((currentStep - 1) / (steps.length - 1)) * 100)}%`,
+                          }}
+                          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                        />
+                      </div>
+
+                      {steps.map((step) => {
+                        const isCompleted =
+                          !isSubmitting && !submitSuccess && currentStep > step.number
+                        const isActive =
+                          (isSubmitting && step.number === 3) ||
+                          (!isSubmitting && !submitSuccess && currentStep === step.number)
+                        const isFuture =
+                          !isSubmitting && !submitSuccess && currentStep < step.number
+
+                        return (
+                          <div
+                            key={step.number}
+                            className="relative z-10 flex flex-1 flex-col items-center"
+                          >
+                            {/* Step circle */}
+                            <motion.div
+                              initial={false}
+                              animate={{
+                                scale: isActive ? 1.1 : 1,
+                                boxShadow: isActive
+                                  ? '0 0 16px rgba(200,150,62,0.4)'
+                                  : 'none',
+                              }}
+                              transition={{
+                                type: 'spring',
+                                stiffness: 300,
+                                damping: 20,
+                              }}
+                              className={`flex h-[30px] w-[30px] items-center justify-center rounded-full border-2 transition-colors duration-300 ${
+                                isSubmitting && step.number === 3
+                                  ? 'border-gold bg-gold'
+                                  : isCompleted
+                                    ? 'border-gold bg-gold'
+                                    : isActive
+                                      ? 'border-gold bg-gold'
+                                      : isFuture
+                                        ? 'border-muted-foreground/30 bg-background'
+                                        : 'border-muted-foreground/30 bg-background'
+                              }`}
+                            >
+                              {isSubmitting && step.number === 3 ? (
+                                <span className="h-3.5 w-3.5 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                              ) : isCompleted ? (
+                                <Check className="h-4 w-4 text-white" strokeWidth={3} />
+                              ) : (
+                                <span
+                                  className={`text-xs font-semibold ${
+                                    isActive
+                                      ? 'text-white'
+                                      : 'text-muted-foreground/50'
+                                  }`}
+                                >
+                                  {step.number}
+                                </span>
+                              )}
+                            </motion.div>
+
+                            {/* Step label */}
+                            <motion.span
+                              key={`label-${step.number}-${isSubmitting ? 'sending' : currentStep}`}
+                              initial={{ opacity: 0, y: -4 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className={`mt-2 text-center text-[11px] font-medium leading-tight sm:text-xs ${
+                                isSubmitting && step.number === 3
+                                  ? 'text-gold'
+                                  : isActive
+                                    ? 'text-gold'
+                                    : isCompleted
+                                      ? 'text-foreground/80'
+                                      : 'text-muted-foreground/50'
+                              }`}
+                            >
+                              {isSubmitting && step.number === 3
+                                ? 'Sending...'
+                                : step.label}
+                            </motion.span>
+                          </div>
+                        )
+                      })}
+                    </div>
+
+                    {/* Subtle hint to continue */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 4 }}
+                      animate={{
+                        opacity: showHint ? 1 : 0,
+                        y: showHint ? 0 : 4,
+                      }}
+                      transition={{ duration: 0.4 }}
+                      className="mt-3 flex items-center justify-center gap-1.5 text-xs text-gold/80"
+                    >
+                      <ChevronRight className="h-3 w-3" />
+                      <span>Great! Now add your message below</span>
+                    </motion.div>
+                  </div>
+                )}
+
+                {/* Success state step indicator */}
+                {submitSuccess && (
+                  <div className="mb-8">
+                    <div className="relative flex items-center justify-between">
+                      {/* Full connecting line - all gold */}
+                      <div className="absolute left-[calc(16.67%+12px)] right-[calc(16.67%+12px)] top-[15px] h-[2px]">
+                        <motion.div
+                          className="h-full bg-green-500"
+                          initial={{ width: '0%' }}
+                          animate={{ width: '100%' }}
+                          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+                        />
+                      </div>
+
+                      {steps.map((step, index) => (
+                        <div
+                          key={step.number}
+                          className="relative z-10 flex flex-1 flex-col items-center"
+                        >
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{
+                              type: 'spring',
+                              stiffness: 300,
+                              damping: 20,
+                              delay: index * 0.12,
+                            }}
+                            className="flex h-[30px] w-[30px] items-center justify-center rounded-full border-2 border-green-500 bg-green-500"
+                          >
+                            <Check className="h-4 w-4 text-white" strokeWidth={3} />
+                          </motion.div>
+                          <motion.span
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: index * 0.12 + 0.1 }}
+                            className="mt-2 text-center text-[11px] font-medium leading-tight text-green-600 dark:text-green-400 sm:text-xs"
+                          >
+                            {index === steps.length - 1
+                              ? 'Sent!'
+                              : step.label}
+                          </motion.span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {submitSuccess ? (
                   <motion.div

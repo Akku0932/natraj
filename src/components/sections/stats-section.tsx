@@ -1,13 +1,14 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
+import { AnimatedCounter } from '@/components/animated-counter'
 
 const stats = [
-  { value: 25, suffix: '+', label: 'Years of Excellence' },
-  { value: 5000, suffix: '+', label: 'Panels Delivered' },
-  { value: 200, suffix: '+', label: 'Happy Clients' },
-  { value: 16, suffix: '', label: 'Product Categories' },
+  { value: 5000, suffix: '+', label: 'Projects Completed', decimals: 0 },
+  { value: 200, suffix: '+', label: 'Happy Clients', decimals: 0 },
+  { value: 25, suffix: '+', label: 'Years Experience', decimals: 0 },
+  { value: 99.9, suffix: '%', label: 'Quality Rate', decimals: 1 },
 ]
 
 const floatClasses = [
@@ -16,49 +17,6 @@ const floatClasses = [
   'animate-float-medium',
   'animate-float-fast',
 ]
-
-function AnimatedCounter({
-  target,
-  suffix,
-  isInView,
-}: {
-  target: number
-  suffix: string
-  isInView: boolean
-}) {
-  const [count, setCount] = useState(0)
-
-  useEffect(() => {
-    if (!isInView) return
-
-    let startTime: number | null = null
-    const duration = 2000 // 2 seconds
-
-    const easeOutQuart = (t: number) => 1 - Math.pow(1 - t, 4)
-
-    const animate = (timestamp: number) => {
-      if (!startTime) startTime = timestamp
-      const elapsed = timestamp - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const easedProgress = easeOutQuart(progress)
-
-      setCount(Math.round(easedProgress * target))
-
-      if (progress < 1) {
-        requestAnimationFrame(animate)
-      }
-    }
-
-    requestAnimationFrame(animate)
-  }, [isInView, target])
-
-  return (
-    <span className="gold-shimmer-text tabular-nums text-gold-glow">
-      {count.toLocaleString('en-IN')}
-      {suffix}
-    </span>
-  )
-}
 
 export default function StatsSection() {
   const ref = useRef(null)
@@ -131,9 +89,10 @@ export default function StatsSection() {
                   <div className="absolute h-36 w-36 rounded-full border border-gold/[0.03] md:h-44 md:w-44 lg:h-48 lg:w-48 animate-breathe" />
                   <div className="relative text-4xl font-bold md:text-5xl lg:text-6xl">
                     <AnimatedCounter
-                      target={stat.value}
+                      value={stat.value}
                       suffix={stat.suffix}
-                      isInView={isInView}
+                      decimals={stat.decimals}
+                      className="gold-shimmer-text tabular-nums text-gold-glow"
                     />
                   </div>
                 </div>
