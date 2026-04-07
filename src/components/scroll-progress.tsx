@@ -15,12 +15,17 @@ export function ScrollProgress() {
 
   return (
     <motion.div
-      className="gold-gradient fixed left-0 right-0 top-0 z-[60] h-[3px] origin-left"
+      className="fixed left-0 right-0 z-[60] h-[3px] origin-left"
       style={{
         scaleX,
         opacity: barOpacity,
       }}
       aria-hidden="true"
-    />
+    >
+      {/* Gold gradient bar */}
+      <div className="absolute inset-0 bg-gradient-to-r from-gold-dark via-gold to-gold-light" />
+      {/* Subtle glow */}
+      <div className="absolute -bottom-1 inset-x-0 h-2 bg-gradient-to-r from-gold-dark/20 via-gold/30 to-gold-light/20 blur-sm" />
+    </motion.div>
   )
 }

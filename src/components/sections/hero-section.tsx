@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Mouse } from 'lucide-react'
 
 const TOTAL_FRAMES = 239
 
@@ -156,18 +156,35 @@ export default function HeroSection() {
           </p>
         </div>
 
-        {/* Bottom: Scroll indicator */}
+        {/* Bottom: Scroll to explore indicator */}
         <div
           style={{ opacity: scrollIndicatorOpacity }}
-          className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2"
+          className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-3"
         >
-          <span className="text-xs uppercase tracking-[0.2em] text-white/50">Scroll to explore</span>
+          {/* Mouse icon */}
           <motion.div
-            animate={{ y: [0, 8, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex flex-col items-center gap-2"
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <ChevronDown className="h-6 w-6 text-gold/70" />
+            <Mouse className="h-5 w-5 text-gold/60" strokeWidth={1.5} />
+            {/* Scroll dot inside mouse */}
+            <motion.div
+              className="h-1.5 w-1 rounded-full bg-gold/60"
+              animate={{ opacity: [0.3, 1, 0.3], y: [0, 6, 0] }}
+              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            />
           </motion.div>
+          <span className="text-[11px] uppercase tracking-[0.25em] text-white/40 font-light">
+            Scroll to explore
+          </span>
+          {/* Animated line */}
+          <motion.div
+            className="w-px h-6 bg-gradient-to-b from-gold/40 to-transparent"
+            animate={{ scaleY: [0.5, 1, 0.5], opacity: [0.3, 0.6, 0.3] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ transformOrigin: 'top' }}
+          />
         </div>
       </div>
     </section>
