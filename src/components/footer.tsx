@@ -187,7 +187,7 @@ export function Footer() {
                 <li key={link.page}>
                   <button
                     onClick={() => handleQuickLink(link.page)}
-                    className={`group flex items-center gap-2.5 text-sm text-white/60 transition-all duration-200 hover:text-gold-light border-l-2 border-transparent hover:border-gold/40 hover:pl-2 ${
+                    className={`group flex items-center gap-2.5 text-sm text-white/60 transition-all duration-200 hover:text-gold-light border-l-2 border-transparent hover:border-gold/40 hover:pl-2.5 hover:tracking-wide ${
                       link.hideOnMobile ? 'hidden sm:flex' : 'flex'
                     }`}
                   >
@@ -400,13 +400,13 @@ export function Footer() {
             <div className="flex items-center gap-6">
               <button
                 onClick={() => setTermsOpen(true)}
-                className="text-xs text-white/40 transition-colors duration-200 hover:text-gold-light"
+                className="text-xs text-white/40 transition-all duration-200 hover:text-gold-light hover:underline underline-offset-2"
               >
                 Terms &amp; Conditions
               </button>
               <button
                 onClick={() => setPrivacyOpen(true)}
-                className="text-xs text-white/40 transition-colors duration-200 hover:text-gold-light"
+                className="text-xs text-white/40 transition-all duration-200 hover:text-gold-light hover:underline underline-offset-2"
               >
                 Privacy Policy
               </button>

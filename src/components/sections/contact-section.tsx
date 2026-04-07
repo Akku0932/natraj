@@ -15,11 +15,21 @@ import {
   ExternalLink,
   Check,
   ChevronRight,
+  Headphones,
+  FileText,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 
 const contactInfo = [
@@ -86,6 +96,8 @@ export default function ContactSection() {
     phone: '',
     subject: '',
     message: '',
+    subjectCategory: '',
+    preferredContact: 'email',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -156,7 +168,12 @@ Message: ${formData.message.trim()}`
       const res = await fetch('/api/contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          subject: formData.subjectCategory
+            ? `[${formData.subjectCategory}] ${formData.subject}`
+            : formData.subject,
+        }),
       })
 
       if (res.ok) {
@@ -165,7 +182,7 @@ Message: ${formData.message.trim()}`
           title: 'Message sent!',
           description: 'We\'ll get back to you within 24 hours.',
         })
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '' })
+        setFormData({ name: '', email: '', phone: '', subject: '', message: '', subjectCategory: '', preferredContact: 'email' })
         setTimeout(() => setSubmitSuccess(false), 5000)
       } else {
         const data = await res.json()
@@ -196,17 +213,26 @@ Message: ${formData.message.trim()}`
     }
   }
 
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [name]: value }))
+  }
+
+  const handleRadioChange = (value: string) => {
+    setFormData((prev) => ({ ...prev, preferredContact: value }))
+  }
+
   // Auto-advance step logic
   const updateStep = useCallback(() => {
     if (isSubmitting || submitSuccess) return
     const hasName = formData.name.trim().length > 0
     const hasEmail = formData.email.trim().length > 0
     const hasMessage = formData.message.trim().length > 0
+    const hasSubject = formData.subjectCategory.length > 0
 
-    if (hasName && hasEmail && hasMessage) {
+    if (hasName && hasEmail && hasSubject && hasMessage) {
       setCurrentStep(3)
       setShowHint(false)
-    } else if (hasName && hasEmail) {
+    } else if (hasName && hasEmail && hasSubject) {
       setCurrentStep(2)
       setShowHint(true)
     } else {
@@ -270,7 +296,7 @@ Message: ${formData.message.trim()}`
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="mx-auto mt-4 max-w-2xl text-lg text-white/60"
+            className="mx-auto mt-4 max-w-2xl text-lg text-white/60 leading-relaxed tracking-wide"
           >
             Have a project in mind? We&apos;d love to hear from you. Reach out and let&apos;s discuss your requirements.
           </motion.p>
@@ -288,12 +314,12 @@ Message: ${formData.message.trim()}`
               transition={{ duration: 0.6 }}
               className="lg:col-span-3"
             >
-              <div className="glass rounded-2xl p-8 md:p-10">
+              <div className="glass rounded-2xl p-8 md:p-10 shadow-card-refined">
                 {/* Gold accent line above header */}
                 <div className="mb-4 h-[3px] w-16 rounded-full bg-gradient-to-r from-gold to-copper" />
                 <div className="flex flex-wrap items-center gap-3 mb-2">
                   <h2 className="text-2xl font-bold text-foreground">Send Us a Message</h2>
-                  {/* 24h response badge */}
+                  {/* 2-4h response badge */}
                   <motion.span
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={isInView ? { opacity: 1, scale: 1 } : {}}
@@ -301,7 +327,7 @@ Message: ${formData.message.trim()}`
                     className="inline-flex items-center gap-1.5 rounded-full bg-gold/10 px-3 py-1 text-xs font-medium text-gold border border-gold/20"
                   >
                     <Clock3 className="h-3 w-3" />
-                    We typically respond within 24 hours
+                    We typically respond within 2-4 hours during business hours
                   </motion.span>
                 </div>
                 <p className="mb-6 text-muted-foreground">
@@ -573,17 +599,103 @@ Message: ${formData.message.trim()}`
                         />
                       </div>
 
-                      {/* Subject */}
+                      {/* Subject Category Dropdown */}
                       <div className="space-y-2">
-                        <Label htmlFor="subject">Subject</Label>
-                        <Input
-                          id="subject"
-                          name="subject"
-                          placeholder="How can we help?"
-                          value={formData.subject}
-                          onChange={handleChange}
-                        />
+                        <Label>Category <span className="text-red-500">*</span></Label>
+                        <Select
+                          value={formData.subjectCategory}
+                          onValueChange={(value) => handleSelectChange('subjectCategory', value)}
+                        >
+                          <SelectTrigger className="w-full border-border/50">
+                            <SelectValue placeholder="Select an enquiry type" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="Product Enquiry">
+                              <span className="flex items-center gap-2">
+                                <FileText className="h-3.5 w-3.5 text-gold" />
+                                Product Enquiry
+                              </span>
+                            </SelectItem>
+                            <SelectItem value="Price Quote">
+                              <span className="flex items-center gap-2">
+                                <CheckCircle className="h-3.5 w-3.5 text-gold" />
+                                Price Quote
+                              </span>
+                            </SelectItem>
+                            <SelectItem value="Technical Support">
+                              <span className="flex items-center gap-2">
+                                <Headphones className="h-3.5 w-3.5 text-gold" />
+                                Technical Support
+                              </span>
+                            </SelectItem>
+                            <SelectItem value="General Inquiry">
+                              <span className="flex items-center gap-2">
+                                <MessageCircle className="h-3.5 w-3.5 text-gold" />
+                                General Inquiry
+                              </span>
+                            </SelectItem>
+                          </SelectContent>
+                        </Select>
                       </div>
+                    </div>
+
+                    {/* Subject (optional) */}
+                    <div className="space-y-2">
+                      <Label htmlFor="subject">Subject / Reference</Label>
+                      <Input
+                        id="subject"
+                        name="subject"
+                        placeholder="Brief subject (optional)"
+                        value={formData.subject}
+                        onChange={handleChange}
+                      />
+                    </div>
+
+                    {/* Preferred Contact Method */}
+                    <div className="space-y-3">
+                      <Label>Preferred Contact Method</Label>
+                      <RadioGroup
+                        value={formData.preferredContact}
+                        onValueChange={handleRadioChange}
+                        className="grid grid-cols-3 gap-3"
+                      >
+                        <label
+                          htmlFor="contact-email"
+                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
+                            formData.preferredContact === 'email'
+                              ? 'border-gold/40 bg-gold/5 text-gold'
+                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
+                          }`}
+                        >
+                          <RadioGroupItem value="email" id="contact-email" />
+                          <Mail className="h-4 w-4" />
+                          <span className="text-xs font-medium">Email</span>
+                        </label>
+                        <label
+                          htmlFor="contact-phone"
+                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
+                            formData.preferredContact === 'phone'
+                              ? 'border-gold/40 bg-gold/5 text-gold'
+                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
+                          }`}
+                        >
+                          <RadioGroupItem value="phone" id="contact-phone" />
+                          <Phone className="h-4 w-4" />
+                          <span className="text-xs font-medium">Phone</span>
+                        </label>
+                        <label
+                          htmlFor="contact-whatsapp"
+                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
+                            formData.preferredContact === 'whatsapp'
+                              ? 'border-gold/40 bg-gold/5 text-gold'
+                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
+                          }`}
+                        >
+                          <RadioGroupItem value="whatsapp" id="contact-whatsapp" />
+                          <MessageCircle className="h-4 w-4" />
+                          <span className="text-xs font-medium">WhatsApp</span>
+                        </label>
+                      </RadioGroup>
                     </div>
 
                     {/* Message */}
@@ -664,7 +776,7 @@ Message: ${formData.message.trim()}`
                       variants={itemVariants}
                       whileHover={{ scale: 1.02 }}
                       transition={{ type: 'spring', stiffness: 400, damping: 25 }}
-                      className="group relative overflow-hidden rounded-xl border border-border/40 bg-background/60 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10"
+                      className="group relative overflow-hidden rounded-xl border border-border/40 bg-background/60 p-5 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10 card-hover-gold-border"
                     >
                       {/* Gold gradient top border accent */}
                       <div className="absolute left-0 top-0 h-[2px] w-full bg-gradient-to-r from-transparent via-gold/60 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />

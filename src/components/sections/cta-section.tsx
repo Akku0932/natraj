@@ -45,7 +45,7 @@ export default function CTASection() {
             </span>
           </h2>
 
-          <p className="mx-auto mt-6 max-w-lg text-lg text-white/80">
+          <p className="mx-auto mt-6 max-w-lg text-lg text-white/80 leading-relaxed tracking-wide">
             Browse our catalog or get in touch — we&apos;re here to help you find exactly what you need.
           </p>
 
@@ -53,7 +53,7 @@ export default function CTASection() {
             <Button
               onClick={() => setCurrentPage('contact')}
               size="lg"
-              className="min-w-[200px] bg-charcoal text-white hover:bg-charcoal/90 transition-colors"
+              className="min-w-[200px] bg-charcoal text-white hover:bg-charcoal/90 transition-all duration-300 btn-shine"
             >
               Get a Quote
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -62,7 +62,7 @@ export default function CTASection() {
               onClick={() => setCurrentPage('products')}
               size="lg"
               variant="outline"
-              className="min-w-[200px] border-2 border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white transition-colors"
+              className="min-w-[200px] border-2 border-white/30 bg-transparent text-white hover:bg-white/10 hover:text-white transition-all duration-300"
             >
               Browse Products
             </Button>

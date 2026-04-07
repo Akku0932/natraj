@@ -232,7 +232,7 @@ export function Navbar() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
           scrolled
-            ? 'glass-nav shadow-lg shadow-black/5'
+            ? 'glass-nav shadow-lg shadow-black/[0.06]'
             : 'bg-transparent'
         }`}
       >
@@ -248,7 +248,9 @@ export function Navbar() {
                 alt="Natraj Electricals"
                 width={140}
                 height={40}
-                className="h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 group-hover:drop-shadow-[0_0_8px_rgba(200,150,62,0.4)]"
+                className={`h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 ${
+                  scrolled ? 'drop-shadow-[0_1px_4px_rgba(200,150,62,0.2)]' : ''
+                } group-hover:drop-shadow-[0_0_8px_rgba(200,150,62,0.4)]`}
                 priority
               />
             </button>
@@ -308,7 +310,7 @@ export function Navbar() {
                         {currentPage === link.page && (
                           <motion.div
                             layoutId="activeNavIndicator"
-                            className="absolute -bottom-1 left-2 right-2 h-0.5 bg-gold rounded-full"
+                            className="absolute -bottom-1 left-3 right-3 h-[2px] rounded-full bg-gradient-to-r from-gold-dark via-gold to-gold-light"
                             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                           />
                         )}
@@ -437,7 +439,7 @@ export function Navbar() {
                     {currentPage === link.page && (
                       <motion.div
                         layoutId="activeNavIndicator"
-                        className="absolute -bottom-1 left-2 right-2 h-0.5 bg-gold rounded-full"
+                        className="absolute -bottom-1 left-3 right-3 h-[2px] rounded-full bg-gradient-to-r from-gold-dark via-gold to-gold-light"
                         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                       />
                     )}
@@ -566,7 +568,7 @@ export function Navbar() {
       <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
         <SheetContent
           side="right"
-          className="w-[300px] bg-background/95 backdrop-blur-xl border-l border-gold/10"
+          className="w-[300px] bg-background/95 backdrop-blur-xl border-l border-gold/10 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
         >
           <SheetHeader className="pt-8 pb-4">
             <SheetTitle className="flex items-center gap-2">

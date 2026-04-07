@@ -28,6 +28,7 @@ import {
   IndianRupee,
   FileText,
   ZoomIn,
+  ZoomOut,
   MessageCircle,
   Share,
   ShoppingBag,
@@ -76,6 +77,7 @@ export function ProductDetailModal() {
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxZoomed, setLightboxZoomed] = useState(false)
+  const [lightboxScrollZoom, setLightboxScrollZoom] = useState(1)
 
   // Enquiry form state
   const [enquiryName, setEnquiryName] = useState('')
@@ -185,6 +187,7 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev + 1) % images.length)
       setLightboxZoomed(false)
+      setLightboxScrollZoom(1)
     }
   }
 
@@ -192,8 +195,22 @@ export function ProductDetailModal() {
     if (images.length > 0) {
       setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length)
       setLightboxZoomed(false)
+      setLightboxScrollZoom(1)
     }
   }
+
+  // Handle lightbox scroll zoom
+  const handleLightboxWheel = useCallback((e: WheelEvent) => {
+    if (!lightboxOpen) return
+    e.preventDefault()
+    setLightboxScrollZoom((prev) => {
+      const delta = e.deltaY > 0 ? -0.15 : 0.15
+      const next = Math.max(0.5, Math.min(3, prev + delta))
+      if (next > 1.05) setLightboxZoomed(true)
+      if (next <= 1) setLightboxZoomed(false)
+      return next
+    })
+  }, [lightboxOpen])
 
   // Keyboard navigation for lightbox
   const handleLightboxKeyDown = useCallback((e: KeyboardEvent) => {
@@ -202,6 +219,7 @@ export function ProductDetailModal() {
       case 'Escape':
         setLightboxOpen(false)
         setLightboxZoomed(false)
+        setLightboxScrollZoom(1)
         break
       case 'ArrowLeft':
         prevImage()
@@ -212,21 +230,52 @@ export function ProductDetailModal() {
       case 'Enter':
       case ' ':
         e.preventDefault()
-        setLightboxZoomed((prev) => !prev)
+        if (lightboxScrollZoom > 1.05) {
+          setLightboxScrollZoom(1)
+          setLightboxZoomed(false)
+        } else {
+          setLightboxScrollZoom(1.5)
+          setLightboxZoomed(true)
+        }
+        break
+      case '+':
+      case '=':
+        e.preventDefault()
+        setLightboxScrollZoom((prev) => {
+          const next = Math.min(3, prev + 0.2)
+          if (next > 1.05) setLightboxZoomed(true)
+          return next
+        })
+        break
+      case '-':
+      case '_':
+        e.preventDefault()
+        setLightboxScrollZoom((prev) => {
+          const next = Math.max(0.5, prev - 0.2)
+          if (next <= 1) setLightboxZoomed(false)
+          return next
+        })
+        break
+      case '0':
+        e.preventDefault()
+        setLightboxScrollZoom(1)
+        setLightboxZoomed(false)
         break
     }
-  }, [lightboxOpen])
+  }, [lightboxOpen, lightboxScrollZoom])
 
   useEffect(() => {
     if (lightboxOpen) {
       document.addEventListener('keydown', handleLightboxKeyDown)
+      document.addEventListener('wheel', handleLightboxWheel, { passive: false })
       document.body.style.overflow = 'hidden'
     }
     return () => {
       document.removeEventListener('keydown', handleLightboxKeyDown)
+      document.removeEventListener('wheel', handleLightboxWheel)
       document.body.style.overflow = ''
     }
-  }, [lightboxOpen, handleLightboxKeyDown])
+  }, [lightboxOpen, handleLightboxKeyDown, handleLightboxWheel])
 
   // Navigate to products page with category filter
   const handleCategoryClick = () => {
@@ -511,6 +560,12 @@ export function ProductDetailModal() {
                               className="object-cover"
                               sizes="64px"
                             />
+                            {/* Image count indicator badge */}
+                            {images.length > 2 && idx === images.length - 1 && (
+                              <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[9px] font-bold text-white leading-none">
+                                {images.length}
+                              </span>
+                            )}
                             {/* Active indicator dot */}
                             {idx === currentImageIndex && (
                               <div className="absolute bottom-0.5 left-1/2 -translate-x-1/2 h-1 w-1 rounded-full bg-gold" />
@@ -784,10 +839,13 @@ export function ProductDetailModal() {
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-sm"
             onClick={() => {
-              if (lightboxZoomed) {
+              if (lightboxScrollZoom > 1.05) {
+                setLightboxScrollZoom(1)
                 setLightboxZoomed(false)
               } else {
                 setLightboxOpen(false)
+                setLightboxZoomed(false)
+                setLightboxScrollZoom(1)
               }
             }}
           >
@@ -797,6 +855,7 @@ export function ProductDetailModal() {
                 e.stopPropagation()
                 setLightboxOpen(false)
                 setLightboxZoomed(false)
+                setLightboxScrollZoom(1)
               }}
               className="absolute right-4 top-4 z-10 flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
               aria-label="Close lightbox"
@@ -847,21 +906,98 @@ export function ProductDetailModal() {
               className="h-[80vh] w-[80vw] flex items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation()
-                setLightboxZoomed((prev) => !prev)
+                if (lightboxScrollZoom > 1.05) {
+                  setLightboxScrollZoom(1)
+                  setLightboxZoomed(false)
+                } else {
+                  setLightboxScrollZoom(1.5)
+                  setLightboxZoomed(true)
+                }
               }}
             >
               <img
                 src={images[currentImageIndex]}
                 alt={`${product?.name || 'Product'} - Image ${currentImageIndex + 1}`}
-                className={`max-h-full max-w-full object-contain transition-all duration-300 cursor-zoom-in ${
-                  lightboxZoomed ? 'scale-150 cursor-zoom-out' : 'scale-100'
+                className={`max-h-full max-w-full object-contain transition-transform duration-200 ${
+                  lightboxScrollZoom > 1.05 ? 'cursor-zoom-out' : 'cursor-zoom-in'
                 }`}
+                style={{
+                  transform: `scale(${lightboxScrollZoom})`,
+                }}
+                draggable={false}
               />
             </motion.div>
 
-            {/* Hint text */}
-            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 rounded-full bg-white/10 px-4 py-2 text-xs text-white/70 backdrop-blur-sm">
-              Click image to zoom • Press Esc to close • Arrow keys to navigate
+            {/* Zoom controls */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2 z-10 flex flex-col gap-2">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setLightboxScrollZoom((prev) => {
+                    const next = Math.min(3, prev + 0.25)
+                    if (next > 1.05) setLightboxZoomed(true)
+                    return next
+                  })
+                }}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                aria-label="Zoom in"
+              >
+                <ZoomIn className="h-5 w-5" />
+              </button>
+              <div className="mx-auto rounded-full bg-white/10 px-2 py-1 text-[10px] font-medium text-white/80 backdrop-blur-sm">
+                {Math.round(lightboxScrollZoom * 100)}%
+              </div>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation()
+                  setLightboxScrollZoom((prev) => {
+                    const next = Math.max(0.5, prev - 0.25)
+                    if (next <= 1) setLightboxZoomed(false)
+                    return next
+                  })
+                }}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                aria-label="Zoom out"
+              >
+                <ZoomOut className="h-5 w-5" />
+              </button>
+              {lightboxScrollZoom > 1.05 && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setLightboxScrollZoom(1)
+                    setLightboxZoomed(false)
+                  }}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-white/10 text-white backdrop-blur-sm transition-colors hover:bg-white/20"
+                  aria-label="Reset zoom"
+                >
+                  <span className="text-xs font-bold">1:1</span>
+                </button>
+              )}
+            </div>
+
+            {/* Keyboard shortcut hints */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex items-center gap-3 rounded-full bg-white/10 px-4 py-2 text-[11px] text-white/60 backdrop-blur-sm">
+              <span className="flex items-center gap-1">
+                <kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded border border-white/20 bg-white/10 px-1 text-[10px] font-mono text-white/80">
+                  ←→
+                </kbd>
+                Navigate
+              </span>
+              <span className="text-white/20">|</span>
+              <span className="flex items-center gap-1">
+                <kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded border border-white/20 bg-white/10 px-1 text-[10px] font-mono text-white/80">
+                  Scroll
+                </kbd>
+                Zoom
+              </span>
+              <span className="hidden sm:inline-flex text-white/20">|</span>
+              <span className="hidden sm:flex items-center gap-1">
+                <kbd className="inline-flex h-5 min-w-5 items-center justify-center rounded border border-white/20 bg-white/10 px-1 text-[10px] font-mono text-white/80">
+                  Esc
+                </kbd>
+                Close
+              </span>
             </div>
           </motion.div>
         )}

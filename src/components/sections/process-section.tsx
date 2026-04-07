@@ -213,9 +213,9 @@ export default function ProcessSection() {
             transition={{ duration: 0.5, delay: 0.25 }}
             className="mt-4 text-muted-foreground"
           >
-            From browsing our catalog to receiving your custom-built panels,
-            our streamlined process ensures a hassle-free experience at every
-            step.
+            From browsing our catalog to receiving your sourced and configured
+            panels, our streamlined process ensures a hassle-free experience at
+            every step.
           </motion.p>
         </div>
 

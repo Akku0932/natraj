@@ -1402,3 +1402,254 @@ img, video, canvas, iframe, [role="img"] {
 .animate-ping-once {
   animation: ping-once 1.2s cubic-bezier(0, 0, 0.2, 1) forwards;
 }
+
+/* ============================================================
+   Styling Expert Polish — Task 3 Additions
+   ============================================================ */
+
+/* 1. Gold text shadow for depth on headings */
+.text-shadow-gold {
+  text-shadow:
+    0 1px 2px rgba(200, 150, 62, 0.15),
+    0 2px 8px rgba(200, 150, 62, 0.08);
+}
+.dark .text-shadow-gold {
+  text-shadow:
+    0 1px 3px rgba(200, 150, 62, 0.25),
+    0 4px 12px rgba(200, 150, 62, 0.12),
+    0 0 30px rgba(200, 150, 62, 0.06);
+}
+
+/* 2. Glass card — frosted glass effect for elevated surfaces */
+.glass-card {
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid rgba(200, 150, 62, 0.08);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 4px 12px rgba(0, 0, 0, 0.03),
+    0 0 0 1px rgba(200, 150, 62, 0.03);
+}
+.dark .glass-card {
+  background: rgba(18, 18, 18, 0.72);
+  border: 1px solid rgba(200, 150, 62, 0.06);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.2),
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 0 0 1px rgba(200, 150, 62, 0.03);
+}
+
+/* 3. Button shine effect — subtle light sweep on hover */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shine::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.15) 45%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0.15) 55%,
+    transparent 60%
+  );
+  transform: skewX(-20deg);
+  pointer-events: none;
+  opacity: 0;
+  transition: left 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+}
+.btn-shine:hover::after {
+  left: 125%;
+  opacity: 1;
+}
+
+/* 4. Animated gold underline — slides in from center */
+.gold-underline {
+  position: relative;
+  display: inline-block;
+}
+.gold-underline::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #C8963E, #E8C77B, #C8963E);
+  transform: translateX(-50%);
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 1px;
+}
+.gold-underline:hover::after,
+.gold-underline.active::after {
+  width: 100%;
+}
+
+/* 5. Section padding — consistent vertical spacing */
+.section-padding {
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+@media (min-width: 768px) {
+  .section-padding {
+    padding-top: 7rem;
+    padding-bottom: 7rem;
+  }
+}
+@media (min-width: 1024px) {
+  .section-padding {
+    padding-top: 8rem;
+    padding-bottom: 8rem;
+  }
+}
+
+/* 6. Multi-layer refined box shadow for premium cards */
+.shadow-card-refined {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 2px 4px rgba(0, 0, 0, 0.03),
+    0 4px 8px rgba(0, 0, 0, 0.03),
+    0 8px 16px rgba(0, 0, 0, 0.02);
+}
+.dark .shadow-card-refined {
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.15),
+    0 2px 4px rgba(0, 0, 0, 0.12),
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 7. Gold border gradient on hover for cards */
+.card-hover-gold-border {
+  border: 1px solid transparent;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+.card-hover-gold-border:hover {
+  border-color: rgba(200, 150, 62, 0.2);
+  box-shadow:
+    0 1px 2px rgba(200, 150, 62, 0.04),
+    0 4px 12px rgba(200, 150, 62, 0.06),
+    0 8px 24px rgba(200, 150, 62, 0.04);
+}
+.dark .card-hover-gold-border:hover {
+  border-color: rgba(200, 150, 62, 0.15);
+  box-shadow:
+    0 1px 2px rgba(200, 150, 62, 0.06),
+    0 4px 12px rgba(200, 150, 62, 0.08),
+    0 8px 24px rgba(200, 150, 62, 0.05);
+}
+
+/* 8. Subtle gold gradient border for CTA buttons */
+.btn-gold-border-animated {
+  position: relative;
+  z-index: 1;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s ease;
+}
+.btn-gold-border-animated:hover {
+  border-color: rgba(200, 150, 62, 0.5);
+  box-shadow:
+    0 0 0 1px rgba(200, 150, 62, 0.1),
+    0 4px 16px rgba(200, 150, 62, 0.1);
+}
+
+/* 9. Enhanced section divider with gradient center */
+.section-divider-elegant {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.5rem auto;
+  width: fit-content;
+}
+.section-divider-elegant::before,
+.section-divider-elegant::after {
+  content: '';
+  width: 2.5rem;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 62, 0.4));
+}
+.section-divider-elegant::after {
+  background: linear-gradient(90deg, rgba(200, 150, 62, 0.4), transparent);
+}
+.section-divider-elegant > span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #C8963E;
+  opacity: 0.6;
+}
+
+/* 10. Improved paragraph typography */
+.prose-subtle {
+  line-height: 1.75;
+  letter-spacing: 0.01em;
+  color: oklch(0.45 0.008 60);
+}
+.dark .prose-subtle {
+  color: oklch(0.72 0.006 80);
+}
+
+/* 11. Premium button hover state */
+.btn-premium-hover {
+  transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.btn-premium-hover:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 4px 12px rgba(200, 150, 62, 0.2),
+    0 8px 24px rgba(200, 150, 62, 0.08);
+}
+.btn-premium-hover:active {
+  transform: translateY(0);
+}
+
+/* 12. Gradient badge/pill with subtle effect */
+.badge-gold-gradient {
+  background: linear-gradient(135deg, rgba(200, 150, 62, 0.1), rgba(232, 199, 123, 0.15));
+  color: #C8963E;
+  border: 1px solid rgba(200, 150, 62, 0.15);
+  font-weight: 500;
+}
+.dark .badge-gold-gradient {
+  background: linear-gradient(135deg, rgba(200, 150, 62, 0.15), rgba(232, 199, 123, 0.08));
+  color: #E8C77B;
+  border-color: rgba(200, 150, 62, 0.12);
+}
+
+/* 13. Hero heading depth text shadow */
+.hero-text-shadow {
+  text-shadow:
+    0 2px 4px rgba(0, 0, 0, 0.3),
+    0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* 14. Elegant scroll indicator line */
+.scroll-line-elegant {
+  width: 1px;
+  height: 40px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(200, 150, 62, 0.1);
+}
+.scroll-line-elegant::after {
+  content: '';
+  position: absolute;
+  top: -100%;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  background: linear-gradient(to bottom, transparent, #C8963E);
+  animation: scroll-line-drip 2s ease-in-out infinite;
+}
+@keyframes scroll-line-drip {
+  0% { top: -50%; }
+  50% { top: 100%; }
+  100% { top: 100%; }
+}

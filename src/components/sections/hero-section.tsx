@@ -145,17 +145,17 @@ export default function HeroSection() {
           </motion.p>
           <motion.h2
             style={{ opacity: titleOpacity, y: titleY }}
-            className="text-center text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
+            className="text-center text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl hero-text-shadow"
           >
             Your Trusted
             <br />
-            <span className="gradient-text">
+            <span className="gradient-text text-shadow-gold">
               Electrical Partner
             </span>
           </motion.h2>
           <motion.p
             style={{ opacity: subtitleOpacity, y: subtitleY }}
-            className="mt-6 max-w-xl text-center text-lg text-white/70 md:text-xl"
+            className="mt-6 max-w-xl text-center text-lg leading-relaxed tracking-wide text-white/70 md:text-xl"
           >
             Quality electrical panels and products — handpicked from India&apos;s leading brands, delivered to your doorstep.
           </motion.p>
@@ -168,7 +168,7 @@ export default function HeroSection() {
             <Button
               onClick={() => setCurrentPage('products')}
               size="lg"
-              className="min-w-[220px] gold-gradient border-0 text-white shadow-lg shadow-gold/30 hover:shadow-gold/40 font-semibold"
+              className="min-w-[220px] gold-gradient border-0 text-white shadow-lg shadow-gold/30 hover:shadow-gold/40 font-semibold btn-shine btn-premium-hover"
             >
               Explore Products
               <ArrowRight className="ml-2 h-4 w-4" />
@@ -177,7 +177,7 @@ export default function HeroSection() {
               onClick={() => setCurrentPage('contact')}
               size="lg"
               variant="outline"
-              className="min-w-[220px] border-2 border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+              className="min-w-[220px] border-2 border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white btn-gold-border-animated"
             >
               Contact Us
             </Button>
@@ -187,23 +187,25 @@ export default function HeroSection() {
         {/* Bottom: Scroll to explore indicator */}
         <div
           style={{ opacity: scrollIndicatorOpacity }}
-          className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-3"
+          className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-4"
         >
-          {/* Mouse icon */}
+          {/* Mouse icon with animated dot */}
           <motion.div
-            className="flex flex-col items-center gap-2"
+            className="flex flex-col items-center"
             animate={{ y: [0, 6, 0] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
           >
-            <Mouse className="h-5 w-5 text-gold/60" strokeWidth={1.5} />
+            <Mouse className="h-5 w-5 text-gold/50" strokeWidth={1.5} />
             {/* Scroll dot inside mouse */}
             <motion.div
-              className="h-1.5 w-1 rounded-full bg-gold/60"
+              className="mt-1.5 h-1.5 w-1 rounded-full bg-gold/60"
               animate={{ opacity: [0.3, 1, 0.3], y: [0, 6, 0] }}
               transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             />
           </motion.div>
-          <span className="text-[11px] uppercase tracking-[0.25em] text-white/40 font-light">
+          {/* Elegant scroll line */}
+          <div className="scroll-line-elegant" />
+          <span className="text-[10px] uppercase tracking-[0.3em] text-white/30 font-light">
             Scroll to explore
           </span>
         </div>

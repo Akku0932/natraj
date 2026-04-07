@@ -45,7 +45,7 @@ export default function StatsSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={isInView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.6, delay: index * 0.15 }}
-              className="text-center rounded-2xl border border-white/[0.06] bg-white/[0.03] py-8 px-4 transition-all duration-300 hover:border-gold/20 hover:-translate-y-1"
+              className="text-center rounded-2xl border border-white/[0.06] bg-white/[0.03] py-8 px-4 transition-all duration-300 hover:border-gold/20 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
             >
               <div className="relative text-4xl font-bold md:text-5xl lg:text-6xl">
                 <AnimatedCounter
@@ -56,7 +56,7 @@ export default function StatsSection() {
                 />
               </div>
 
-              <p className="mt-4 text-sm font-medium uppercase tracking-wider text-white/60 md:text-base">
+              <p className="mt-4 text-sm font-medium uppercase tracking-wider text-white/60 md:text-base leading-relaxed">
                 {stat.label}
               </p>
 

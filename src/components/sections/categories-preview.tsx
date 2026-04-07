@@ -19,8 +19,10 @@ import {
   Power,
   Sun,
   Box,
+  Package,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { useStore } from '@/store/use-store'
 
 interface Category {
@@ -50,6 +52,27 @@ function getCategoryIcon(name: string) {
   if (lowerName.includes('mains')) return Power
   if (lowerName.includes('solar')) return Sun
   return Box
+}
+
+// Map category names to short descriptions
+function getCategoryDescription(name: string): string {
+  const lowerName = name.toLowerCase()
+
+  if (lowerName.includes('three phase')) return 'Industrial-grade motor starters for heavy-duty applications with overload protection.'
+  if (lowerName.includes('single phase')) return 'Reliable single-phase panels for residential and light commercial use.'
+  if (lowerName.includes('automatic')) return 'Seamless power transfer between mains and generator sources automatically.'
+  if (lowerName.includes('temperature')) return 'Precision temperature monitoring and control for industrial processes.'
+  if (lowerName.includes('oil')) return 'Oil-cooled starters for high-power motor applications and heavy loads.'
+  if (lowerName.includes('busbar')) return 'Efficient power distribution systems for industrial and commercial setups.'
+  if (lowerName.includes('air break')) return 'Air circuit breakers for reliable short-circuit and overload protection.'
+  if (lowerName.includes('main switch')) return 'Isolator switches for safe electrical isolation during maintenance.'
+  if (lowerName.includes('distribution')) return 'Organized power distribution boards for multi-circuit management.'
+  if (lowerName.includes('water level')) return 'Automatic water level controllers for tanks and overhead storage.'
+  if (lowerName.includes('measuring')) return 'Digital instruments for accurate voltage, current, and power measurement.'
+  if (lowerName.includes('power factor')) return 'Capacitor banks and APFC panels for power factor improvement.'
+  if (lowerName.includes('mains')) return 'Main incoming panels for total building or facility power management.'
+  if (lowerName.includes('solar')) return 'Solar power panels and inverters for renewable energy solutions.'
+  return 'High-quality electrical panels and equipment for various applications.'
 }
 
 const containerVariants = {
@@ -148,7 +171,7 @@ export default function CategoriesPreview() {
             {Array.from({ length: 8 }).map((_, i) => (
               <div
                 key={i}
-                className="h-32 animate-pulse rounded-2xl bg-muted/50"
+                className="h-48 animate-pulse rounded-2xl bg-muted/50"
               />
             ))}
           </div>
@@ -162,29 +185,46 @@ export default function CategoriesPreview() {
           >
             {categories.map((category) => {
               const IconComponent = getCategoryIcon(category.name)
+              const description = getCategoryDescription(category.name)
               return (
-                <motion.button
+                <motion.div
                   key={category.id}
                   variants={cardVariants}
                   onClick={() => handleCategoryClick(category.slug)}
-                  className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 animate-sparkle-sweep"
+                  className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-5 text-left transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 cursor-pointer"
                 >
                   {/* Gold gradient border effect on hover */}
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/0 via-gold/0 to-gold/0 transition-all duration-500 group-hover:from-gold/10 group-hover:via-transparent group-hover:to-copper/10" />
 
-                  <div className="relative z-10">
-                    <h3 className="mb-2 flex items-center gap-2.5 font-semibold text-foreground transition-colors group-hover:text-gold">
-                      <IconComponent className="h-4 w-4 shrink-0 text-gold/60 transition-colors group-hover:text-gold" />
+                  <div className="relative z-10 flex h-full flex-col">
+                    {/* Icon and product count */}
+                    <div className="mb-3 flex items-start justify-between">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 transition-colors group-hover:from-gold/20 group-hover:to-copper/20">
+                        <IconComponent className="h-5 w-5 text-gold transition-transform group-hover:scale-110" />
+                      </div>
+                      <Badge className="bg-gradient-to-r from-gold/10 to-copper/10 text-gold border-gold/20 text-[10px] font-medium">
+                        <Package className="mr-1 h-3 w-3" />
+                        {category.productCount} {category.productCount === 1 ? 'item' : 'items'}
+                      </Badge>
+                    </div>
+
+                    {/* Category name */}
+                    <h3 className="mb-2 text-sm font-semibold text-foreground transition-colors group-hover:text-gold leading-tight">
                       {category.name}
                     </h3>
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm text-muted-foreground">
-                        {category.productCount} {category.productCount === 1 ? 'product' : 'products'}
-                      </span>
-                      <ArrowRight className="h-4 w-4 text-gold/0 transition-all duration-300 group-hover:text-gold group-hover:translate-x-1" />
+
+                    {/* Description */}
+                    <p className="mb-4 flex-1 text-xs leading-relaxed text-muted-foreground line-clamp-2">
+                      {description}
+                    </p>
+
+                    {/* View Products link */}
+                    <div className="flex items-center gap-1 text-xs font-medium text-gold/70 transition-colors group-hover:text-gold">
+                      View Products
+                      <ArrowRight className="h-3 w-3 transition-transform group-hover:translate-x-1" />
                     </div>
                   </div>
-                </motion.button>
+                </motion.div>
               )
             })}
           </motion.div>

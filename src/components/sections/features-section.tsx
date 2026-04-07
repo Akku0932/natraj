@@ -99,18 +99,18 @@ export default function FeaturesSection() {
             transition={{ duration: 0.5, delay: 0.1 }}
             className="text-3xl font-bold tracking-tight sm:text-4xl md:text-5xl"
           >
-            Why Choose <span className="gradient-text">Natraj</span>
+            Why Choose <span className="gradient-text text-shadow-gold">Natraj</span>
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.15 }}
-            className="mx-auto mt-4 max-w-xl text-muted-foreground"
+            className="mx-auto mt-4 max-w-xl text-muted-foreground leading-relaxed tracking-wide"
           >
             India&apos;s trusted electrical panel distributor — quality products, competitive prices, reliable delivery.
           </motion.p>
-          <div className="section-divider mx-auto mt-6 w-24" />
+          <div className="section-divider-elegant" />
         </div>
 
         {/* Feature Cards Grid */}
@@ -127,7 +127,7 @@ export default function FeaturesSection() {
               <motion.div
                 key={feature.title}
                 variants={cardVariants}
-                className="glass group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
+                className="glass shadow-card-refined card-hover-gold-border group relative overflow-hidden rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
               >
                 {/* Icon */}
                 <div className="mb-5 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-105">
@@ -141,7 +141,7 @@ export default function FeaturesSection() {
                 <span className="mb-3 inline-block text-sm font-bold gradient-text">
                   {feature.stat}
                 </span>
-                <p className="text-sm leading-relaxed text-muted-foreground">
+                <p className="text-sm leading-relaxed text-muted-foreground prose-subtle">
                   {feature.description}
                 </p>
 

@@ -50,7 +50,7 @@ export function TermsModal() {
                 2. Products &amp; Services
               </h3>
               <p className="mb-2">
-                Natraj Electricals manufactures and supplies electrical control
+                Natraj Electricals supplies and distributes electrical control
                 panels, automatic changeovers, busbar systems, power factor
                 correction panels, water level controllers, temperature control
                 panels, digital measuring instruments, air break starters, AC
@@ -95,10 +95,10 @@ export function TermsModal() {
                 4. Warranty
               </h3>
               <p className="mb-2">
-                All electrical panels and equipment manufactured by Natraj
-                Electricals are warranted against manufacturing defects and
-                faulty workmanship for a period of 12 months from the date of
-                dispatch, subject to the following conditions:
+                All electrical panels and equipment supplied by Natraj
+                Electricals are warranted against defects and faulty workmanship
+                for a period of 12 months from the date of dispatch, subject to
+                the following conditions:
               </p>
               <ul className="ml-4 list-disc space-y-1">
                 <li>The product has been used in accordance with the intended purpose and operating conditions specified.</li>
@@ -156,8 +156,8 @@ export function TermsModal() {
                 7. Returns &amp; Cancellations
               </h3>
               <p>
-                Custom-manufactured panels and made-to-order products are
-                non-returnable and non-cancellable once production has
+                Custom-configured panels and sourced-to-order products are
+                non-returnable and non-cancellable once procurement has
                 commenced. Standard products may be eligible for return within
                 7 days of delivery, provided they are in original, unused
                 condition and in their original packaging. Return shipping
