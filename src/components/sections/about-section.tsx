@@ -1,7 +1,7 @@
 'use client'
 
-import { useRef } from 'react'
-import { motion, useInView } from 'framer-motion'
+import { useRef, useCallback } from 'react'
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import {
   Award,
   Lightbulb,
@@ -12,6 +12,7 @@ import {
   Calendar,
   MapPin,
 } from 'lucide-react'
+import { FloatingParticles } from '@/components/floating-particles'
 
 const milestones = [
   {
@@ -82,6 +83,42 @@ const itemVariants = {
       ease: [0.22, 1, 0.36, 1],
     },
   },
+}
+
+function TiltCard({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+  const x = useMotionValue(0)
+  const y = useMotionValue(0)
+  const springX = useSpring(x, { stiffness: 300, damping: 20 })
+  const springY = useSpring(y, { stiffness: 300, damping: 20 })
+
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect()
+      const centerX = rect.left + rect.width / 2
+      const centerY = rect.top + rect.height / 2
+      const rotateX = ((e.clientY - centerY) / (rect.height / 2)) * -6
+      const rotateY = ((e.clientX - centerX) / (rect.width / 2)) * 6
+      x.set(rotateX)
+      y.set(rotateY)
+    },
+    [x, y]
+  )
+
+  const handleMouseLeave = useCallback(() => {
+    x.set(0)
+    y.set(0)
+  }, [x, y])
+
+  return (
+    <motion.div
+      style={{ rotateX: springX, rotateY: springY, perspective: 800 }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={className}
+    >
+      {children}
+    </motion.div>
+  )
 }
 
 export default function AboutSection() {
@@ -160,6 +197,7 @@ export default function AboutSection() {
       {/* Mission & Vision */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div className="absolute inset-0 bg-background" />
+        <FloatingParticles count={4} className="z-0" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid gap-8 md:grid-cols-2">
             {/* Mission */}
@@ -250,9 +288,37 @@ export default function AboutSection() {
                     <p className="mt-2 text-white/60 leading-relaxed">{milestone.description}</p>
                   </div>
 
-                  {/* Timeline dot */}
+                  {/* Timeline dot with pulse animation */}
                   <div className="absolute left-4 top-1 -translate-x-1/2 md:left-1/2">
-                    <div className="h-3 w-3 rounded-full border-2 border-gold bg-charcoal" />
+                    <motion.div
+                      className="h-3 w-3 rounded-full border-2 border-gold bg-charcoal"
+                      animate={{
+                        boxShadow: [
+                          '0 0 0 0 rgba(200,150,62,0)',
+                          '0 0 0 6px rgba(200,150,62,0.3)',
+                          '0 0 0 0 rgba(200,150,62,0)',
+                        ],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        delay: index * 0.5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    />
+                    <motion.div
+                      className="absolute inset-0 h-3 w-3 rounded-full bg-gold/40"
+                      animate={{
+                        scale: [1, 1.8, 1],
+                        opacity: [0.4, 0, 0.4],
+                      }}
+                      transition={{
+                        duration: 2.5,
+                        delay: index * 0.5,
+                        repeat: Infinity,
+                        ease: 'easeInOut',
+                      }}
+                    />
                   </div>
                 </motion.div>
               ))}
@@ -293,13 +359,14 @@ export default function AboutSection() {
                 <motion.div
                   key={value.title}
                   variants={itemVariants}
-                  className="glass group rounded-2xl p-6 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/5"
                 >
-                  <div className="mx-auto mb-4 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110">
-                    <Icon className="h-6 w-6 text-gold" />
-                  </div>
-                  <h3 className="mb-2 font-semibold text-foreground">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
+                  <TiltCard className="glass group rounded-2xl p-6 text-center transition-all duration-500 hover:-translate-y-1 hover:shadow-lg hover:shadow-gold/10">
+                    <div className="mx-auto mb-4 inline-flex rounded-xl bg-gradient-to-br from-gold/10 to-copper/10 p-3 transition-all duration-300 group-hover:from-gold/20 group-hover:to-copper/20 group-hover:scale-110">
+                      <Icon className="h-6 w-6 text-gold" />
+                    </div>
+                    <h3 className="mb-2 font-semibold text-foreground">{value.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{value.description}</p>
+                  </TiltCard>
                 </motion.div>
               )
             })}

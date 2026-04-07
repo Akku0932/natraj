@@ -1,10 +1,11 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useSyncExternalStore } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Menu, X, Phone } from 'lucide-react'
+import { Menu, X, Phone, Sun, Moon } from 'lucide-react'
 import { useStore, type PageView } from '@/store/use-store'
+import { useTheme } from 'next-themes'
 import { Button } from '@/components/ui/button'
 import {
   Sheet,
@@ -23,12 +24,18 @@ const navLinks: { label: string; page: PageView }[] = [
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  )
   const {
     currentPage,
     setCurrentPage,
     mobileMenuOpen,
     setMobileMenuOpen,
   } = useStore()
+  const { theme, setTheme } = useTheme()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -106,27 +113,75 @@ export function Navbar() {
                 className="flex items-center gap-2 text-sm font-medium text-muted-foreground transition-colors hover:text-gold"
               >
                 <Phone className="h-4 w-4" />
-                <span>+91 98682 25911</span>
+                <span className="hidden lg:inline">+91 98682 25911</span>
               </a>
+              {/* Dark Mode Toggle */}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                className="relative h-9 w-9 rounded-full border border-border/50 hover:border-gold/30 hover:bg-gold/5 transition-all duration-300"
+                aria-label="Toggle theme"
+              >
+                <AnimatePresence mode="wait">
+                  {theme === 'dark' ? (
+                    <motion.div
+                      key="sun"
+                      initial={{ rotate: -90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: 90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Sun className="h-4 w-4 text-gold" />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="moon"
+                      initial={{ rotate: 90, opacity: 0 }}
+                      animate={{ rotate: 0, opacity: 1 }}
+                      exit={{ rotate: -90, opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <Moon className="h-4 w-4" />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </Button>
               <Button
                 onClick={() => handleNavClick('contact')}
-                className="gold-gradient border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-shadow duration-300"
+                className="gold-gradient border-0 text-white shadow-lg shadow-gold/20 hover:shadow-gold/40 transition-all duration-300"
                 size="sm"
               >
                 Get Quote
               </Button>
             </div>
 
-            {/* Mobile Menu Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(true)}
-              aria-label="Open menu"
-            >
-              <Menu className="h-5 w-5" />
-            </Button>
+            {/* Mobile: Theme Toggle + Menu */}
+            <div className="flex items-center gap-1 md:hidden">
+              {mounted && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+                  className="h-9 w-9"
+                  aria-label="Toggle theme"
+                >
+                  {theme === 'dark' ? (
+                    <Sun className="h-4 w-4 text-gold" />
+                  ) : (
+                    <Moon className="h-4 w-4" />
+                  )}
+                </Button>
+              )}
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileMenuOpen(true)}
+                aria-label="Open menu"
+              >
+                <Menu className="h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </nav>
       </motion.header>

@@ -9,6 +9,8 @@ import { BackToTopButton } from '@/components/back-to-top-button'
 import { TermsModal } from '@/components/terms-modal'
 import { PrivacyModal } from '@/components/privacy-modal'
 import { ProductDetailModal } from '@/components/product-detail-modal'
+import { LoadingScreen } from '@/components/loading-screen'
+import { ScrollProgress } from '@/components/scroll-progress'
 import HeroSection from '@/components/sections/hero-section'
 import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
@@ -35,6 +37,8 @@ export default function Home() {
 
   return (
     <>
+      <LoadingScreen />
+      <ScrollProgress />
       <Navbar />
       <main className="min-h-screen">
         <AnimatePresence mode="wait">

@@ -276,3 +276,107 @@
     rgba(26, 26, 26, 0.85) 100%
   );
 }
+
+/* Sparkle shimmer sweep animation */
+@keyframes sparkle-sweep {
+  0% { left: -100%; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { left: 200%; opacity: 0; }
+}
+
+.animate-sparkle-sweep::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(200, 150, 62, 0.15), rgba(232, 199, 123, 0.25), rgba(200, 150, 62, 0.15), transparent);
+  pointer-events: none;
+  z-index: 5;
+  border-radius: inherit;
+}
+
+.animate-sparkle-sweep:hover::after {
+  animation: sparkle-sweep 0.8s ease-in-out forwards;
+}
+
+/* Gold line trace animation */
+@keyframes gold-line-trace {
+  0% { height: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { height: 100%; opacity: 0.5; }
+}
+
+.animate-gold-line-trace {
+  animation: gold-line-trace 3s ease-in-out infinite;
+}
+
+/* Float animation with different delays */
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-6px); }
+}
+
+.animate-float-slow {
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.animate-float-medium {
+  animation: float-medium 3.5s ease-in-out infinite;
+}
+
+.animate-float-fast {
+  animation: float-fast 2.8s ease-in-out infinite;
+}
+
+/* Pulse text animation */
+@keyframes text-pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+.animate-text-pulse {
+  animation: text-pulse 2s ease-in-out infinite;
+}
+
+/* Stat label underline on hover */
+.stat-label-hover {
+  position: relative;
+  display: inline-block;
+}
+
+.stat-label-hover::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #C8963E, #E8C77B);
+  transition: all 0.3s ease;
+  transform: translateX(-50%);
+  border-radius: 1px;
+}
+
+.stat-label-hover:hover::after {
+  width: 80%;
+}
+
+/* Dotted background pattern */
+.dot-pattern {
+  background-image: radial-gradient(circle, rgba(200, 150, 62, 0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}

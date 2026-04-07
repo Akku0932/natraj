@@ -2,7 +2,24 @@
 
 import { useRef, useEffect, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import {
+  ArrowRight,
+  Zap,
+  Plug,
+  RefreshCw,
+  Thermometer,
+  Droplets,
+  Network,
+  Wind,
+  ToggleLeft,
+  LayoutGrid,
+  Waves,
+  BarChart3,
+  Activity,
+  Power,
+  Sun,
+  Box,
+} from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useStore } from '@/store/use-store'
 
@@ -12,6 +29,27 @@ interface Category {
   slug: string
   description: string | null
   productCount: number
+}
+
+// Map category names to icons
+function getCategoryIcon(name: string) {
+  const lowerName = name.toLowerCase()
+
+  if (lowerName.includes('three phase')) return Zap
+  if (lowerName.includes('single phase')) return Plug
+  if (lowerName.includes('automatic')) return RefreshCw
+  if (lowerName.includes('temperature')) return Thermometer
+  if (lowerName.includes('oil')) return Droplets
+  if (lowerName.includes('busbar')) return Network
+  if (lowerName.includes('air break')) return Wind
+  if (lowerName.includes('main switch')) return ToggleLeft
+  if (lowerName.includes('distribution')) return LayoutGrid
+  if (lowerName.includes('water level')) return Waves
+  if (lowerName.includes('measuring')) return BarChart3
+  if (lowerName.includes('power factor')) return Activity
+  if (lowerName.includes('mains')) return Power
+  if (lowerName.includes('solar')) return Sun
+  return Box
 }
 
 const containerVariants = {
@@ -122,29 +160,33 @@ export default function CategoriesPreview() {
             animate={isInView ? 'visible' : 'hidden'}
             className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4"
           >
-            {categories.map((category) => (
-              <motion.button
-                key={category.id}
-                variants={cardVariants}
-                onClick={() => handleCategoryClick(category.slug)}
-                className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5"
-              >
-                {/* Gold gradient border effect on hover */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/0 via-gold/0 to-gold/0 transition-all duration-500 group-hover:from-gold/10 group-hover:via-transparent group-hover:to-copper/10" />
+            {categories.map((category) => {
+              const IconComponent = getCategoryIcon(category.name)
+              return (
+                <motion.button
+                  key={category.id}
+                  variants={cardVariants}
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className="group relative overflow-hidden rounded-2xl border border-border/50 bg-card p-6 text-left transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/5 animate-sparkle-sweep"
+                >
+                  {/* Gold gradient border effect on hover */}
+                  <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/0 via-gold/0 to-gold/0 transition-all duration-500 group-hover:from-gold/10 group-hover:via-transparent group-hover:to-copper/10" />
 
-                <div className="relative z-10">
-                  <h3 className="mb-2 font-semibold text-foreground transition-colors group-hover:text-gold">
-                    {category.name}
-                  </h3>
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">
-                      {category.productCount} {category.productCount === 1 ? 'product' : 'products'}
-                    </span>
-                    <ArrowRight className="h-4 w-4 text-gold/0 transition-all duration-300 group-hover:text-gold group-hover:translate-x-1" />
+                  <div className="relative z-10">
+                    <h3 className="mb-2 flex items-center gap-2.5 font-semibold text-foreground transition-colors group-hover:text-gold">
+                      <IconComponent className="h-4 w-4 shrink-0 text-gold/60 transition-colors group-hover:text-gold" />
+                      {category.name}
+                    </h3>
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm text-muted-foreground">
+                        {category.productCount} {category.productCount === 1 ? 'product' : 'products'}
+                      </span>
+                      <ArrowRight className="h-4 w-4 text-gold/0 transition-all duration-300 group-hover:text-gold group-hover:translate-x-1" />
+                    </div>
                   </div>
-                </div>
-              </motion.button>
-            ))}
+                </motion.button>
+              )
+            })}
           </motion.div>
         )}
 

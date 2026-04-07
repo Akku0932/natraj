@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, Calendar, Package, Award } from 'lucide-react'
 
 const TOTAL_FRAMES = 239
 
@@ -151,7 +151,16 @@ export default function HeroSection() {
           >
             Precision
             <br />
-            <span className="gradient-text">Engineering</span>
+            <span
+              className="gradient-text"
+              style={{
+                textShadow: '0 0 40px rgba(200, 150, 62, 0.3), 0 0 80px rgba(200, 150, 62, 0.15)',
+                WebkitTextStroke: '0.5px transparent',
+                filter: 'brightness(1.1)',
+              }}
+            >
+              Engineering
+            </span>
           </motion.h2>
           <motion.p
             style={{ opacity: subtitleOpacity, y: subtitleY }}
@@ -166,7 +175,7 @@ export default function HeroSection() {
           style={{ opacity: scrollIndicatorOpacity }}
           className="absolute bottom-12 left-1/2 z-20 -translate-x-1/2 flex flex-col items-center gap-2"
         >
-          <span className="text-xs uppercase tracking-[0.2em] text-white/50">Scroll to explore</span>
+          <span className="text-xs uppercase tracking-[0.2em] text-white/50 animate-text-pulse">Scroll to explore</span>
           <motion.div
             animate={{ y: [0, 8, 0] }}
             transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
@@ -174,6 +183,57 @@ export default function HeroSection() {
             <ChevronDown className="h-6 w-6 text-gold/70" />
           </motion.div>
         </motion.div>
+
+        {/* Floating badge widgets */}
+        <motion.div
+          style={{ opacity: scrollIndicatorOpacity }}
+          className="absolute bottom-8 left-4 z-20 hidden md:block animate-float-slow"
+        >
+          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+              <Calendar className="h-4 w-4 text-gold" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">25+ Years</p>
+              <p className="text-[10px] uppercase tracking-wider text-white/50">Experience</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          style={{ opacity: scrollIndicatorOpacity }}
+          className="absolute bottom-24 left-12 z-20 hidden md:block animate-float-medium"
+        >
+          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+              <Package className="h-4 w-4 text-gold" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">5000+ Panels</p>
+              <p className="text-[10px] uppercase tracking-wider text-white/50">Delivered</p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div
+          style={{ opacity: scrollIndicatorOpacity }}
+          className="absolute bottom-16 right-4 z-20 hidden md:block animate-float-fast"
+        >
+          <div className="glass flex items-center gap-3 rounded-xl px-4 py-3 shadow-lg shadow-black/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gold/10">
+              <Award className="h-4 w-4 text-gold" />
+            </div>
+            <div>
+              <p className="text-sm font-bold text-white">ISO Certified</p>
+              <p className="text-[10px] uppercase tracking-wider text-white/50">Quality</p>
+            </div>
+          </div>
+        </motion.div>
+
+        {/* Animated gold line on left edge */}
+        <div className="absolute left-0 top-0 z-20 hidden h-full w-1 md:block">
+          <div className="animate-gold-line-trace h-full w-full bg-gradient-to-b from-gold/0 via-gold/60 to-gold/0" />
+        </div>
 
         {/* Side decorations */}
         <div className="absolute left-8 top-1/2 z-20 hidden -translate-y-1/2 lg:block">

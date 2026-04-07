@@ -1,12 +1,19 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useMemo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star } from 'lucide-react'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, Bookmark, ChevronRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { useStore } from '@/store/use-store'
 
 interface Category {
@@ -25,9 +32,52 @@ interface Product {
   price: number | null
   images: string
   featured: boolean
+  order: number
   category: {
     name: string
     slug: string
+  }
+}
+
+type SortOption = 'featured' | 'price-asc' | 'price-desc' | 'name-asc' | 'name-desc'
+
+const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+  { value: 'featured', label: 'Featured' },
+  { value: 'price-asc', label: 'Price: Low to High' },
+  { value: 'price-desc', label: 'Price: High to Low' },
+  { value: 'name-asc', label: 'Name: A-Z' },
+  { value: 'name-desc', label: 'Name: Z-A' },
+]
+
+function sortProducts(products: Product[], sort: SortOption): Product[] {
+  const sorted = [...products]
+  switch (sort) {
+    case 'featured':
+      return sorted.sort((a, b) => {
+        if (a.featured && !b.featured) return -1
+        if (!a.featured && b.featured) return 1
+        return (a.order ?? 0) - (b.order ?? 0)
+      })
+    case 'price-asc':
+      return sorted.sort((a, b) => {
+        if (a.price === null && b.price === null) return 0
+        if (a.price === null) return 1
+        if (b.price === null) return -1
+        return a.price - b.price
+      })
+    case 'price-desc':
+      return sorted.sort((a, b) => {
+        if (a.price === null && b.price === null) return 0
+        if (a.price === null) return 1
+        if (b.price === null) return -1
+        return b.price - a.price
+      })
+    case 'name-asc':
+      return sorted.sort((a, b) => a.name.localeCompare(b.name))
+    case 'name-desc':
+      return sorted.sort((a, b) => b.name.localeCompare(a.name))
+    default:
+      return sorted
   }
 }
 
@@ -38,6 +88,7 @@ export default function ProductsSection() {
   const [loadingProducts, setLoadingProducts] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [searchInput, setSearchInput] = useState('')
+  const [sortBy, setSortBy] = useState<SortOption>('featured')
 
   const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen } = useStore()
 
@@ -86,6 +137,8 @@ export default function ProductsSection() {
     fetchProducts()
   }, [fetchProducts])
 
+  const sortedProducts = useMemo(() => sortProducts(products, sortBy), [products, sortBy])
+
   const handleCategoryChange = (slug: string) => {
     setSelectedCategory(slug === 'all' ? null : slug)
   }
@@ -131,7 +184,7 @@ export default function ProductsSection() {
       </section>
 
       {/* Search & Filter Section */}
-      <section className="sticky top-0 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+      <section className="sticky top-16 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl md:top-20">
         <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
           {/* Search Bar */}
           <form onSubmit={handleSearch} className="mb-4 flex gap-2">
@@ -198,14 +251,14 @@ export default function ProductsSection() {
       {/* Products Grid */}
       <section className="py-12 md:py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          {/* Results count */}
-          <div className="mb-8 flex items-center justify-between">
+          {/* Results count & Sort */}
+          <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-sm text-muted-foreground">
               {loadingProducts ? (
                 'Loading products...'
               ) : (
                 <>
-                  Showing <span className="font-medium text-foreground">{products.length}</span> products
+                  Showing <span className="font-medium text-foreground">{sortedProducts.length}</span> products
                   {searchQuery && (
                     <>
                       {' '}for &ldquo;<span className="text-gold">{searchQuery}</span>&rdquo;
@@ -222,20 +275,34 @@ export default function ProductsSection() {
                 </>
               )}
             </p>
-            {(searchQuery || selectedCategory) && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => {
-                  clearSearch()
-                  setSelectedCategory(null)
-                }}
-                className="text-muted-foreground hover:text-foreground"
-              >
-                <SlidersHorizontal className="mr-2 h-4 w-4" />
-                Clear filters
-              </Button>
-            )}
+            <div className="flex items-center gap-3">
+              <Select value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
+                <SelectTrigger className="w-[180px] border-border/50 text-sm">
+                  <SelectValue placeholder="Sort by" />
+                </SelectTrigger>
+                <SelectContent>
+                  {SORT_OPTIONS.map((option) => (
+                    <SelectItem key={option.value} value={option.value}>
+                      {option.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              {(searchQuery || selectedCategory) && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                    clearSearch()
+                    setSelectedCategory(null)
+                  }}
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <SlidersHorizontal className="mr-2 h-4 w-4" />
+                  Clear
+                </Button>
+              )}
+            </div>
           </div>
 
           {/* Loading skeleton */}
@@ -253,7 +320,7 @@ export default function ProductsSection() {
                 </div>
               ))}
             </div>
-          ) : products.length === 0 ? (
+          ) : sortedProducts.length === 0 ? (
             <div className="py-20 text-center">
               <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
                 <Search className="h-8 w-8 text-muted-foreground" />
@@ -279,7 +346,7 @@ export default function ProductsSection() {
               className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
             >
               <AnimatePresence mode="popLayout">
-                {products.map((product, index) => {
+                {sortedProducts.map((product, index) => {
                   const images = JSON.parse(product.images || '[]') as string[]
                   const firstImage = images.length > 0 ? images[0] : null
 
@@ -291,24 +358,36 @@ export default function ProductsSection() {
                       animate={{ opacity: 1, y: 0 }}
                       exit={{ opacity: 0, scale: 0.95 }}
                       transition={{ duration: 0.4, delay: index * 0.05 }}
-                      className="product-card group overflow-hidden rounded-2xl border border-border/50 bg-card"
+                      className="product-card group overflow-hidden rounded-2xl border border-border/50 bg-card transition-shadow duration-300 hover:shadow-xl hover:shadow-gold/5"
                     >
+                      {/* Gold gradient bottom border on hover */}
+                      <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-gradient-to-r from-gold/0 via-gold to-gold/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100 -z-10" />
+
                       {/* Image */}
                       <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
                         {firstImage ? (
-                          <img
-                            src={firstImage}
-                            alt={product.name}
-                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
-                            loading="lazy"
-                          />
+                          <>
+                            <img
+                              src={firstImage}
+                              alt={product.name}
+                              className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                              loading="lazy"
+                            />
+                            {/* Gradient overlay */}
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+                            {/* Shimmer shine sweep on hover */}
+                            <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              <div className="shimmer-sweep absolute inset-0" />
+                            </div>
+                          </>
                         ) : (
                           <div className="flex h-full items-center justify-center">
                             <div className="text-4xl text-muted-foreground/30">⚡</div>
                           </div>
                         )}
+
                         {/* Badges */}
-                        <div className="absolute left-3 top-3 flex flex-col gap-1.5">
+                        <div className="absolute left-3 top-3 flex flex-col gap-1.5 z-10">
                           <Badge className="bg-gold/90 text-white hover:bg-gold text-xs">
                             {product.category.name}
                           </Badge>
@@ -319,6 +398,26 @@ export default function ProductsSection() {
                             </Badge>
                           )}
                         </div>
+
+                        {/* Save/Compare icon - top right */}
+                        <button
+                          className="absolute right-3 top-3 z-10 flex h-8 w-8 items-center justify-center rounded-full bg-black/30 text-white backdrop-blur-sm transition-all hover:bg-gold/80 hover:scale-110"
+                          aria-label="Save product"
+                        >
+                          <Bookmark className="h-4 w-4" />
+                        </button>
+
+                        {/* Quick View button - overlay on hover */}
+                        <div className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                          <Button
+                            onClick={() => handleViewDetails(product.slug)}
+                            size="sm"
+                            className="bg-white/90 text-charcoal backdrop-blur-md shadow-lg border-0 hover:bg-white hover:shadow-xl transform transition-transform hover:scale-105"
+                          >
+                            <Eye className="mr-2 h-4 w-4" />
+                            Quick View
+                          </Button>
+                        </div>
                       </div>
 
                       {/* Content */}
@@ -327,7 +426,7 @@ export default function ProductsSection() {
                           {product.name}
                         </h3>
                         <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
-                          {product.specifications}
+                          {product.description || product.category.name}
                         </p>
 
                         {/* Price & CTA */}
@@ -337,18 +436,18 @@ export default function ProductsSection() {
                               ₹{product.price.toLocaleString()}
                             </span>
                           ) : (
-                            <span className="text-sm text-muted-foreground">
-                              Contact for price
+                            <span className="inline-flex items-center rounded-full border border-gold/40 bg-gold/5 px-3 py-1 text-sm font-medium text-gold">
+                              Request Quote
                             </span>
                           )}
                           <Button
                             onClick={() => handleViewDetails(product.slug)}
                             size="sm"
                             variant="outline"
-                            className="border-gold/30 text-gold hover:bg-gold hover:text-white"
+                            className="border-gold/30 text-gold hover:bg-gold hover:text-white transition-colors"
                           >
-                            <Eye className="mr-1.5 h-3.5 w-3.5" />
-                            Details
+                            View Details
+                            <ChevronRight className="ml-1 h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5" />
                           </Button>
                         </div>
                       </div>
@@ -360,6 +459,27 @@ export default function ProductsSection() {
           )}
         </div>
       </section>
+
+      {/* Shimmer animation CSS */}
+      <style jsx global>{`
+        @keyframes shimmer-sweep {
+          0% { transform: translateX(-100%) rotate(25deg); }
+          100% { transform: translateX(200%) rotate(25deg); }
+        }
+        .shimmer-sweep {
+          background: linear-gradient(
+            90deg,
+            transparent 0%,
+            rgba(255, 255, 255, 0.08) 25%,
+            rgba(255, 255, 255, 0.2) 50%,
+            rgba(255, 255, 255, 0.08) 75%,
+            transparent 100%
+          );
+          animation: shimmer-sweep 0.8s ease-in-out;
+          transform: translateX(-100%) rotate(25deg);
+          width: 50%;
+        }
+      `}</style>
     </div>
   )
 }

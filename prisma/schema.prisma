@@ -51,3 +51,9 @@ model PageView {
   userAgent String?
   createdAt DateTime @default(now())
 }
+
+model Newsletter {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
