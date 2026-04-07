@@ -24,10 +24,10 @@ const steps = [
   {
     number: 3,
     icon: Settings,
-    title: 'Expert Manufacturing',
-    subtitle: 'Precision Engineering',
+    title: 'Quality Assurance',
+    subtitle: 'Certified Products',
     description:
-      'Our ISO-certified engineers manufacture your panels with precision, using premium materials and rigorous quality checks.',
+      'Every product is sourced from certified manufacturers and undergoes quality checks before dispatch to ensure reliability.',
   },
   {
     number: 4,

@@ -6,6 +6,8 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const categorySlug = searchParams.get("category");
     const searchQuery = searchParams.get("search");
+    const featuredParam = searchParams.get("featured");
+    const limitParam = searchParams.get("limit");
 
     const whereClause: Record<string, unknown> = {};
 
@@ -21,10 +23,17 @@ export async function GET(request: NextRequest) {
       ];
     }
 
+    if (featuredParam === "true") {
+      whereClause.featured = true;
+    }
+
+    const take = limitParam ? parseInt(limitParam, 10) : undefined;
+
     const products = await db.product.findMany({
       where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
       include: { category: true },
       orderBy: { order: "asc" },
+      take,
     });
 
     return NextResponse.json(products);

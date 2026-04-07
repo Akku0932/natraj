@@ -14,24 +14,24 @@ import { useStore } from '@/store/use-store'
 
 const faqs = [
   {
-    question: 'What types of electrical panels does Natraj manufacture?',
+    question: 'What types of electrical panels does Natraj supply?',
     answer:
-      'We manufacture a wide range including three-phase panels, automatic changeovers, busbar systems, temperature control panels, water level controllers, distribution panels, and more. Each panel is custom-designed to meet specific requirements.',
+      'We supply a wide range including three-phase panels, automatic changeovers, busbar systems, temperature control panels, water level controllers, distribution panels, and more from India\'s leading brands like Siemens, Schneider, ABB, and Havells.',
   },
   {
-    question: 'Are your panels ISI marked and certified?',
+    question: 'Are the products you supply certified?',
     answer:
-      'Yes, Natraj Electricals is an ISO 9001:2015 certified company. Our panels are manufactured using premium-grade components from reputed brands and undergo rigorous quality testing before delivery.',
+      'Yes, Natraj Electricals supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery to ensure it meets the highest standards.',
   },
   {
-    question: 'Can I get custom panels designed for my specific needs?',
+    question: 'Can I get custom panels for my specific needs?',
     answer:
-      'Absolutely! We specialize in custom solutions. Our experienced engineering team will work with you to design panels tailored to your exact specifications, load requirements, and budget.',
+      'Yes! We can source custom-configured panels from our manufacturing partners. Our team will help you find the right products for your exact specifications and budget.',
   },
   {
     question: 'What is the typical delivery timeline?',
     answer:
-      'Standard panels are typically delivered within 7-15 working days depending on the complexity and order size. Custom panels may take 15-30 days. We also offer expedited delivery for urgent orders.',
+      'In-stock products are typically delivered within 3-7 working days. For larger or custom orders, delivery may take 10-20 days. We also offer expedited delivery for urgent requirements.',
   },
   {
     question: 'Do you provide installation support?',
@@ -39,14 +39,14 @@ const faqs = [
       'Yes, we provide detailed installation guidelines and technical support. For projects in Delhi NCR, our team can assist with on-site installation guidance as well.',
   },
   {
-    question: 'What warranty do your products carry?',
+    question: 'What warranty do the products carry?',
     answer:
-      'All our electrical panels come with a comprehensive warranty. Specific warranty terms vary by product category and are communicated at the time of order confirmation.',
+      'All products we supply come with the original manufacturer warranty. Specific warranty terms vary by product and brand, and are communicated at the time of order confirmation.',
   },
   {
-    question: 'Do you offer after-sales service?',
+    question: 'Do you offer after-sales support?',
     answer:
-      'Yes, our dedicated support team provides after-sales service including troubleshooting, maintenance guidance, and spare parts availability. You can reach us via phone, email, or WhatsApp.',
+      'Yes, our dedicated team provides after-sales support including troubleshooting, maintenance guidance, and coordination with manufacturer service centers. You can reach us via phone, email, or WhatsApp.',
   },
   {
     question: 'How can I get a price quote?',

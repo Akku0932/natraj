@@ -22,55 +22,55 @@ const milestones = [
     year: '1998',
     title: 'Foundation',
     description:
-      'Natraj Electricals was founded in the heart of Delhi with a vision to deliver premium electrical control panels to the Indian market.',
+      'Natraj Electricals was established in Bhagirath Place, Delhi — India\'s largest electrical market — with a focus on quality distribution.',
   },
   {
     year: '2008',
-    title: 'ISO Certification',
+    title: 'Growth & Expansion',
     description:
-      'Achieved ISO 9001:2015 certification, validating our commitment to quality management and international manufacturing standards.',
+      'Expanded product range to cover 16+ categories of electrical panels and components, building partnerships with leading national brands.',
   },
   {
     year: '2018',
-    title: 'Pan-India Expansion',
+    title: 'Pan-India Reach',
     description:
-      'Expanded operations to serve clients across India, with over 5000+ panels delivered to industrial and commercial projects nationwide.',
+      'Extended distribution network nationwide, serving over 200 clients across industrial, commercial, and residential sectors.',
   },
   {
     year: '2024',
-    title: 'Innovation Hub',
+    title: 'Digital Transformation',
     description:
-      'Launched smart control panel solutions and embraced modern automation technologies to meet the evolving needs of our clients.',
+      'Launched online platform for seamless browsing, ordering, and support — making quality electrical products accessible to everyone.',
   },
   {
     year: 'Present',
-    title: 'Smart Manufacturing',
+    title: 'Leading Distributor',
     current: true,
     description:
-      'Pioneering IoT-enabled smart panels and digital manufacturing to lead the next era of electrical control solutions in India.',
+      'Today, Natraj Electricals is recognized as one of Delhi\'s most trusted electrical product distributors — known for quality, reliability, and service.',
   },
 ]
 
 const values = [
   {
-    icon: Award,
+    icon: ShieldCheck,
     title: 'Quality',
-    description: 'Uncompromising quality in every panel we manufacture, backed by rigorous testing and certification.',
+    description: 'Every product we supply is certified and sourced from reputable manufacturers — no compromises.',
   },
   {
     icon: Lightbulb,
-    title: 'Innovation',
-    description: 'Continuously evolving our designs and adopting new technologies to deliver cutting-edge solutions.',
+    title: 'Expert Guidance',
+    description: 'Our knowledgeable team helps you choose the right products for your specific requirements.',
   },
   {
-    icon: ShieldCheck,
+    icon: Award,
     title: 'Reliability',
-    description: 'Building panels that stand the test of time, with a proven track record spanning over 25 years.',
+    description: '25+ years of trusted service with a proven track record of timely deliveries and genuine products.',
   },
   {
     icon: Heart,
     title: 'Customer Focus',
-    description: 'Every panel is built around our customers\' needs, with personalized service and dedicated support.',
+    description: 'Your satisfaction drives everything we do — from product selection to after-sales support.',
   },
 ]
 
@@ -79,15 +79,15 @@ const teamMembers = [
     name: 'Rajesh Kumar',
     initials: 'RK',
     title: 'Founder & Managing Director',
-    description: 'With over 25 years of industry experience, Rajesh founded Natraj Electricals with a vision to revolutionize electrical panel manufacturing in India.',
+    description: 'With over 25 years of experience in the electrical industry, Rajesh founded Natraj Electricals to bring quality products and trustworthy service to businesses across India.',
     linkedin: '#',
     twitter: '#',
   },
   {
     name: 'Amit Sharma',
     initials: 'AS',
-    title: 'Head of Engineering',
-    description: 'A seasoned engineer specializing in control panel design and automation, Amit leads our innovation initiatives and ensures top-notch quality standards.',
+    title: 'Head of Sales',
+    description: 'Amit leads our sales and distribution operations, ensuring competitive pricing, efficient logistics, and strong brand partnerships.',
     linkedin: '#',
     twitter: '#',
   },
@@ -95,7 +95,7 @@ const teamMembers = [
     name: 'Priya Mehta',
     initials: 'PM',
     title: 'Director of Operations',
-    description: 'Priya oversees end-to-end operations, from procurement to delivery, ensuring every Natraj panel meets our promise of excellence and reliability.',
+    description: 'Priya oversees day-to-day operations — from procurement and inventory to delivery and customer support, ensuring smooth service.',
     linkedin: '#',
     twitter: '#',
   },
@@ -124,9 +124,9 @@ const itemVariants = {
 
 const inlineStats = [
   { value: '25+', label: 'Years' },
-  { value: '5000+', label: 'Panels' },
+  { value: '5000+', label: 'Products Sold' },
   { value: '200+', label: 'Clients' },
-  { value: '16', label: 'Categories' },
+  { value: '16+', label: 'Categories' },
 ]
 
 function useSpotlightMouse() {
@@ -160,7 +160,7 @@ export default function AboutSection() {
         </div>
       </section>
 
-      {/* Company Story - CLEAN, no animated gradient border */}
+      {/* Company Story */}
       <section className="relative overflow-hidden py-20 md:py-28">
         <div className="absolute inset-0 bg-warm-gray" />
         <div className="gold-gradient-subtle absolute inset-0" />
@@ -169,7 +169,7 @@ export default function AboutSection() {
             <div className="text-center">
               <div className="mx-auto mb-8 flex justify-center gap-2">
                 <MapPin className="h-5 w-5 text-gold" />
-                <span className="text-sm font-medium text-gold">Delhi, India</span>
+                <span className="text-sm font-medium text-gold">Bhagirath Place, Delhi</span>
               </div>
 
               <div className="mb-8 inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gradient-to-r from-gold/5 to-copper/5 px-5 py-2">
@@ -177,12 +177,11 @@ export default function AboutSection() {
               </div>
 
               <p className="text-lg leading-relaxed text-foreground/80 md:text-xl">
-                Founded with a vision to deliver premium electrical control panels,{' '}
-                <strong className="text-foreground">Natraj Electricals</strong> has grown into one of
-                Delhi&apos;s most trusted names in electrical panel manufacturing. As an{' '}
-                <strong className="text-foreground">ISO 9001:2015 certified</strong> company, we
-                specialize in a wide range of electrical panels designed for industrial and
-                commercial applications.
+                <strong className="text-foreground">Natraj Electricals</strong> is a trusted distributor
+                and supplier of premium electrical panels and components, located in the heart of
+                Delhi&apos;s electrical market — Bhagirath Place. We specialize in sourcing and
+                supplying a comprehensive range of electrical products from India&apos;s leading brands,
+                serving industrial, commercial, and residential clients across the country.
               </p>
 
               {/* Inline stats row */}
@@ -199,11 +198,10 @@ export default function AboutSection() {
               </div>
 
               <p className="mt-8 text-lg leading-relaxed text-foreground/80 md:text-xl">
-                With over <strong className="gradient-text">25 years</strong> of expertise, we
-                combine traditional craftsmanship with modern engineering to create panels that are
-                safe, reliable, and built to last. Our commitment to{' '}
-                <strong className="text-foreground">quality, innovation, and customer satisfaction</strong>{' '}
-                drives everything we do.
+                With over <strong className="gradient-text">25 years</strong> in the industry, we&apos;ve
+                built strong relationships with top manufacturers and brands. Our commitment to{' '}
+                <strong className="text-foreground">quality products, competitive pricing, and reliable delivery</strong>{' '}
+                has made us a preferred partner for businesses across India.
               </p>
             </div>
           </div>
@@ -228,10 +226,10 @@ export default function AboutSection() {
               </div>
               <h3 className="mb-4 text-2xl font-bold text-foreground">Our Mission</h3>
               <p className="text-foreground/70 leading-relaxed">
-                To engineer and deliver electrical control panels of uncompromising quality that
-                empower industries and businesses across India. We are committed to providing
-                innovative, safe, and reliable solutions that exceed our clients&apos; expectations
-                while maintaining the highest standards of manufacturing excellence.
+                To be the most trusted supplier of quality electrical panels and components in India.
+                We connect businesses with the best products from leading brands, offering expert
+                guidance, competitive prices, and reliable delivery — making quality electrical
+                solutions accessible to everyone.
               </p>
             </motion.div>
 
@@ -248,10 +246,10 @@ export default function AboutSection() {
               </div>
               <h3 className="mb-4 text-2xl font-bold text-foreground">Our Vision</h3>
               <p className="text-foreground/70 leading-relaxed">
-                To be India&apos;s most trusted and preferred electrical panel manufacturer, recognized
-                for our engineering excellence, customer-centric approach, and sustainable practices.
-                We envision a future where every connection is powered by Natraj — delivering
-                reliability that industries can count on, day after day, year after year.
+                To become India&apos;s go-to electrical distribution partner — recognized for our
+                curated product selection, honest business practices, and unwavering commitment to
+                customer satisfaction. We envision a future where every business has easy access to
+                quality electrical products at fair prices.
               </p>
             </motion.div>
           </div>
@@ -410,9 +408,9 @@ export default function AboutSection() {
 
             <div className="space-y-0">
               {[
-                { label: 'Quality Standards', natraj: 'ISO 9001:2015 Certified', others: 'Basic Compliance' },
-                { label: 'Customization', natraj: '100% Tailored to Your Needs', others: 'Standard Options Only' },
-                { label: 'After-Sales Support', natraj: '24/7 Dedicated Support', others: 'Limited Business Hours' },
+                { label: 'Product Quality', natraj: 'Certified & Brand-Name Only', others: 'Mixed Quality' },
+                { label: 'Pricing', natraj: 'Competitive Wholesale Rates', others: 'Higher Markups' },
+                { label: 'Support', natraj: 'Expert Product Guidance', others: 'Limited Assistance' },
                 { label: 'Delivery', natraj: 'Pan-India with Tracking', others: 'Regional Only' },
               ].map((row, i) => (
                 <motion.div

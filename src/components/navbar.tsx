@@ -324,7 +324,7 @@ export function Navbar() {
                             transition={{ duration: 0.2, ease: 'easeOut' }}
                             className="absolute left-1/2 top-full -translate-x-1/2 pt-2 z-40"
                           >
-                            <div className="glass-gold w-[min(896px,calc(100vw-3rem))] rounded-2xl border border-gold/10 shadow-xl shadow-black/10 overflow-hidden">
+                            <div className="w-[min(896px,calc(100vw-3rem))] rounded-2xl border border-gold/10 bg-background/85 backdrop-blur-xl shadow-xl shadow-black/10 overflow-hidden">
                               {/* Decorative gold line at top */}
                               <div className="gold-gradient h-0.5 w-full" />
 

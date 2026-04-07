@@ -151,7 +151,7 @@ export function Footer() {
             </div>
 
             <p className="text-sm leading-relaxed text-white/50">
-              Manufacturer and supplier of premium electrical control panels, automatic changeovers, busbar systems, and more. Serving the industry with excellence since establishment.
+              Trusted distributor and supplier of quality electrical panels and components from India&apos;s leading brands. Serving businesses with excellence since 1998.
             </p>
 
             {/* Social Media Links with glass background and spring animation */}

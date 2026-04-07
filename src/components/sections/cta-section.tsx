@@ -13,16 +13,6 @@ export default function CTASection() {
       {/* Gold gradient background */}
       <div className="absolute inset-0 gold-gradient" />
 
-      {/* Subtle dot pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            'radial-gradient(circle at 1px 1px, white 1px, transparent 0)',
-          backgroundSize: '40px 40px',
-        }}
-      />
-
       <div className="relative z-10 mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -31,13 +21,13 @@ export default function CTASection() {
           transition={{ duration: 0.5 }}
         >
           <h2 className="text-3xl font-bold leading-tight text-white sm:text-4xl md:text-5xl">
-            Ready to Power Up
+            Looking for Quality
             <br />
-            Your Project?
+            Electrical Products?
           </h2>
 
           <p className="mx-auto mt-6 max-w-lg text-lg text-white/80">
-            Contact us today for custom solutions tailored to your exact requirements.
+            Browse our catalog or get in touch — we&apos;re here to help you find exactly what you need.
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">

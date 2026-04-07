@@ -2,38 +2,38 @@
 
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Calendar, Award, Settings, Truck, Headphones, TrendingDown } from 'lucide-react'
+import { Calendar, Award, PackageCheck, Truck, Headphones, TrendingDown } from 'lucide-react'
 
 const advantages = [
   {
     icon: Calendar,
     title: '25+ Years Experience',
-    description: 'Founded in 1998, we bring decades of expertise in electrical panel manufacturing',
+    description: 'Serving businesses across India since 1998 with trusted electrical distribution',
   },
   {
     icon: Award,
-    title: 'ISO Certified Quality',
-    description: 'Every panel undergoes rigorous quality testing to meet international standards',
+    title: 'Authorized Distributor',
+    description: 'Official partner of top brands — ISI, BIS, and CE certified products only',
   },
   {
-    icon: Settings,
-    title: 'Custom Solutions',
-    description: 'Tailored panels designed specifically for your project requirements',
+    icon: PackageCheck,
+    title: 'Wide Product Range',
+    description: '16+ categories of electrical panels and components from leading manufacturers',
   },
   {
     icon: Truck,
     title: 'Pan-India Delivery',
-    description: 'Reliable delivery network covering all major cities across India',
+    description: 'Safe and insured delivery to every corner of India with tracking',
   },
   {
     icon: Headphones,
-    title: '24/7 Support',
-    description: 'Dedicated technical support team available around the clock',
+    title: 'Expert Guidance',
+    description: 'Knowledgeable team to help you select the right products for your needs',
   },
   {
     icon: TrendingDown,
-    title: 'Competitive Pricing',
-    description: 'Best value in the market without compromising on quality',
+    title: 'Best Prices',
+    description: 'Competitive wholesale pricing — direct from brands, no extra markups',
   },
 ]
 
@@ -99,11 +99,11 @@ export function WhyChooseSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 text-white/60"
           >
-            Discover what sets us apart as India&apos;s trusted electrical panel manufacturer
+            Your reliable distribution partner for quality electrical products
           </motion.p>
         </div>
 
-        {/* Advantage cards - CLEAN, no excessive effects */}
+        {/* Advantage cards */}
         <motion.div
           variants={containerVariants}
           initial="hidden"

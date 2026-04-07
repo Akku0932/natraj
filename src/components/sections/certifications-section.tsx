@@ -144,7 +144,7 @@ export default function CertificationsSection() {
             className="relative z-10 mt-4 text-white/60"
           >
             Backed by industry-leading certifications and decades of proven
-            excellence in electrical panel manufacturing
+            excellence in electrical product distribution
           </motion.p>
         </div>
 

@@ -367,7 +367,7 @@ export function ProductDetailModal() {
   return (
     <>
       <Dialog open={productDetailOpen} onOpenChange={setProductDetailOpen}>
-        <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-hidden flex flex-col p-0">
+        <DialogContent className="sm:max-w-4xl lg:max-w-5xl max-h-[92vh] overflow-hidden flex flex-col p-0">
           {/* Loading State */}
           {loading && (
             <div className="p-6 space-y-6">

@@ -15,42 +15,43 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Natraj Electricals | Premium Electrical Control Panels",
+  title: "Natraj Electricals | Trusted Electrical Panel Distributor",
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
     apple: '/favicon.png',
   },
   description:
-    "ISO 9001:2015 certified manufacturer of premium electrical control panels, automatic changeovers, busbar systems, and more.",
+    "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
   keywords: [
     "Natraj Electricals",
     "electrical control panels",
     "automatic changeovers",
     "busbar systems",
-    "ISO 9001:2015",
-    "electrical panels",
-    "control panels manufacturer",
-    "Delhi electrical",
+    "electrical distributor",
+    "electrical supplier",
+    "electrical panels Delhi",
     "Bhagirath Place",
     "power factor panels",
     "water level controllers",
     "solar panels",
+    "Siemens distributor",
+    "Schneider Electric distributor",
   ],
   authors: [{ name: "Natraj Electricals" }],
   openGraph: {
-    title: "Natraj Electricals | Premium Electrical Control Panels",
+    title: "Natraj Electricals | Trusted Electrical Panel Distributor",
     description:
-      "ISO 9001:2015 certified manufacturer of premium electrical control panels, automatic changeovers, busbar systems, and more.",
+      "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
     siteName: "Natraj Electricals",
     type: "website",
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Natraj Electricals | Premium Electrical Control Panels",
+    title: "Natraj Electricals | Trusted Electrical Panel Distributor",
     description:
-      "ISO 9001:2015 certified manufacturer of premium electrical control panels, automatic changeovers, busbar systems, and more.",
+      "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
   },
 };
 
@@ -63,7 +64,7 @@ export default function RootLayout({
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
     "name": "Natraj Electricals",
-    "description": "ISO 9001:2015 certified manufacturer of premium electrical control panels, automatic changeovers, busbar systems, and more.",
+    "description": "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
     "url": "https://natrajelectricals.com",
     "telephone": ["+91-11-23873532", "+91-9868225911"],
     "email": "natrajenterprises14@gmail.com",
@@ -96,26 +97,26 @@ export default function RootLayout({
     "mainEntity": [
       {
         "@type": "Question",
-        "name": "What types of electrical panels does Natraj manufacture?",
+        "name": "What types of electrical panels does Natraj supply?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "We manufacture a wide range including three-phase panels, automatic changeovers, busbar systems, temperature control panels, water level controllers, distribution panels, and more. Each panel is custom-designed to meet specific requirements."
+          "text": "We supply a wide range including three-phase panels, automatic changeovers, busbar systems, temperature control panels, water level controllers, distribution panels, and more from India's leading brands."
         }
       },
       {
         "@type": "Question",
-        "name": "Are your panels ISI marked and certified?",
+        "name": "Are the products you supply certified?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, Natraj Electricals is an ISO 9001:2015 certified company. Our panels are manufactured using premium-grade components from reputed brands and undergo rigorous quality testing before delivery."
+          "text": "Yes, Natraj Electricals supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery."
         }
       },
       {
         "@type": "Question",
-        "name": "Can I get custom panels designed for my specific needs?",
+        "name": "Can I get custom panels for my specific needs?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Absolutely! We specialize in custom solutions. Our experienced engineering team will work with you to design panels tailored to your exact specifications, load requirements, and budget."
+          "text": "Yes! We can source custom-configured panels from our manufacturing partners. Our team will work with you to find the right products for your specifications and budget."
         }
       },
       {
@@ -136,10 +137,10 @@ export default function RootLayout({
       },
       {
         "@type": "Question",
-        "name": "What warranty do your products carry?",
+        "name": "What warranty do the products carry?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "All our electrical panels come with a comprehensive warranty. Specific warranty terms vary by product category and are communicated at the time of order confirmation."
+          "text": "All products we supply come with manufacturer warranty. Specific warranty terms vary by product and brand, and are communicated at the time of order confirmation."
         }
       },
       {
@@ -160,10 +161,10 @@ export default function RootLayout({
       },
       {
         "@type": "Question",
-        "name": "Do you provide installation services?",
+        "name": "Do you provide installation support?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, our team provides professional installation support and commissioning services for all our electrical panels. We ensure proper setup and testing before handover."
+          "text": "We provide detailed installation guidelines and technical support for all products. For projects in Delhi NCR, our team can assist with on-site guidance as well."
         }
       },
       {

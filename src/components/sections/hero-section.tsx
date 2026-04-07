@@ -2,7 +2,9 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion'
-import { ChevronDown, Mouse } from 'lucide-react'
+import { ArrowRight, Mouse } from 'lucide-react'
+import { useStore } from '@/store/use-store'
+import { Button } from '@/components/ui/button'
 
 const TOTAL_FRAMES = 239
 
@@ -15,6 +17,7 @@ export default function HeroSection() {
   const imgRef = useRef<HTMLImageElement>(null)
   const [currentFrame, setCurrentFrame] = useState(1)
   const frameCache = useRef<Map<number, HTMLImageElement>>(new Map())
+  const { setCurrentPage } = useStore()
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -33,6 +36,8 @@ export default function HeroSection() {
   const titleY = useTransform(scrollYProgress, [0, 0.15, 0.25], [60, 0, -40])
   const subtitleOpacity = useTransform(scrollYProgress, [0.05, 0.2, 0.3], [0, 1, 0])
   const subtitleY = useTransform(scrollYProgress, [0.05, 0.2, 0.3], [40, 0, -30])
+  const ctaOpacity = useTransform(scrollYProgress, [0.08, 0.22, 0.32], [0, 1, 0])
+  const ctaY = useTransform(scrollYProgress, [0.08, 0.22, 0.32], [30, 0, -25])
   const scrollIndicatorOpacity = useTransform(scrollYProgress, [0.5, 0.7], [1, 0])
 
   // Preload frames progressively
@@ -110,7 +115,7 @@ export default function HeroSection() {
           <img
             ref={imgRef}
             src={getFramePath(currentFrame)}
-            alt="Natraj Electricals"
+            alt="Natraj Electricals - Premium Electrical Panels"
             className="h-full w-full object-cover will-change-transform"
             loading="eager"
             draggable={false}
@@ -118,11 +123,11 @@ export default function HeroSection() {
         </div>
 
         {/* Dark overlay for text readability */}
-        <div className="hero-overlay absolute inset-0 z-10" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-b from-charcoal/70 via-charcoal/40 to-charcoal/80" />
 
         {/* Top: Logo - with extra padding to avoid navbar overlap */}
         <div className="absolute left-0 right-0 top-0 z-20 flex justify-center pt-28 md:pt-32">
-          <div className="glass-dark rounded-full px-8 py-3">
+          <div className="rounded-full border border-white/10 bg-black/30 px-8 py-3 backdrop-blur-md">
             <h1 className="text-2xl font-bold tracking-wider md:text-3xl">
               <span className="gradient-text">NATRAJ</span>{' '}
               <span className="text-white/90 font-light tracking-widest">ELECTRICALS</span>
@@ -130,30 +135,53 @@ export default function HeroSection() {
           </div>
         </div>
 
-        {/* Center: Main heading */}
+        {/* Center: Main heading - CLEAN supplier-focused */}
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4">
-          <p
+          <motion.p
             style={{ opacity: titleOpacity, y: titleY }}
             className="mb-4 text-sm font-medium uppercase tracking-[0.3em] text-gold-light/80 md:text-base"
           >
-            Established Since 1998
-          </p>
-          <h2
+            Trusted Since 1998
+          </motion.p>
+          <motion.h2
             style={{ opacity: titleOpacity, y: titleY }}
-            className="text-center text-4xl font-bold leading-tight text-white sm:text-5xl md:text-7xl lg:text-8xl"
+            className="text-center text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
           >
-            Precision
+            Your Trusted
             <br />
             <span className="gradient-text">
-              Engineering
+              Electrical Partner
             </span>
-          </h2>
-          <p
+          </motion.h2>
+          <motion.p
             style={{ opacity: subtitleOpacity, y: subtitleY }}
-            className="mt-6 max-w-md text-center text-lg text-white/70 md:text-xl"
+            className="mt-6 max-w-xl text-center text-lg text-white/70 md:text-xl"
           >
-            For Every Connection
-          </p>
+            Quality electrical panels and products — handpicked from India&apos;s leading brands, delivered to your doorstep.
+          </motion.p>
+
+          {/* CTA Buttons */}
+          <motion.div
+            style={{ opacity: ctaOpacity, y: ctaY }}
+            className="mt-10 flex flex-col items-center gap-4 sm:flex-row"
+          >
+            <Button
+              onClick={() => setCurrentPage('products')}
+              size="lg"
+              className="min-w-[220px] gold-gradient border-0 text-white shadow-lg shadow-gold/30 hover:shadow-gold/40 font-semibold"
+            >
+              Explore Products
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Button>
+            <Button
+              onClick={() => setCurrentPage('contact')}
+              size="lg"
+              variant="outline"
+              className="min-w-[220px] border-2 border-white/20 bg-transparent text-white hover:bg-white/10 hover:text-white"
+            >
+              Contact Us
+            </Button>
+          </motion.div>
         </div>
 
         {/* Bottom: Scroll to explore indicator */}
@@ -178,13 +206,6 @@ export default function HeroSection() {
           <span className="text-[11px] uppercase tracking-[0.25em] text-white/40 font-light">
             Scroll to explore
           </span>
-          {/* Animated line */}
-          <motion.div
-            className="w-px h-6 bg-gradient-to-b from-gold/40 to-transparent"
-            animate={{ scaleY: [0.5, 1, 0.5], opacity: [0.3, 0.6, 0.3] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ transformOrigin: 'top' }}
-          />
         </div>
       </div>
     </section>

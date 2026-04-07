@@ -5,10 +5,10 @@ import { motion, useInView } from 'framer-motion'
 import { AnimatedCounter } from '@/components/animated-counter'
 
 const stats = [
-  { value: 5000, suffix: '+', label: 'Projects Completed', decimals: 0 },
+  { value: 5000, suffix: '+', label: 'Products Delivered', decimals: 0 },
   { value: 200, suffix: '+', label: 'Happy Clients', decimals: 0 },
-  { value: 25, suffix: '+', label: 'Years Experience', decimals: 0 },
-  { value: 99.9, suffix: '%', label: 'Quality Rate', decimals: 1 },
+  { value: 25, suffix: '+', label: 'Years Trusted', decimals: 0 },
+  { value: 99.9, suffix: '%', label: 'Satisfaction Rate', decimals: 1 },
 ]
 
 export default function StatsSection() {
@@ -20,16 +20,6 @@ export default function StatsSection() {
       {/* Background */}
       <div className="absolute inset-0 bg-charcoal" />
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,150,62,0.08)_0%,transparent_70%)]" />
-
-      {/* Subtle grid pattern */}
-      <div
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage:
-            'linear-gradient(rgba(200,150,62,1) 1px, transparent 1px), linear-gradient(90deg, rgba(200,150,62,1) 1px, transparent 1px)',
-          backgroundSize: '60px 60px',
-        }}
-      />
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Gold line at top */}

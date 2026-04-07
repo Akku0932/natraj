@@ -16,23 +16,18 @@ import { LoadingScreen } from '@/components/loading-screen'
 import { ScrollProgress } from '@/components/scroll-progress'
 import { AnnouncementBanner } from '@/components/announcement-banner'
 import HeroSection from '@/components/sections/hero-section'
+import FeaturedProductsSection from '@/components/sections/featured-products-section'
 import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
-import CategoriesPreview from '@/components/sections/categories-preview'
 import CTASection from '@/components/sections/cta-section'
-import CatalogDownloadSection from '@/components/sections/catalog-section'
-import FeaturedMarquee from '@/components/sections/featured-marquee'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
 import TestimonialsSection from '@/components/sections/testimonials-section'
-import ClientsSection from '@/components/sections/clients-section'
-import WhyChooseSection from '@/components/sections/why-choose-section'
 import ProcessSection from '@/components/sections/process-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
 import CertificationsSection from '@/components/sections/certifications-section'
 import IndustryApplications from '@/components/sections/industry-applications'
-import PartnerLogosSection from '@/components/sections/partner-logos-section'
 import ServiceAreasSection from '@/components/sections/service-areas-section'
 import { CookieConsent } from '@/components/cookie-consent'
 import { QuickSearchModal } from '@/components/quick-search-modal'
@@ -72,35 +67,23 @@ export default function Home() {
               transition={pageTransition}
             >
               <HeroSection />
+              <FeaturedProductsSection />
               <SectionTransition variant="gold-line" />
               <FeaturesSection />
               <StatsSection />
-              <ClientsSection />
               <LazySection minHeight="500px">
                 <TestimonialsSection />
               </LazySection>
-              <LazySection minHeight="400px">
-                <WhyChooseSection />
-              </LazySection>
-              <SectionTransition variant="dots" />
               <ProcessSection />
-              <SectionTransition variant="gold-line" />
+              <SectionTransition variant="dots" />
               <LazySection minHeight="600px">
                 <IndustryApplications />
-              </LazySection>
-              <CategoriesPreview />
-              <CatalogDownloadSection />
-              <LazySection minHeight="350px">
-                <FeaturedMarquee />
               </LazySection>
               <CTASection />
               <LazySection minHeight="500px">
                 <FaqSection />
               </LazySection>
               <CertificationsSection />
-              <LazySection minHeight="600px">
-                <PartnerLogosSection />
-              </LazySection>
               <LazySection minHeight="500px">
                 <ServiceAreasSection />
               </LazySection>
@@ -240,10 +223,10 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">2. Products and Services</h3>
                       <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-                        Natraj Electricals manufactures and supplies a comprehensive range of electrical control panels and equipment, including but not limited to: three-phase panels, single-phase panels, automatic changeovers, busbar systems, temperature control panels, oil immersed starters, water level controllers, digital measuring instruments, power factor correction panels, air break starters, distribution boards, main switches, solar panels, and sequence timer panels.
+                        Natraj Electricals supplies and distributes a comprehensive range of electrical control panels and equipment, including but not limited to: three-phase panels, single-phase panels, automatic changeovers, busbar systems, temperature control panels, oil immersed starters, water level controllers, digital measuring instruments, power factor correction panels, air break starters, distribution boards, main switches, solar panels, and sequence timer panels.
                       </p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        All product specifications, images, and descriptions on this website are provided for informational purposes and do not constitute a binding offer. The Company reserves the right to modify product specifications, designs, or features without prior notice. Actual products may vary slightly from the representations shown herein due to ongoing improvements and manufacturing processes.
+                        All product specifications, images, and descriptions on this website are provided for informational purposes and do not constitute a binding offer. The Company reserves the right to update product listings and availability without prior notice. Actual products may vary slightly from the representations shown herein.
                       </p>
                     </motion.article>
 
@@ -261,7 +244,7 @@ export default function Home() {
                         All prices displayed on this website are in Indian Rupees (INR) and are exclusive of applicable Goods and Services Tax (GST) and other statutory levies, unless expressly stated otherwise. Prices are indicative and subject to change without prior notice based on raw material costs, market conditions, and other factors.
                       </p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        A formal quotation provided by the Company shall be binding for a period of 30 days from the date of issue, unless otherwise specified in writing. Payment terms shall be as mutually agreed upon at the time of order confirmation. The Company reserves the right to require advance payment for custom-manufactured or large-scale orders.
+                        A formal quotation provided by the Company shall be binding for a period of 30 days from the date of issue, unless otherwise specified in writing. Payment terms shall be as mutually agreed upon at the time of order confirmation. The Company reserves the right to require advance payment for large-scale or special orders.
                       </p>
                     </motion.article>
 
@@ -294,13 +277,13 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">5. Warranty</h3>
                       <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-                        All electrical panels and equipment manufactured by Natraj Electricals are warranted against manufacturing defects and faulty workmanship for a period of 12 months from the date of dispatch, subject to the following conditions:
+                        All electrical panels and equipment supplied by Natraj Electricals carry the original manufacturer&apos;s warranty against defects and faulty workmanship. Warranty periods vary by product and brand, and are communicated at the time of purchase, subject to the following conditions:
                       </p>
                       <ul className="ml-4 list-disc space-y-2 text-sm leading-relaxed text-muted-foreground">
-                        <li>The product has been installed, operated, and maintained in accordance with the intended purpose and operating conditions specified in the product documentation.</li>
+                        <li>The product has been installed, operated, and maintained in accordance with the manufacturer&apos;s guidelines and operating conditions specified in the product documentation.</li>
                         <li>The product has not been subject to unauthorized modification, repair, alteration, or misuse of any kind.</li>
                         <li>Any damage is not caused by negligence, accident, overloading, voltage fluctuations, natural calamity, or improper storage.</li>
-                        <li>The warranty covers only the replacement or repair of defective components at the Company&apos;s discretion and does not extend to consequential damages, installation costs, or labor charges.</li>
+                        <li>Warranty claims are processed through the original manufacturer or their authorized service center, with support from Natraj Electricals.</li>
                       </ul>
                     </motion.article>
 

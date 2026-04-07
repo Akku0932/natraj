@@ -1,105 +1,53 @@
 'use client'
 
-import { useRef, useState, useEffect, useCallback } from 'react'
+import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
-import { Award, Shield, Wrench, Settings, Truck, Headphones } from 'lucide-react'
+import { Award, Shield, PackageCheck, Truck, Headphones, Handshake } from 'lucide-react'
 
 const features = [
   {
-    icon: Award,
-    title: 'ISO 9001:2015 Certified',
-    stat: 'ISO Certified',
+    icon: PackageCheck,
+    title: 'Handpicked Products',
+    stat: '50+',
     description:
-      'Our commitment to quality is backed by international certification, ensuring every panel meets the highest industry standards.',
+      'Every product in our catalog is carefully selected from India\'s top brands — ensuring you get only the best quality electrical panels and components.',
   },
   {
     icon: Shield,
-    title: 'Premium Quality Materials',
+    title: 'Certified Quality',
     stat: '99.9%',
     description:
-      'We source only the finest components from trusted brands to build panels that last for decades with minimal maintenance.',
+      'We source only ISI-marked and certified products from trusted manufacturers. Quality is non-negotiable.',
   },
   {
-    icon: Wrench,
-    title: 'Expert Engineering',
+    icon: Handshake,
+    title: 'Trusted Partnerships',
     stat: '25+ Years',
     description:
-      'Our team of experienced engineers designs each panel with precision, optimizing for performance, safety, and efficiency.',
+      'Over two decades of trusted relationships with leading brands like Siemens, Schneider, ABB, Havells, and more.',
   },
   {
-    icon: Settings,
-    title: 'Custom Solutions',
-    stat: '100% Custom',
+    icon: Award,
+    title: 'Competitive Pricing',
+    stat: 'Best Value',
     description:
-      'Every project is unique. We specialize in designing and manufacturing panels tailored to your exact specifications.',
+      'As an authorized distributor, we offer the most competitive prices in the market — no middlemen, no inflated costs.',
   },
   {
     icon: Truck,
     title: 'Pan-India Delivery',
-    stat: '5000+ Delivered',
+    stat: '5000+',
     description:
-      'From Delhi to any corner of India, we ensure safe and timely delivery of your electrical panels with proper packaging.',
+      'From Delhi to any corner of India — safe, insured, and timely delivery with proper packaging and tracking.',
   },
   {
     icon: Headphones,
-    title: '24/7 Support',
+    title: 'Expert Support',
     stat: '24/7',
     description:
-      'Our dedicated support team is always ready to assist you with technical queries, installation guidance, and after-sales service.',
+      'Our knowledgeable team is always ready to help you choose the right products and provide technical guidance.',
   },
 ]
-
-function AnimatedStat({ value }: { value: string }) {
-  const ref = useRef<HTMLSpanElement>(null)
-  const isInView = useInView(ref, { once: true, margin: '-40px' })
-  const animatedRef = useRef(false)
-  const [displayValue, setDisplayValue] = useState(value)
-
-  const parseValue = useCallback((val: string) => {
-    const match = val.match(/^([\d.]+)(.*)$/)
-    if (!match) return { num: 0, suffix: val, hasNum: false }
-    return { num: parseFloat(match[1]), suffix: match[2], hasNum: true }
-  }, [])
-
-  useEffect(() => {
-    if (!isInView || animatedRef.current) return
-
-    const { num, suffix, hasNum } = parseValue(value)
-    if (!hasNum) return
-
-    animatedRef.current = true
-    const isDecimal = num % 1 !== 0
-    const duration = 1500
-    const startTime = performance.now()
-
-    function animate(currentTime: number) {
-      const elapsed = currentTime - startTime
-      const progress = Math.min(elapsed / duration, 1)
-      const eased = 1 - Math.pow(1 - progress, 3)
-      const currentNum = eased * num
-
-      if (isDecimal) {
-        setDisplayValue(currentNum.toFixed(1) + suffix)
-      } else {
-        setDisplayValue(Math.round(currentNum).toString() + suffix)
-      }
-
-      if (progress < 1) {
-        requestAnimationFrame(animate)
-      } else {
-        if (isDecimal) {
-          setDisplayValue(num.toFixed(1) + suffix)
-        } else {
-          setDisplayValue(Math.round(num).toString() + suffix)
-        }
-      }
-    }
-
-    requestAnimationFrame(animate)
-  }, [isInView, value, parseValue])
-
-  return <span ref={ref}>{displayValue}</span>
-}
 
 const containerVariants = {
   hidden: {},
@@ -153,10 +101,19 @@ export default function FeaturesSection() {
           >
             Why Choose <span className="gradient-text">Natraj</span>
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.15 }}
+            className="mx-auto mt-4 max-w-xl text-muted-foreground"
+          >
+            India&apos;s trusted electrical panel distributor — quality products, competitive prices, reliable delivery.
+          </motion.p>
           <div className="section-divider mx-auto mt-6 w-24" />
         </div>
 
-        {/* Feature Cards Grid - CLEAN, no excessive effects */}
+        {/* Feature Cards Grid */}
         <motion.div
           ref={ref}
           variants={containerVariants}
@@ -182,7 +139,7 @@ export default function FeaturesSection() {
                   {feature.title}
                 </h3>
                 <span className="mb-3 inline-block text-sm font-bold gradient-text">
-                  <AnimatedStat value={feature.stat} />
+                  {feature.stat}
                 </span>
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {feature.description}
