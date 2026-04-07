@@ -1,0 +1,358 @@
+'use client'
+
+import { useEffect, useState, useCallback } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Search, X, Eye, ArrowRight, SlidersHorizontal } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Badge } from '@/components/ui/badge'
+import { Skeleton } from '@/components/ui/skeleton'
+import { useStore } from '@/store/use-store'
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+  productCount: number
+}
+
+interface Product {
+  id: string
+  name: string
+  slug: string
+  description: string | null
+  specifications: string
+  price: number | null
+  images: string
+  category: {
+    name: string
+    slug: string
+  }
+}
+
+export default function ProductsSection() {
+  const [categories, setCategories] = useState<Category[]>([])
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [loadingProducts, setLoadingProducts] = useState(false)
+  const [searchQuery, setSearchQuery] = useState('')
+  const [searchInput, setSearchInput] = useState('')
+
+  const { selectedCategory, setSelectedCategory, selectedProduct, setSelectedProduct, setProductDetailOpen } = useStore()
+
+  // Fetch categories on mount
+  useEffect(() => {
+    async function fetchCategories() {
+      try {
+        const res = await fetch('/api/categories')
+        if (res.ok) {
+          const data = await res.json()
+          setCategories(data)
+        }
+      } catch (err) {
+        console.error('Failed to fetch categories:', err)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchCategories()
+  }, [])
+
+  // Fetch products when category or search changes
+  const fetchProducts = useCallback(async () => {
+    setLoadingProducts(true)
+    try {
+      const params = new URLSearchParams()
+      if (selectedCategory && selectedCategory !== 'all') {
+        params.set('category', selectedCategory)
+      }
+      if (searchQuery) {
+        params.set('search', searchQuery)
+      }
+      const res = await fetch(`/api/products?${params.toString()}`)
+      if (res.ok) {
+        const data = await res.json()
+        setProducts(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch products:', err)
+    } finally {
+      setLoadingProducts(false)
+    }
+  }, [selectedCategory, searchQuery])
+
+  useEffect(() => {
+    fetchProducts()
+  }, [fetchProducts])
+
+  const handleCategoryChange = (slug: string) => {
+    setSelectedCategory(slug === 'all' ? null : slug)
+  }
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    setSearchQuery(searchInput)
+  }
+
+  const clearSearch = () => {
+    setSearchInput('')
+    setSearchQuery('')
+  }
+
+  const handleViewDetails = (slug: string) => {
+    setSelectedProduct(slug)
+    setProductDetailOpen(true)
+  }
+
+  return (
+    <div className="min-h-screen">
+      {/* Page Header */}
+      <section className="relative overflow-hidden bg-charcoal py-20 md:py-28">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom,rgba(200,150,62,0.1)_0%,transparent_60%)]" />
+        <div className="relative z-10 mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
+          <motion.h1
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-4xl font-bold text-white sm:text-5xl md:text-6xl"
+          >
+            Our <span className="gradient-text">Products</span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.1 }}
+            className="mx-auto mt-4 max-w-2xl text-lg text-white/60"
+          >
+            Explore our comprehensive range of premium electrical control panels
+          </motion.p>
+        </div>
+      </section>
+
+      {/* Search & Filter Section */}
+      <section className="sticky top-0 z-30 border-b border-border/50 bg-background/80 backdrop-blur-xl">
+        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
+          {/* Search Bar */}
+          <form onSubmit={handleSearch} className="mb-4 flex gap-2">
+            <div className="relative flex-1">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search products..."
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+                className="pl-10 pr-10"
+              />
+              {searchInput && (
+                <button
+                  type="button"
+                  onClick={clearSearch}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              )}
+            </div>
+            <Button type="submit" variant="outline" className="border-gold/30 text-gold hover:bg-gold/10">
+              <Search className="mr-2 h-4 w-4" />
+              Search
+            </Button>
+          </form>
+
+          {/* Category Tabs */}
+          <div className="flex gap-2 overflow-x-auto pb-1 scrollbar-hide">
+            <Button
+              onClick={() => handleCategoryChange('all')}
+              variant={selectedCategory === null ? 'default' : 'outline'}
+              size="sm"
+              className={`shrink-0 ${
+                selectedCategory === null
+                  ? 'bg-gold text-white hover:bg-gold-dark'
+                  : 'border-border/50 hover:border-gold/30 hover:text-gold'
+              }`}
+            >
+              All Products
+            </Button>
+            {categories.map((cat) => (
+              <Button
+                key={cat.id}
+                onClick={() => handleCategoryChange(cat.slug)}
+                variant={selectedCategory === cat.slug ? 'default' : 'outline'}
+                size="sm"
+                className={`shrink-0 ${
+                  selectedCategory === cat.slug
+                    ? 'bg-gold text-white hover:bg-gold-dark'
+                    : 'border-border/50 hover:border-gold/30 hover:text-gold'
+                }`}
+              >
+                {cat.name}
+                <span className="ml-1.5 rounded-full bg-white/10 px-1.5 py-0.5 text-[10px]">
+                  {cat.productCount}
+                </span>
+              </Button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Products Grid */}
+      <section className="py-12 md:py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          {/* Results count */}
+          <div className="mb-8 flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              {loadingProducts ? (
+                'Loading products...'
+              ) : (
+                <>
+                  Showing <span className="font-medium text-foreground">{products.length}</span> products
+                  {searchQuery && (
+                    <>
+                      {' '}for &ldquo;<span className="text-gold">{searchQuery}</span>&rdquo;
+                    </>
+                  )}
+                  {selectedCategory && (
+                    <>
+                      {' '}in{' '}
+                      <span className="font-medium text-foreground">
+                        {categories.find((c) => c.slug === selectedCategory)?.name}
+                      </span>
+                    </>
+                  )}
+                </>
+              )}
+            </p>
+            {(searchQuery || selectedCategory) && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  clearSearch()
+                  setSelectedCategory(null)
+                }}
+                className="text-muted-foreground hover:text-foreground"
+              >
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Clear filters
+              </Button>
+            )}
+          </div>
+
+          {/* Loading skeleton */}
+          {loadingProducts ? (
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="overflow-hidden rounded-2xl border border-border/50">
+                  <Skeleton className="aspect-[4/3] w-full" />
+                  <div className="p-5 space-y-3">
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-5 w-3/4" />
+                    <Skeleton className="h-4 w-full" />
+                    <Skeleton className="h-9 w-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : products.length === 0 ? (
+            <div className="py-20 text-center">
+              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-muted">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-lg font-semibold text-foreground">No products found</h3>
+              <p className="mt-2 text-muted-foreground">
+                Try adjusting your search or filter criteria
+              </p>
+              <Button
+                onClick={() => {
+                  clearSearch()
+                  setSelectedCategory(null)
+                }}
+                variant="outline"
+                className="mt-4 border-gold/30 text-gold hover:bg-gold/10"
+              >
+                View All Products
+              </Button>
+            </div>
+          ) : (
+            <motion.div
+              layout
+              className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            >
+              <AnimatePresence mode="popLayout">
+                {products.map((product, index) => {
+                  const images = JSON.parse(product.images || '[]') as string[]
+                  const firstImage = images.length > 0 ? images[0] : null
+
+                  return (
+                    <motion.div
+                      key={product.id}
+                      layout
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.95 }}
+                      transition={{ duration: 0.4, delay: index * 0.05 }}
+                      className="product-card group overflow-hidden rounded-2xl border border-border/50 bg-card"
+                    >
+                      {/* Image */}
+                      <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
+                        {firstImage ? (
+                          <img
+                            src={firstImage}
+                            alt={product.name}
+                            className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
+                            loading="lazy"
+                          />
+                        ) : (
+                          <div className="flex h-full items-center justify-center">
+                            <div className="text-4xl text-muted-foreground/30">⚡</div>
+                          </div>
+                        )}
+                        {/* Category badge */}
+                        <div className="absolute left-3 top-3">
+                          <Badge className="bg-gold/90 text-white hover:bg-gold text-xs">
+                            {product.category.name}
+                          </Badge>
+                        </div>
+                      </div>
+
+                      {/* Content */}
+                      <div className="p-5">
+                        <h3 className="mb-2 line-clamp-1 font-semibold text-foreground transition-colors group-hover:text-gold">
+                          {product.name}
+                        </h3>
+                        <p className="mb-4 line-clamp-2 text-sm text-muted-foreground">
+                          {product.specifications}
+                        </p>
+
+                        {/* Price & CTA */}
+                        <div className="flex items-center justify-between">
+                          {product.price ? (
+                            <span className="text-lg font-bold text-gold">
+                              ₹{product.price.toLocaleString()}
+                            </span>
+                          ) : (
+                            <span className="text-sm text-muted-foreground">
+                              Contact for price
+                            </span>
+                          )}
+                          <Button
+                            onClick={() => handleViewDetails(product.slug)}
+                            size="sm"
+                            variant="outline"
+                            className="border-gold/30 text-gold hover:bg-gold hover:text-white"
+                          >
+                            <Eye className="mr-1.5 h-3.5 w-3.5" />
+                            Details
+                          </Button>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )
+                })}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </div>
+      </section>
+    </div>
+  )
+}
