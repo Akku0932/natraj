@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback, useMemo, useRef } from 'react'
+import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Search, X, Eye, ArrowRight, SlidersHorizontal, Star, GitCompare, ChevronRight, Trash2, Package, Heart, AlertCircle, RefreshCw, Zap } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -387,20 +388,21 @@ export default function ProductsSection() {
                     style={{ animationDelay: `${index * 0.05}s` }}
                   >
                     {/* Image */}
-                    <div className="relative aspect-[4/3] overflow-hidden bg-muted/30">
+                    <div className="relative aspect-[4/3] overflow-hidden bg-muted/30" data-product-img={product.id}>
                       {firstImage ? (
                         <>
-                          <img
+                          <Image
                             src={firstImage}
                             alt={product.name}
-                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                            fill
+                            className="object-cover transition-transform duration-500 group-hover:scale-105"
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
                             loading="lazy"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement
-                              target.style.display = 'none'
-                              const parent = target.parentElement
-                              if (parent) {
-                                const fallback = parent.querySelector('.image-fallback')
+                            onError={() => {
+                              const el = document.querySelector(`[data-product-img="${product.id}"]`)
+                              if (el) {
+                                el.style.display = 'none'
+                                const fallback = el.parentElement?.querySelector('.image-fallback')
                                 if (fallback) (fallback as HTMLElement).style.display = 'flex'
                               }
                             }}

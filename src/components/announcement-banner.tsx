@@ -81,6 +81,7 @@ export function AnnouncementBanner() {
                   <span
                     key={groupIdx}
                     className="inline-flex items-center gap-4 whitespace-nowrap"
+                    aria-hidden={groupIdx === 1 ? "true" : undefined}
                   >
                     {announcements.map((text, i) => (
                       <span key={`${groupIdx}-${i}`} className="inline-flex items-center">
