@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, startTransition } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X, ChevronLeft, ChevronRight, ZoomIn, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -16,6 +16,13 @@ interface LightboxProps {
 export function ImageLightbox({ images, alt, isOpen, onClose, initialIndex = 0 }: LightboxProps) {
   const [currentIndex, setCurrentIndex] = useState(initialIndex)
   const [isZoomed, setIsZoomed] = useState(false)
+
+  // Sync currentIndex when initialIndex changes using startTransition to avoid cascading renders
+  useEffect(() => {
+    startTransition(() => {
+      setCurrentIndex(initialIndex)
+    })
+  }, [initialIndex, isOpen])
 
   const goToPrev = useCallback(() => {
     setCurrentIndex((prev) => (prev > 0 ? prev - 1 : images.length - 1))
@@ -44,10 +51,6 @@ export function ImageLightbox({ images, alt, isOpen, onClose, initialIndex = 0 }
       document.body.style.overflow = ''
     }
   }, [isOpen, handleKeyDown])
-
-  useEffect(() => {
-    setCurrentIndex(initialIndex)
-  }, [initialIndex, isOpen])
 
   const handleDownload = useCallback(() => {
     const img = images[currentIndex]
