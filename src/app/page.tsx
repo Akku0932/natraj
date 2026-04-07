@@ -12,10 +12,12 @@ import { TermsModal } from '@/components/terms-modal'
 import { PrivacyModal } from '@/components/privacy-modal'
 import { ProductDetailModal } from '@/components/product-detail-modal'
 import { ProductComparisonModal } from '@/components/product-comparison-modal'
+import { EnquiryCartBar, EnquiryCartModal } from '@/components/enquiry-cart'
 import { LoadingScreen } from '@/components/loading-screen'
 import { ScrollProgress } from '@/components/scroll-progress'
 import { AnnouncementBanner } from '@/components/announcement-banner'
 import HeroSection from '@/components/sections/hero-section'
+import PromoBanner from '@/components/sections/promo-banner'
 import FeaturedProductsSection from '@/components/sections/featured-products-section'
 import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
@@ -32,6 +34,7 @@ import ServiceAreasSection from '@/components/sections/service-areas-section'
 import BlogSection from '@/components/sections/blog-section'
 import CategoriesShowcase from '@/components/sections/categories-showcase'
 import { CookieConsent } from '@/components/cookie-consent'
+import { LiveChatWidget } from '@/components/live-chat-widget'
 import { QuickSearchModal } from '@/components/quick-search-modal'
 import { RecentlyViewedSection } from '@/components/recently-viewed-section'
 import { SectionTransition } from '@/components/section-transition'
@@ -69,6 +72,7 @@ export default function Home() {
               transition={pageTransition}
             >
               <HeroSection />
+              <PromoBanner />
               <FeaturedProductsSection />
               <LazySection minHeight="600px">
                 <CategoriesShowcase />
@@ -803,12 +807,15 @@ export default function Home() {
       <Footer />
       <WhatsAppButton />
       <BackToTopButton />
+      <EnquiryCartBar />
       <TermsModal />
       <PrivacyModal />
       <ProductDetailModal />
       <ProductComparisonModal />
+      <EnquiryCartModal />
       <CookieConsent />
       <QuickSearchModal />
+      <LiveChatWidget />
     </>
   )
 }

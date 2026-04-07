@@ -36,6 +36,7 @@ import {
   Wrench,
   MessageSquare,
   Send,
+  ShoppingCart,
 } from 'lucide-react'
 import { useToast } from '@/hooks/use-toast'
 
@@ -66,6 +67,8 @@ export function ProductDetailModal() {
     selectedProduct,
     setCurrentPage,
     setSelectedCategory,
+    addToEnquiryCart,
+    isInEnquiryCart,
   } = useStore()
 
   const [product, setProduct] = useState<ProductData | null>(null)
@@ -286,6 +289,22 @@ export function ProductDetailModal() {
   }
 
   const { toast } = useToast()
+
+  // Add to enquiry cart handler
+  const handleAddToEnquiryCart = () => {
+    if (!product) return
+    const alreadyInCart = isInEnquiryCart(product.slug)
+    if (alreadyInCart) {
+      toast({ title: 'Already in quote list', description: `${product.name} is already in your enquiry cart.` })
+      return
+    }
+    addToEnquiryCart({
+      slug: product.slug,
+      name: product.name,
+      price: product.price,
+    })
+    toast({ title: 'Added to quote!', description: `${product.name} has been added to your enquiry cart.` })
+  }
 
   // WhatsApp enquiry link
   const whatsappLink = product
@@ -812,12 +831,20 @@ export function ProductDetailModal() {
                         Share
                       </Button>
                       <Button
+                        onClick={handleAddToEnquiryCart}
+                        variant="outline"
+                        className="flex-1 border-gold/30 text-gold hover:bg-gold/10"
+                      >
+                        <ShoppingCart className="mr-1.5 h-4 w-4" />
+                        Add to Quote
+                      </Button>
+                      <Button
                         asChild
                         className="flex-1 bg-gradient-to-r from-green-600 to-green-500 text-white border-0 shadow-lg shadow-green-600/20 hover:from-green-700 hover:to-green-600"
                       >
                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                           <MessageCircle className="mr-2 h-4 w-4" />
-                          Enquire on WhatsApp
+                          WhatsApp
                         </a>
                       </Button>
                     </div>

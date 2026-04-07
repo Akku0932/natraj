@@ -42,6 +42,18 @@ interface StoreState {
   wishlist: string[]
   toggleWishlist: (productId: string) => void
   isInWishlist: (productId: string) => boolean
+
+  // Enquiry Cart feature
+  enquiryCart: Array<{ slug: string; name: string; quantity: number; price: number | null }>
+  enquiryCartOpen: boolean
+  setEnquiryCartOpen: (open: boolean) => void
+  addToEnquiryCart: (product: { slug: string; name: string; price: number | null }) => void
+  removeFromEnquiryCart: (slug: string) => void
+  updateEnquiryQuantity: (slug: string, quantity: number) => void
+  clearEnquiryCart: () => void
+  getEnquiryCartTotal: () => number
+  getEnquiryCartCount: () => number
+  isInEnquiryCart: (slug: string) => boolean
 }
 
 export const useStore = create<StoreState>((set) => ({
@@ -109,5 +121,46 @@ export const useStore = create<StoreState>((set) => ({
   isInWishlist: (productId) => {
     const state = useStore.getState()
     return state.wishlist.includes(productId)
+  },
+
+  // Enquiry Cart feature
+  enquiryCart: [],
+  enquiryCartOpen: false,
+  setEnquiryCartOpen: (open) => set({ enquiryCartOpen: open }),
+  addToEnquiryCart: (product) =>
+    set((state) => {
+      if (state.enquiryCart.some((item) => item.slug === product.slug)) return state
+      return { enquiryCart: [...state.enquiryCart, { ...product, quantity: 1 }] }
+    }),
+  removeFromEnquiryCart: (slug) =>
+    set((state) => ({
+      enquiryCart: state.enquiryCart.filter((item) => item.slug !== slug),
+    })),
+  updateEnquiryQuantity: (slug, quantity) =>
+    set((state) => {
+      if (quantity <= 0) {
+        return { enquiryCart: state.enquiryCart.filter((item) => item.slug !== slug) }
+      }
+      return {
+        enquiryCart: state.enquiryCart.map((item) =>
+          item.slug === slug ? { ...item, quantity } : item
+        ),
+      }
+    }),
+  clearEnquiryCart: () => set({ enquiryCart: [], enquiryCartOpen: false }),
+  getEnquiryCartTotal: () => {
+    const state = useStore.getState()
+    return state.enquiryCart.reduce(
+      (total, item) => (item.price !== null ? total + item.price * item.quantity : total),
+      0
+    )
+  },
+  getEnquiryCartCount: () => {
+    const state = useStore.getState()
+    return state.enquiryCart.reduce((count, item) => count + item.quantity, 0)
+  },
+  isInEnquiryCart: (slug) => {
+    const state = useStore.getState()
+    return state.enquiryCart.some((item) => item.slug === slug)
   },
 }))
