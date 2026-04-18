@@ -18,25 +18,17 @@ import { ScrollProgress } from '@/components/scroll-progress'
 import { AnnouncementBanner } from '@/components/announcement-banner'
 import HeroSection from '@/components/sections/hero-section'
 import PromoBanner from '@/components/sections/promo-banner'
-import FeaturedProductsSection from '@/components/sections/featured-products-section'
 import FeaturesSection from '@/components/sections/features-section'
 import StatsSection from '@/components/sections/stats-section'
 import CTASection from '@/components/sections/cta-section'
 import AboutSection from '@/components/sections/about-section'
 import ProductsSection from '@/components/sections/products-section'
-import TestimonialsSection from '@/components/sections/testimonials-section'
-import CustomerReviewsSection from '@/components/sections/customer-reviews-section'
 import ProcessSection from '@/components/sections/process-section'
 import ContactSection from '@/components/sections/contact-section'
 import FaqSection from '@/components/sections/faq-section'
-import CertificationsSection from '@/components/sections/certifications-section'
 import IndustryApplications from '@/components/sections/industry-applications'
-import ServiceAreasSection from '@/components/sections/service-areas-section'
 import WarrantySupportSection from '@/components/sections/warranty-support-section'
-import TechPartnersSection from '@/components/sections/tech-partners-section'
-import BlogSection from '@/components/sections/blog-section'
 import CategoriesShowcase from '@/components/sections/categories-showcase'
-import ProductCategoriesSection from '@/components/sections/product-categories-section'
 import { CookieConsent } from '@/components/cookie-consent'
 import { QuickSearchModal } from '@/components/quick-search-modal'
 import { RecentlyViewedSection } from '@/components/recently-viewed-section'
@@ -76,22 +68,12 @@ export default function Home() {
             >
               <HeroSection />
               <PromoBanner />
-              <FeaturedProductsSection />
               <LazySection minHeight="600px">
                 <CategoriesShowcase />
-              </LazySection>
-              <LazySection minHeight="500px">
-                <ProductCategoriesSection />
               </LazySection>
               <SectionTransition variant="gold-line" />
               <FeaturesSection />
               <StatsSection />
-              <LazySection minHeight="500px">
-                <TestimonialsSection />
-              </LazySection>
-              <LazySection minHeight="500px">
-                <CustomerReviewsSection />
-              </LazySection>
               <ProcessSection />
               <SectionTransition variant="dots" />
               <LazySection minHeight="600px">
@@ -101,19 +83,8 @@ export default function Home() {
               <LazySection minHeight="500px">
                 <FaqSection />
               </LazySection>
-              <CertificationsSection />
               <LazySection minHeight="500px">
                 <WarrantySupportSection />
-              </LazySection>
-              <LazySection minHeight="500px">
-                <ServiceAreasSection />
-              </LazySection>
-              <LazySection minHeight="500px">
-                <TechPartnersSection />
-              </LazySection>
-              <SectionTransition variant="gold-line" />
-              <LazySection minHeight="500px">
-                <BlogSection />
               </LazySection>
             </motion.div>
           )}

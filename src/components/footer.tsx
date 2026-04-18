@@ -77,6 +77,7 @@ export function Footer() {
   const [quotePhone, setQuotePhone] = useState('')
   const [isQuoteSubmitting, setIsQuoteSubmitting] = useState(false)
   const [quoteSuccess, setQuoteSuccess] = useState(false)
+  const [logoError, setLogoError] = useState(false)
 
   const handleQuickLink = (page: PageView) => {
     setCurrentPage(page)
@@ -282,13 +283,18 @@ export function Footer() {
           {/* Column 1: Company Info — spans full on tablet, 4 cols on desktop */}
           <div className="space-y-5 sm:col-span-2 lg:col-span-4">
             <div className="flex items-center gap-2">
-              <Image
-                src="/images/logo.PNG"
-                alt="Natraj Electricals logo"
-                width={140}
-                height={40}
-                className="h-9 w-auto object-contain dark:brightness-0 dark:invert"
-              />
+              {logoError ? (
+                <span className="gradient-text text-lg font-bold tracking-tight">NATRAJ</span>
+              ) : (
+                <Image
+                  src="/images/logo.PNG"
+                  alt="Natraj Electricals logo"
+                  width={140}
+                  height={40}
+                  className="h-9 w-auto object-contain dark:brightness-0 dark:invert"
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </div>
 
             <div className="inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/[0.07] px-3 py-2 backdrop-blur-sm">

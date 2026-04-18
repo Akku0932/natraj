@@ -41,6 +41,7 @@ export function QuickSearchModal() {
   const [categoriesLoading, setCategoriesLoading] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
   const [isMac, setIsMac] = useState(false)
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
   const inputRef = useRef<HTMLInputElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -337,14 +338,18 @@ export function QuickSearchModal() {
                       >
                         {/* Thumbnail */}
                         <div className="relative flex size-10 shrink-0 items-center justify-center overflow-hidden rounded-lg bg-muted/80">
-                          {product.images && product.images.length > 0 ? (
+                          {product.images && product.images.length > 0 && !imageErrors.has(product.slug) ? (
                             <img
                               src={product.images[0]}
                               alt={product.name}
                               className="size-full object-cover"
+                              loading="lazy"
+                              onError={() => setImageErrors((prev) => new Set(prev).add(product.slug))}
                             />
                           ) : (
-                            <ImageIcon className="size-4 text-muted-foreground/40" />
+                            <div className="flex items-center justify-center text-[10px] font-medium text-muted-foreground/50">
+                              <ImageIcon className="size-4 text-muted-foreground/40" />
+                            </div>
                           )}
                         </div>
 

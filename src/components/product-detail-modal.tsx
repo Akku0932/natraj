@@ -76,6 +76,7 @@ export function ProductDetailModal() {
   const [error, setError] = useState<string | null>(null)
   const [currentImageIndex, setCurrentImageIndex] = useState(0)
   const [quantity, setQuantity] = useState(1)
+  const [imageErrors, setImageErrors] = useState<Set<number>>(new Set())
 
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -152,6 +153,7 @@ export function ProductDetailModal() {
             setError(null)
             setCurrentImageIndex(0)
             setQuantity(1)
+            setImageErrors(new Set())
             setEnquiryName('')
             setEnquiryPhone('')
             setEnquiryMessage('')
@@ -489,15 +491,28 @@ export function ProductDetailModal() {
                               transition={{ duration: 0.2 }}
                               className="absolute inset-0"
                             >
-                              <Image
-                                src={images[currentImageIndex]}
-                                alt={`${product.name} - Image ${currentImageIndex + 1}`}
-                                fill
-                                className="object-cover"
-                                sizes="(max-width: 640px) 100vw, 50vw"
-                                priority
-                              />
-                            </motion.div>
+                              {imageErrors.has(currentImageIndex) ? (
+                                <div className="absolute inset-0 flex items-center justify-center bg-muted">
+                                  <div className="flex flex-col items-center gap-2 text-muted-foreground">
+                                    <Package className="h-10 w-10" />
+                                    <span className="text-xs">Image not available</span>
+                                  </div>
+                                </div>
+                              ) : (
+                                <Image
+                                  src={images[currentImageIndex]}
+                                  alt={`${product.name} - Image ${currentImageIndex + 1}`}
+                                  fill
+                                  className="object-cover"
+                                  sizes="(max-width: 640px) 100vw, 50vw"
+                                  priority
+                                  onError={() => {
+                                    setImageErrors(prev => new Set(prev).add(currentImageIndex))
+                                  }}
+                                />
+                              )
+                            }
+                          </motion.div>
                           </AnimatePresence>
 
                           {/* Zoom button */}
@@ -572,13 +587,24 @@ export function ProductDetailModal() {
                                 : 'border-transparent opacity-50 hover:opacity-80 hover:border-gold/30'
                             }`}
                           >
-                            <Image
-                              src={img}
-                              alt={`Thumbnail ${idx + 1}`}
-                              fill
-                              className="object-cover"
-                              sizes="64px"
-                            />
+                            {imageErrors.has(idx) ? (
+                              <div className="absolute inset-0 flex items-center justify-center bg-muted rounded-md">
+                                <Package className="h-5 w-5 text-muted-foreground/50" />
+                              </div>
+                            ) : (
+                              <Image
+                                src={img}
+                                alt={`Thumbnail ${idx + 1}`}
+                                fill
+                                className="object-cover"
+                                sizes="64px"
+                                loading="lazy"
+                                onError={() => {
+                                  setImageErrors(prev => new Set(prev).add(idx))
+                                }}
+                              />
+                              )
+                            }
                             {/* Image count indicator badge */}
                             {images.length > 2 && idx === images.length - 1 && (
                               <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-gold px-1 text-[9px] font-bold text-white leading-none">
@@ -942,17 +968,28 @@ export function ProductDetailModal() {
                 }
               }}
             >
-              <img
-                src={images[currentImageIndex]}
-                alt={`${product?.name || 'Product'} - Image ${currentImageIndex + 1}`}
-                className={`max-h-full max-w-full object-contain transition-transform duration-200 ${
-                  lightboxScrollZoom > 1.05 ? 'cursor-zoom-out' : 'cursor-zoom-in'
-                }`}
-                style={{
-                  transform: `scale(${lightboxScrollZoom})`,
-                }}
-                draggable={false}
-              />
+              {imageErrors.has(currentImageIndex) ? (
+                <div className="flex flex-col items-center gap-3 text-white/60">
+                  <Package className="h-16 w-16" />
+                  <span className="text-sm">Image not available</span>
+                </div>
+              ) : (
+                <img
+                  src={images[currentImageIndex]}
+                  alt={`${product?.name || 'Product'} - Image ${currentImageIndex + 1}`}
+                  className={`max-h-full max-w-full object-contain transition-transform duration-200 ${
+                    lightboxScrollZoom > 1.05 ? 'cursor-zoom-out' : 'cursor-zoom-in'
+                  }`}
+                  style={{
+                    transform: `scale(${lightboxScrollZoom})`,
+                  }}
+                  draggable={false}
+                  onError={() => {
+                    setImageErrors(prev => new Set(prev).add(currentImageIndex))
+                  }}
+                />
+              )
+            }
             </motion.div>
 
             {/* Zoom controls */}

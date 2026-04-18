@@ -119,6 +119,7 @@ export function Navbar() {
   const { theme, setTheme, resolvedTheme, systemTheme } = useTheme()
   const { toast } = useToast()
   const [copiedPhone, setCopiedPhone] = useState(false)
+  const [logoError, setLogoError] = useState(false)
 
   // Theme cycling: system -> light -> dark -> system
   const cycleTheme = useCallback(() => {
@@ -243,16 +244,21 @@ export function Navbar() {
               onClick={() => handleNavClick('home')}
               className="ripple flex items-center gap-2 group"
             >
-              <Image
-                src="/images/logo.PNG"
-                alt="Natraj Electricals"
-                width={140}
-                height={40}
-                className={`h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 ${
-                  scrolled ? 'drop-shadow-[0_1px_4px_rgba(200,150,62,0.2)]' : ''
-                } group-hover:drop-shadow-[0_0_12px_rgba(200,150,62,0.5)] group-hover:brightness-[1.05] group-hover:saturate-[1.2]`}
-                priority
-              />
+              {logoError ? (
+                <span className="gradient-text text-lg font-bold tracking-tight md:text-xl">NATRAJ</span>
+              ) : (
+                <Image
+                  src="/images/logo.PNG"
+                  alt="Natraj Electricals"
+                  width={140}
+                  height={40}
+                  className={`h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 ${
+                    scrolled ? 'drop-shadow-[0_1px_4px_rgba(200,150,62,0.2)]' : ''
+                  } group-hover:drop-shadow-[0_0_12px_rgba(200,150,62,0.5)] group-hover:brightness-[1.05] group-hover:saturate-[1.2]`}
+                  priority
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </button>
 
             {/* Desktop Nav Links */}
@@ -579,13 +585,18 @@ export function Navbar() {
         >
           <SheetHeader className="pt-8 pb-4">
             <SheetTitle className="flex items-center gap-2">
-              <Image
-                src="/images/logo.PNG"
-                alt="Natraj Electricals"
-                width={120}
-                height={36}
-                className="h-8 w-auto object-contain"
-              />
+              {logoError ? (
+                <span className="gradient-text text-lg font-bold tracking-tight">NATRAJ</span>
+              ) : (
+                <Image
+                  src="/images/logo.PNG"
+                  alt="Natraj Electricals"
+                  width={120}
+                  height={36}
+                  className="h-8 w-auto object-contain"
+                  onError={() => setLogoError(true)}
+                />
+              )}
             </SheetTitle>
           </SheetHeader>
 

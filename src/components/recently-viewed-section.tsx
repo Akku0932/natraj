@@ -21,6 +21,7 @@ export function RecentlyViewedSection() {
   const { currentPage, setSelectedProduct, setProductDetailOpen } = useStore()
   const [products, setProducts] = useState<ProductPreview[]>([])
   const [isCleared, setIsCleared] = useState(false)
+  const [imageErrors, setImageErrors] = useState<Set<string>>(new Set())
 
   // Fetch product data for recently viewed slugs
   useEffect(() => {
@@ -166,13 +167,15 @@ export function RecentlyViewedSection() {
             >
               {/* Thumbnail */}
               <div className="relative h-[120px] w-full overflow-hidden bg-muted/30">
-                {product.images.length > 0 ? (
+                {product.images.length > 0 && !imageErrors.has(product.slug) ? (
                   <Image
                     src={product.images[0]}
                     alt={product.name}
                     fill
                     className="object-cover transition-transform duration-300 group-hover:scale-110"
                     sizes="200px"
+                    loading="lazy"
+                    onError={() => setImageErrors((prev) => new Set(prev).add(product.slug))}
                   />
                 ) : (
                   <div className="flex h-full w-full items-center justify-center">
