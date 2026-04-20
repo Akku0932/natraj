@@ -34,14 +34,14 @@ const categories = [
   { name: 'Oil Immersed Starters', slug: 'oil-immersed-starters', icon: Droplets, description: 'Oil-cooled starters for high-power motor applications and heavy loads.', count: 4 },
   { name: 'Busbar', slug: 'busbar', icon: Network, description: 'Efficient power distribution systems for industrial and commercial setups.', count: 3 },
   { name: 'Air Break Starters & Switches', slug: 'air-break-starters-switches', icon: Wind, description: 'Air circuit breakers for reliable short-circuit and overload protection.', count: 4 },
-  { name: 'Main Switches & Changeovers', slug: 'main-switches-changeovers', icon: ToggleLeft, description: 'Isolator switches for safe electrical isolation during maintenance.', count: 4 },
-  { name: 'A.C. Box & Socket Type Distribution Panels', slug: 'ac-box-socket-type-distribution-panels', icon: LayoutGrid, description: 'Organized power distribution boards for multi-circuit management.', count: 3 },
+  { name: 'Main Switches & Changeovers', slug: 'main-switches-changecovers', icon: ToggleLeft, description: 'Isolator switches for safe electrical isolation during maintenance.', count: 4 },
+  { name: 'A.C. Box & Socket Type Distribution Panels', slug: 'ac-box-socket-distribution-panels', icon: LayoutGrid, description: 'Organized power distribution boards for multi-circuit management.', count: 3 },
   { name: 'Automatic Water Level Controllers', slug: 'automatic-water-level-controllers', icon: Waves, description: 'Automatic water level controllers for tanks and overhead storage.', count: 2 },
-  { name: 'Digital Measuring Instruments', slug: 'digital-measuring-instruments', icon: BarChart3, description: 'Digital instruments for accurate voltage, current, and power measurement.', count: 4 },
-  { name: 'Power Factor Correction Panels', slug: 'power-factor-correction-panels', icon: Activity, description: 'Capacitor banks and APFC panels for power factor improvement.', count: 3 },
+  { name: 'Digital Measuring Instruments', slug: 'digital-measuring-instruments-ac-drives', icon: BarChart3, description: 'Digital instruments for accurate voltage, current, and power measurement.', count: 4 },
+  { name: 'Power Factor Correction Panels', slug: 'automatic-power-factor-control-panel', icon: Activity, description: 'Capacitor banks and APFC panels for power factor improvement.', count: 3 },
   { name: 'Solar Panels', slug: 'solar-panels', icon: Sun, description: 'Solar power panels and inverters for renewable energy solutions.', count: 3 },
-  { name: 'VFD & Soft Starters', slug: 'vfd-soft-starters', icon: Cpu, description: 'Variable frequency drives for energy-efficient motor speed control.', count: 4 },
-  { name: 'Synchronizing Panels', slug: 'synchronizing-panels', icon: Radio, description: 'Panels for synchronizing multiple power sources seamlessly.', count: 2 },
+  { name: 'VFD & Soft Starters', slug: 'digital-measuring-instruments-ac-drives', icon: Cpu, description: 'Variable frequency drives for energy-efficient motor speed control.', count: 4 },
+  { name: 'Synchronizing Panels', slug: 'automatic-mains-failure', icon: Radio, description: 'Panels for synchronizing multiple power sources seamlessly.', count: 2 },
 ]
 
 const containerVariants = {
@@ -126,7 +126,16 @@ export default function CategoriesShowcase() {
               <motion.div
                 key={cat.slug}
                 variants={cardVariants}
-                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-5 transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10 card-shine"
+                className="group relative overflow-hidden rounded-2xl border border-white/[0.08] bg-white/[0.04] p-5 transition-all duration-500 hover:-translate-y-1 hover:border-gold/30 hover:shadow-lg hover:shadow-gold/10 card-shine cursor-pointer"
+                role="button"
+                tabIndex={0}
+                onClick={() => handleExplore(cat.slug)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault()
+                    handleExplore(cat.slug)
+                  }
+                }}
               >
                 <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-gold/0 via-gold/0 to-gold/0 transition-all duration-500 group-hover:from-gold/10 group-hover:via-transparent group-hover:to-copper/10" />
 

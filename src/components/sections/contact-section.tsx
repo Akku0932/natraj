@@ -12,7 +12,6 @@ import {
  AlertCircle,
   Clock3,
   MessageCircle,
-  ExternalLink,
   Check,
   ChevronRight,
   Headphones,
@@ -24,7 +23,6 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import {
   Select,
   SelectContent,
@@ -117,7 +115,6 @@ export default function ContactSection() {
     subject: '',
     message: '',
     subjectCategory: '',
-    preferredContact: 'email',
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -180,47 +177,7 @@ Message: ${formData.message.trim()}`
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!validate()) return
-
-    setCurrentStep(3)
-    setShowHint(false)
-    setIsSubmitting(true)
-    try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          ...formData,
-          subject: formData.subjectCategory
-            ? `[${formData.subjectCategory}] ${formData.subject}`
-            : formData.subject,
-        }),
-      })
-
-      if (res.ok) {
-        setSubmitSuccess(true)
-        toast({
-          title: 'Message sent!',
-          description: 'We\'ll get back to you within 24 hours.',
-        })
-        setFormData({ name: '', email: '', phone: '', subject: '', message: '', subjectCategory: '', preferredContact: 'email' })
-        setTimeout(() => setSubmitSuccess(false), 5000)
-      } else {
-        const data = await res.json()
-        toast({
-          title: 'Failed to send',
-          description: data.error || 'Something went wrong. Please try again.',
-          variant: 'destructive',
-        })
-      }
-    } catch {
-      toast({
-        title: 'Error',
-        description: 'Failed to connect. Please check your internet connection.',
-        variant: 'destructive',
-      })
-    } finally {
-      setIsSubmitting(false)
-    }
+    handleWhatsAppSubmit()
   }
 
   const handleChange = (
@@ -235,10 +192,6 @@ Message: ${formData.message.trim()}`
 
   const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({ ...prev, [name]: value }))
-  }
-
-  const handleRadioChange = (value: string) => {
-    setFormData((prev) => ({ ...prev, preferredContact: value }))
   }
 
   // Auto-advance step logic
@@ -671,53 +624,6 @@ Message: ${formData.message.trim()}`
                       />
                     </div>
 
-                    {/* Preferred Contact Method */}
-                    <div className="space-y-3">
-                      <Label>Preferred Contact Method</Label>
-                      <RadioGroup
-                        value={formData.preferredContact}
-                        onValueChange={handleRadioChange}
-                        className="grid grid-cols-3 gap-3"
-                      >
-                        <label
-                          htmlFor="contact-email"
-                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
-                            formData.preferredContact === 'email'
-                              ? 'border-gold/40 bg-gold/5 text-gold'
-                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
-                          }`}
-                        >
-                          <RadioGroupItem value="email" id="contact-email" />
-                          <Mail className="h-4 w-4" />
-                          <span className="text-xs font-medium">Email</span>
-                        </label>
-                        <label
-                          htmlFor="contact-phone"
-                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
-                            formData.preferredContact === 'phone'
-                              ? 'border-gold/40 bg-gold/5 text-gold'
-                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
-                          }`}
-                        >
-                          <RadioGroupItem value="phone" id="contact-phone" />
-                          <Phone className="h-4 w-4" />
-                          <span className="text-xs font-medium">Phone</span>
-                        </label>
-                        <label
-                          htmlFor="contact-whatsapp"
-                          className={`flex cursor-pointer items-center gap-2.5 rounded-lg border p-3 transition-all ${
-                            formData.preferredContact === 'whatsapp'
-                              ? 'border-gold/40 bg-gold/5 text-gold'
-                              : 'border-border/50 text-muted-foreground hover:border-gold/20'
-                          }`}
-                        >
-                          <RadioGroupItem value="whatsapp" id="contact-whatsapp" />
-                          <MessageCircle className="h-4 w-4" />
-                          <span className="text-xs font-medium">WhatsApp</span>
-                        </label>
-                      </RadioGroup>
-                    </div>
-
                     {/* Message */}
                     <div className="space-y-2">
                       <Label htmlFor="message">
@@ -740,29 +646,11 @@ Message: ${formData.message.trim()}`
                       )}
                     </div>
 
-                    {/* Submit Buttons */}
+                    {/* WhatsApp-only Submit */}
                     <div className="flex flex-col gap-3 sm:flex-row">
                       <Button
                         type="submit"
                         disabled={isSubmitting}
-                        className="flex-1 bg-gold text-white hover:bg-gold-dark"
-                        size="lg"
-                      >
-                        {isSubmitting ? (
-                          <span className="flex items-center gap-2">
-                            <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                            Sending...
-                          </span>
-                        ) : (
-                          <span className="flex items-center gap-2">
-                            <Send className="h-4 w-4" />
-                            Send Message
-                          </span>
-                        )}
-                      </Button>
-                      <Button
-                        type="button"
-                        onClick={handleWhatsAppSubmit}
                         className="flex-1 bg-green-600 text-white hover:bg-green-700"
                         size="lg"
                       >
@@ -916,17 +804,11 @@ Message: ${formData.message.trim()}`
               />
             </div>
 
-            {/* View on Google Maps link */}
             <div className="mt-3 text-center">
-              <a
-                href="https://www.google.com/maps/place/Bhagirath+Place,+Delhi,+110006"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-gold"
-              >
-                <ExternalLink className="h-3.5 w-3.5" />
-                View on Google Maps
-              </a>
+              <div className="inline-flex items-center gap-2 rounded-full border border-gold/30 bg-gold/5 px-4 py-2 text-sm text-foreground">
+                <MapPin className="h-4 w-4 text-gold" />
+                1547/3, Jai Hind Building, Bhagirath Place, Delhi-6
+              </div>
             </div>
           </motion.div>
         </div>

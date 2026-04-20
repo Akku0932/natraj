@@ -15,7 +15,6 @@ import { ProductComparisonModal } from '@/components/product-comparison-modal'
 import { EnquiryCartBar, EnquiryCartModal } from '@/components/enquiry-cart'
 import { LoadingScreen } from '@/components/loading-screen'
 import { ScrollProgress } from '@/components/scroll-progress'
-import { AnnouncementBanner } from '@/components/announcement-banner'
 import HeroSection from '@/components/sections/hero-section'
 import PromoBanner from '@/components/sections/promo-banner'
 import FeaturesSection from '@/components/sections/features-section'
@@ -53,7 +52,6 @@ export default function Home() {
     <>
       <LoadingScreen />
       <ScrollProgress />
-      <AnnouncementBanner />
       <Navbar />
       <main className="min-h-screen">
         <AnimatePresence mode="wait">

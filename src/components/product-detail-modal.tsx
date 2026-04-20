@@ -410,7 +410,7 @@ export function ProductDetailModal() {
   return (
     <>
       <Dialog open={productDetailOpen} onOpenChange={setProductDetailOpen}>
-        <DialogContent className="sm:max-w-4xl lg:max-w-5xl max-h-[92vh] overflow-hidden flex flex-col p-0">
+        <DialogContent className="w-[95vw] max-w-[95vw] sm:max-w-4xl lg:max-w-5xl max-h-[92vh] overflow-hidden flex flex-col p-0">
           {/* Loading State */}
           {loading && (
             <div className="p-6 space-y-6">
@@ -471,10 +471,10 @@ export function ProductDetailModal() {
                 </DialogDescription>
               </DialogHeader>
 
-              <ScrollArea className="flex-1 px-6 pb-6">
-                <div className="flex flex-col gap-6 pt-4 sm:flex-row">
+              <ScrollArea className="flex-1 px-4 pb-4 sm:px-6 sm:pb-6">
+                <div className="flex flex-col gap-6 pt-4 md:flex-row">
                   {/* Image Section */}
-                  <div className="relative w-full sm:w-1/2 shrink-0">
+                  <div className="relative w-full md:w-1/2 shrink-0">
                     {images.length > 0 ? (
                       <>
                         {/* Main Image */}
@@ -839,11 +839,11 @@ export function ProductDetailModal() {
                     </div>
 
                     {/* Action buttons */}
-                    <div className="flex gap-3 pt-2">
+                    <div className="grid grid-cols-1 gap-2 pt-2 sm:grid-cols-2 lg:grid-cols-4">
                       <Button
                         onClick={() => setProductDetailOpen(false)}
                         variant="outline"
-                        className="flex-1 border-border/50 text-foreground hover:bg-muted"
+                        className="border-border/50 text-foreground hover:bg-muted"
                       >
                         Close
                       </Button>
@@ -859,14 +859,14 @@ export function ProductDetailModal() {
                       <Button
                         onClick={handleAddToEnquiryCart}
                         variant="outline"
-                        className="flex-1 border-gold/30 text-gold hover:bg-gold/10"
+                        className="border-gold/30 text-gold hover:bg-gold/10"
                       >
                         <ShoppingCart className="mr-1.5 h-4 w-4" />
                         Add to Quote
                       </Button>
                       <Button
                         asChild
-                        className="flex-1 bg-gradient-to-r from-green-600 to-green-500 text-white border-0 shadow-lg shadow-green-600/20 hover:from-green-700 hover:to-green-600"
+                        className="bg-gradient-to-r from-green-600 to-green-500 text-white border-0 shadow-lg shadow-green-600/20 hover:from-green-700 hover:to-green-600"
                       >
                         <a href={whatsappLink} target="_blank" rel="noopener noreferrer">
                           <MessageCircle className="mr-2 h-4 w-4" />
