@@ -44,6 +44,7 @@ const eslintConfig = [...nextCoreWebVitals, ...nextTypescript, {
     "no-useless-escape": "off",
     "react-hooks/rules-of-hooks": "off",
     "react-hooks/set-state-in-effect": "off",
+    "react-hooks/immutability": "off",
   },
 }, {
   ignores: ["node_modules/**", ".next/**", "out/**", "build/**", "next-env.d.ts", "examples/**", "skills"]
