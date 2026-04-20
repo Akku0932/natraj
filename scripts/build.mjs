@@ -1,14 +1,7 @@
 import { spawnSync, execSync } from 'child_process';
-import { existsSync, renameSync } from 'fs';
+import { existsSync } from 'fs';
 
 console.log('=== CUSTOM BUILD SCRIPT START ===');
-
-// Temporarily hide eslint config so Next.js skips linting
-const eslintConfigExists = existsSync('eslint.config.mjs');
-if (eslintConfigExists) {
-  console.log('Temporarily hiding eslint.config.mjs...');
-  renameSync('eslint.config.mjs', 'eslint.config.mjs.bak');
-}
 
 // Run next build
 const result = spawnSync('npx', ['next', 'build'], {
@@ -17,20 +10,68 @@ const result = spawnSync('npx', ['next', 'build'], {
   env: { ...process.env }
 });
 
-// Restore eslint config
-if (existsSync('eslint.config.mjs.bak')) {
-  renameSync('eslint.config.mjs.bak', 'eslint.config.mjs');
-}
-
 console.log('=== next build exit code:', result.status, '===');
 
-// Check build output
-const routesManifest = existsSync('.next/routes-manifest.json');
-const buildManifest = existsSync('.next/build-manifest.json');
-console.log('routes-manifest.json exists:', routesManifest);
-console.log('build-manifest.json exists:', buildManifest);
+// Exhaustive diagnostics
+const dirs = [
+  '.next',
+  '.next/diagnostics',
+  '.next/server',
+  '.next/server/app',
+  '.next/server/app/api',
+  '.next/build',
+  '.next/cache',
+];
 
-if (result.status !== 0) {
-  console.error('Build failed with exit code', result.status);
-  process.exit(1);
+for (const dir of dirs) {
+  if (existsSync(dir)) {
+    try {
+      const out = execSync(`ls -laR ${dir} 2>&1`, { encoding: 'utf-8' });
+      console.log(`=== ${dir} ===`);
+      console.log(out.slice(0, 3000));
+    } catch (e) {
+      console.log(`=== ${dir} (error listing) ===`);
+    }
+  }
 }
+
+// Check for any log files
+try {
+  const logSearch = execSync('find .next -name "*.log" -o -name "*.txt" -o -name "diagnostics*" 2>/dev/null | head -20', { encoding: 'utf-8' });
+  console.log('=== Log files found ===');
+  console.log(logSearch);
+  
+  // Read each log file
+  for (const logFile of logSearch.trim().split('\n').filter(Boolean)) {
+    try {
+      const content = execSync(`cat "${logFile}" 2>&1`, { encoding: 'utf-8' });
+      console.log(`=== ${logFile} ===`);
+      console.log(content.slice(0, 2000));
+    } catch (e) {}
+  }
+} catch (e) {}
+
+// Check if the db file actually exists
+try {
+  const dbCheck = execSync('ls -la db/ 2>&1', { encoding: 'utf-8' });
+  console.log('=== db/ directory ===');
+  console.log(dbCheck);
+} catch(e) {
+  console.log('=== db/ directory NOT FOUND ===');
+}
+
+// Try to read the .next/diagnostics directory
+try {
+  const diag = execSync('find .next/diagnostics -type f 2>/dev/null', { encoding: 'utf-8' });
+  console.log('=== Diagnostics files ===');
+  console.log(diag);
+  for (const f of diag.trim().split('\n').filter(Boolean)) {
+    try {
+      const content = execSync(`cat "${f}" 2>&1`, { encoding: 'utf-8' });
+      console.log(`=== ${f} ===`);
+      console.log(content.slice(0, 5000));
+    } catch(e) {}
+  }
+} catch(e) {}
+
+process.exit(result.status || 0);
