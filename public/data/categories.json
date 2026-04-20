@@ -1,0 +1,130 @@
+[
+  {
+    "id": "cmnoyqv1h0000nzhjuqmp1nvs",
+    "name": "THREE PHASE PANELS",
+    "slug": "three-phase-panels",
+    "description": "Three phase electrical panels for motor control and power distribution",
+    "productCount": 3,
+    "order": 1
+  },
+  {
+    "id": "cmnoyqv1h0001nzhjun8r38et",
+    "name": "SINGLE PHASE SUMMERSIBLE PANELS",
+    "slug": "single-phase-summersible-panels",
+    "description": "Single phase submersible motor control panels",
+    "productCount": 3,
+    "order": 2
+  },
+  {
+    "id": "cmnoyqv1i0002nzhj1126khh5",
+    "name": "AUTOMATIC CHANGEOVERS",
+    "slug": "automatic-changeovers",
+    "description": "Automatic changeover switches for seamless power switching",
+    "productCount": 4,
+    "order": 3
+  },
+  {
+    "id": "cmnoyqv1j0003nzhje2se9am0",
+    "name": "AUTOMATIC SEQUENCE TIMER PANELS",
+    "slug": "automatic-sequence-timer-panels",
+    "description": "Sequence timer panels for automated motor control sequencing",
+    "productCount": 2,
+    "order": 4
+  },
+  {
+    "id": "cmnoyqv1j0004nzhj59s1zqtn",
+    "name": "AUTOMATIC TEMPERATURE CONTROL PANELS",
+    "slug": "automatic-temperature-control-panels",
+    "description": "Temperature control panels for heating applications",
+    "productCount": 2,
+    "order": 5
+  },
+  {
+    "id": "cmnoyqv1k0005nzhjgcjo083p",
+    "name": "OIL IMMERSED STARTERS",
+    "slug": "oil-immersed-starters",
+    "description": "Oil immersed motor starters for heavy duty applications",
+    "productCount": 5,
+    "order": 6
+  },
+  {
+    "id": "cmnoyqv1k0006nzhjofy6a0mq",
+    "name": "BUSBAR",
+    "slug": "busbar",
+    "description": "Heavy duty busbar systems for power distribution",
+    "productCount": 1,
+    "order": 7
+  },
+  {
+    "id": "cmnoyqv1l0007nzhjrjrt3ddz",
+    "name": "AIR BREAK STARTERS & SWITCHES",
+    "slug": "air-break-starters-switches",
+    "description": "Air break starters and switches for motor control",
+    "productCount": 4,
+    "order": 8
+  },
+  {
+    "id": "cmnoyqv1l0008nzhj25ovo1pa",
+    "name": "MAIN SWITCHES & CHANGEOVERS",
+    "slug": "main-switches-changecovers",
+    "description": "Main switches, changeovers, and distribution boxes",
+    "productCount": 4,
+    "order": 9
+  },
+  {
+    "id": "cmnoyqv1m0009nzhjsl8dynn8",
+    "name": "A.C. BOX & SOCKET TYPE DISTRIBUTION PANELS",
+    "slug": "ac-box-socket-distribution-panels",
+    "description": "AC boxes, socket type distribution panels, and feeder pillars",
+    "productCount": 3,
+    "order": 10
+  },
+  {
+    "id": "cmnoyqv1m000anzhj7f9dmsbh",
+    "name": "AUTOMATIC WATER LEVEL CONTROLLERS",
+    "slug": "automatic-water-level-controllers",
+    "description": "Automatic water level controllers for pumps and tanks",
+    "productCount": 8,
+    "order": 11
+  },
+  {
+    "id": "cmnoyqv1n000bnzhjurgom3xe",
+    "name": "DIGITAL MEASURING INSTRU. & A.C Drives",
+    "slug": "digital-measuring-instruments-ac-drives",
+    "description": "Digital measuring instruments and AC drive panels",
+    "productCount": 4,
+    "order": 12
+  },
+  {
+    "id": "cmnoyqv1n000cnzhjqu7uftfq",
+    "name": "AUTOMATIC POWER FAC. CONTROL PANEL",
+    "slug": "automatic-power-factor-control-panel",
+    "description": "Automatic power factor control panels for power optimization",
+    "productCount": 3,
+    "order": 13
+  },
+  {
+    "id": "cmnoyqv1o000dnzhj91fd590h",
+    "name": "AUTOMATIC MAINS FAILURE",
+    "slug": "automatic-mains-failure",
+    "description": "AMF panels for automatic generator start on mains failure",
+    "productCount": 3,
+    "order": 14
+  },
+  {
+    "id": "cmnoyqv1p000enzhj22x1guog",
+    "name": "SOLAR PANELS",
+    "slug": "solar-panels",
+    "description": "Customized solar panel systems in IP 65 enclosures",
+    "productCount": 1,
+    "order": 15
+  },
+  {
+    "id": "cmnoyqv1p000fnzhjwxmdn5nh",
+    "name": "HUT TYPE PANEL (IP 55)",
+    "slug": "hut-type-panel-ip55",
+    "description": "Hut type feeder pillar panels with IP 55 protection",
+    "productCount": 1,
+    "order": 16
+  }
+]

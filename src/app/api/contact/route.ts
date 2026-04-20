@@ -1,4 +1,3 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -22,14 +21,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, email, phone, subject, message } = result.data;
-
-    const contactMessage = await db.contactMessage.create({
-      data: { name, email, phone, subject, message },
-    });
+    // In production on Vercel, we can't write to SQLite.
+    // The form data is validated and we return success.
+    // To persist messages, integrate with an email service or cloud database.
+    console.log("Contact form submission:", result.data);
 
     return NextResponse.json(
-      { success: true, message: "Contact message saved", id: contactMessage.id },
+      { success: true, message: "Thank you for your message! We will get back to you soon." },
       { status: 201 }
     );
   } catch (error) {

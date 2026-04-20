@@ -1,5 +1,6 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export async function GET(
   request: NextRequest,
@@ -7,11 +8,10 @@ export async function GET(
 ) {
   try {
     const { slug } = await params;
+    const dataPath = join(process.cwd(), "public", "data", "products.json");
+    const products = JSON.parse(readFileSync(dataPath, "utf-8"));
 
-    const product = await db.product.findUnique({
-      where: { slug },
-      include: { category: true },
-    });
+    const product = products.find((p: any) => p.slug === slug);
 
     if (!product) {
       return NextResponse.json(

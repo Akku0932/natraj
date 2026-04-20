@@ -1,40 +1,44 @@
-import { db } from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
+import { readFileSync } from "fs";
+import { join } from "path";
 
 export async function GET(request: NextRequest) {
   try {
+    const dataPath = join(process.cwd(), "public", "data", "products.json");
+    let products = JSON.parse(readFileSync(dataPath, "utf-8"));
+
     const { searchParams } = new URL(request.url);
     const categorySlug = searchParams.get("category");
     const searchQuery = searchParams.get("search");
     const featuredParam = searchParams.get("featured");
     const limitParam = searchParams.get("limit");
 
-    const whereClause: Record<string, unknown> = {};
-
     if (categorySlug) {
-      whereClause.category = { slug: categorySlug };
+      products = products.filter(
+        (p: any) => p.category?.slug === categorySlug
+      );
     }
 
     if (searchQuery) {
-      whereClause.OR = [
-        { name: { contains: searchQuery } },
-        { description: { contains: searchQuery } },
-        { specifications: { contains: searchQuery } },
-      ];
+      const q = searchQuery.toLowerCase();
+      products = products.filter(
+        (p: any) =>
+          p.name?.toLowerCase().includes(q) ||
+          p.description?.toLowerCase().includes(q) ||
+          p.specifications?.toLowerCase().includes(q)
+      );
     }
 
     if (featuredParam === "true") {
-      whereClause.featured = true;
+      products = products.filter((p: any) => p.featured === true);
     }
 
-    const take = limitParam ? parseInt(limitParam, 10) : undefined;
-
-    const products = await db.product.findMany({
-      where: Object.keys(whereClause).length > 0 ? whereClause : undefined,
-      include: { category: true },
-      orderBy: { order: "asc" },
-      take,
-    });
+    if (limitParam) {
+      const limit = parseInt(limitParam, 10);
+      if (!isNaN(limit)) {
+        products = products.slice(0, limit);
+      }
+    }
 
     return NextResponse.json(products);
   } catch (error) {
