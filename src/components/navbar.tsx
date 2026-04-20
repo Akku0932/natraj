@@ -249,7 +249,7 @@ export function Navbar() {
               ) : (
                 <Image
                   src="/images/logo.PNG"
-                  alt="Natraj Electricals"
+                  alt="Natraj Electrical Control Panel"
                   width={140}
                   height={40}
                   className={`h-9 w-auto object-contain md:h-11 transition-all duration-300 group-hover:scale-[1.02] group-hover:opacity-90 ${
@@ -590,7 +590,7 @@ export function Navbar() {
               ) : (
                 <Image
                   src="/images/logo.PNG"
-                  alt="Natraj Electricals"
+                  alt="Natraj Electrical Control Panel"
                   width={120}
                   height={36}
                   className="h-8 w-auto object-contain"

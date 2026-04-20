@@ -318,7 +318,7 @@ export function ProductDetailModal() {
     if (!product) return
 
     const shareUrl = `${window.location.origin}/products/${product.slug}`
-    const shareText = `Check out ${product.name} - ${product.category.name} at Natraj Electricals`
+    const shareText = `Check out ${product.name} - ${product.category.name} at Natraj Electrical Control Panel`
 
     if (typeof navigator.share === 'function') {
       try {

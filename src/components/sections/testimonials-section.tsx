@@ -9,7 +9,7 @@ const testimonials = [
   {
     name: 'Rajesh Kumar',
     role: 'Project Manager, L&T Construction',
-    text: 'Natraj Electricals has been our trusted electrical panel supplier for over 8 years. Their product range, competitive pricing, and reliable delivery make them our go-to partner.',
+    text: 'Natraj Electrical Control Panel has been our trusted electrical panel supplier for over 8 years. Their product range, competitive pricing, and reliable delivery make them our go-to partner.',
     rating: 5,
   },
   {
@@ -27,7 +27,7 @@ const testimonials = [
   {
     name: 'Vikram Singh',
     role: 'Owner, Singh Industries',
-    text: 'From helping us select the right panels to ensuring timely delivery, Natraj Electricals is a true distribution partner. Highly recommended for any business.',
+    text: 'From helping us select the right panels to ensuring timely delivery, Natraj Electrical Control Panel is a true distribution partner. Highly recommended for any business.',
     rating: 5,
   },
   {
@@ -222,7 +222,7 @@ export default function TestimonialsSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 text-muted-foreground"
           >
-            Hear from the businesses that rely on Natraj Electricals
+            Hear from the businesses that rely on Natraj Electrical Control Panel
           </motion.p>
         </div>
 

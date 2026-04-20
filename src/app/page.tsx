@@ -205,7 +205,7 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">1. Acceptance of Terms</h3>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        These Terms and Conditions govern your use of the website and services provided by Natraj Electricals (&quot;the Company&quot;), located at 1547/3, Jai Hind Building, Bhagirath Place, Delhi-6. By accessing this website, browsing its content, or engaging our services, you acknowledge that you have read, understood, and agree to be bound by these terms in their entirety. If you do not agree with any part of these terms, you must not use our website or services.
+                        These Terms and Conditions govern your use of the website and services provided by Natraj Electrical Control Panel (&quot;the Company&quot;), located at 1547/3, Jai Hind Building, Bhagirath Place, Delhi-6. By accessing this website, browsing its content, or engaging our services, you acknowledge that you have read, understood, and agree to be bound by these terms in their entirety. If you do not agree with any part of these terms, you must not use our website or services.
                       </p>
                     </motion.article>
 
@@ -220,7 +220,7 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">2. Products and Services</h3>
                       <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-                        Natraj Electricals supplies and distributes a comprehensive range of electrical control panels and equipment, including but not limited to: three-phase panels, single-phase panels, automatic changeovers, busbar systems, temperature control panels, oil immersed starters, water level controllers, digital measuring instruments, power factor correction panels, air break starters, distribution boards, main switches, solar panels, and sequence timer panels.
+                        Natraj Electrical Control Panel supplies and distributes a comprehensive range of electrical control panels and equipment, including but not limited to: three-phase panels, single-phase panels, automatic changeovers, busbar systems, temperature control panels, oil immersed starters, water level controllers, digital measuring instruments, power factor correction panels, air break starters, distribution boards, main switches, solar panels, and sequence timer panels.
                       </p>
                       <p className="text-sm leading-relaxed text-muted-foreground">
                         All product specifications, images, and descriptions on this website are provided for informational purposes and do not constitute a binding offer. The Company reserves the right to update product listings and availability without prior notice. Actual products may vary slightly from the representations shown herein.
@@ -274,13 +274,13 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">5. Warranty</h3>
                       <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-                        All electrical panels and equipment supplied by Natraj Electricals carry the original manufacturer&apos;s warranty against defects and faulty workmanship. Warranty periods vary by product and brand, and are communicated at the time of purchase, subject to the following conditions:
+                        All electrical panels and equipment supplied by Natraj Electrical Control Panel carry the original manufacturer&apos;s warranty against defects and faulty workmanship. Warranty periods vary by product and brand, and are communicated at the time of purchase, subject to the following conditions:
                       </p>
                       <ul className="ml-4 list-disc space-y-2 text-sm leading-relaxed text-muted-foreground">
                         <li>The product has been installed, operated, and maintained in accordance with the manufacturer&apos;s guidelines and operating conditions specified in the product documentation.</li>
                         <li>The product has not been subject to unauthorized modification, repair, alteration, or misuse of any kind.</li>
                         <li>Any damage is not caused by negligence, accident, overloading, voltage fluctuations, natural calamity, or improper storage.</li>
-                        <li>Warranty claims are processed through the original manufacturer or their authorized service center, with support from Natraj Electricals.</li>
+                        <li>Warranty claims are processed through the original manufacturer or their authorized service center, with support from Natraj Electrical Control Panel.</li>
                       </ul>
                     </motion.article>
 
@@ -295,7 +295,7 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">6. Intellectual Property</h3>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        All content on this website, including but not limited to text, graphics, logos, images, product designs, software code, and the overall website design, is the exclusive intellectual property of Natraj Electricals and is protected by applicable Indian and international intellectual property laws. Unauthorized reproduction, distribution, modification, display, or use of any content from this website is strictly prohibited and may result in legal action. The Natraj Electricals name and logo are registered trademarks and may not be used without prior written consent.
+                        All content on this website, including but not limited to text, graphics, logos, images, product designs, software code, and the overall website design, is the exclusive intellectual property of Natraj Electrical Control Panel and is protected by applicable Indian and international intellectual property laws. Unauthorized reproduction, distribution, modification, display, or use of any content from this website is strictly prohibited and may result in legal action. The Natraj Electrical Control Panel name and logo are registered trademarks and may not be used without prior written consent.
                       </p>
                     </motion.article>
 
@@ -358,7 +358,7 @@ export default function Home() {
                         For any queries, concerns, or clarification regarding these Terms and Conditions, please contact us at:
                       </p>
                       <div className="rounded-xl bg-muted/50 p-5 text-sm leading-relaxed text-muted-foreground">
-                        <p className="font-medium text-foreground">Natraj Electricals</p>
+                        <p className="font-medium text-foreground">Natraj Electrical Control Panel</p>
                         <p>1547/3, Jai Hind Building, Bhagirath Place, Delhi-6</p>
                         <p>Phone: 011-23873532, 9868225911</p>
                         <p>Email: natrajenterprises14@gmail.com</p>
@@ -444,7 +444,7 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">1. Information Collection</h3>
                       <p className="mb-3 text-sm leading-relaxed text-muted-foreground">
-                        Natraj Electricals (&quot;the Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) may collect the following types of information when you visit our website or interact with our services:
+                        Natraj Electrical Control Panel (&quot;the Company&quot;, &quot;we&quot;, &quot;us&quot;, or &quot;our&quot;) may collect the following types of information when you visit our website or interact with our services:
                       </p>
                       <ul className="ml-4 list-disc space-y-2 text-sm leading-relaxed text-muted-foreground">
                         <li><strong className="text-foreground/80">Contact Information:</strong> Name, email address, phone number, and mailing address when you submit a contact form, request a quotation, or subscribe to our newsletter.</li>
@@ -548,7 +548,7 @@ export default function Home() {
                     >
                       <h3 className="mb-3 text-lg font-semibold text-foreground">6. Third-Party Links</h3>
                       <p className="text-sm leading-relaxed text-muted-foreground">
-                        Our website may contain links to third-party websites, including social media platforms, partner websites, and external resources. These links are provided for your convenience and reference only. We do not have control over the content, privacy policies, or practices of third-party websites. The inclusion of any link does not imply endorsement by Natraj Electricals. We recommend that you review the privacy policy of any third-party website before providing personal information. We are not responsible for any damage or loss arising from your interaction with third-party websites.
+                        Our website may contain links to third-party websites, including social media platforms, partner websites, and external resources. These links are provided for your convenience and reference only. We do not have control over the content, privacy policies, or practices of third-party websites. The inclusion of any link does not imply endorsement by Natraj Electrical Control Panel. We recommend that you review the privacy policy of any third-party website before providing personal information. We are not responsible for any damage or loss arising from your interaction with third-party websites.
                       </p>
                     </motion.article>
 
@@ -621,7 +621,7 @@ export default function Home() {
                         If you have any questions, concerns, or requests regarding this Privacy Policy or our data practices, please contact us at:
                       </p>
                       <div className="rounded-xl bg-muted/50 p-5 text-sm leading-relaxed text-muted-foreground">
-                        <p className="font-medium text-foreground">Natraj Electricals</p>
+                        <p className="font-medium text-foreground">Natraj Electrical Control Panel</p>
                         <p>1547/3, Jai Hind Building, Bhagirath Place, Delhi-6</p>
                         <p>Phone: 011-23873532, 9868225911</p>
                         <p>Email: natrajenterprises14@gmail.com</p>

@@ -120,7 +120,7 @@ export function LoadingScreen() {
               </motion.div>
             </motion.div>
 
-            {/* NATRAJ ELECTRICALS with gold gradient */}
+            {/* Natraj Electrical Control Panel with gold gradient */}
             <motion.h1
               className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-[0.2em] gradient-text mb-2"
               initial={{ opacity: 0, letterSpacing: '0.5em' }}
@@ -136,7 +136,7 @@ export function LoadingScreen() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
             >
-              ELECTRICALS
+              ELECTRICAL CONTROL PANEL
             </motion.p>
 
             {/* Progress Bar */}
@@ -227,7 +227,7 @@ export function LoadingScreen() {
               NATRAJ
             </h1>
             <p className="text-base sm:text-lg md:text-xl font-light tracking-[0.4em] text-gold-light/80">
-              ELECTRICALS
+              ELECTRICAL CONTROL PANEL
             </p>
           </div>
         </motion.div>

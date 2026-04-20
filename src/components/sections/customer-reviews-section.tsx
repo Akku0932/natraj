@@ -17,7 +17,7 @@ const customerReviews = [
     role: 'Project Manager',
     company: 'L&T Construction',
     rating: 5,
-    text: 'Natraj Electricals has been our trusted electrical panel supplier for over 8 years. Their product range, competitive pricing, and reliable delivery make them our go-to partner for all large-scale construction projects.',
+    text: 'Natraj Electrical Control Panel has been our trusted electrical panel supplier for over 8 years. Their product range, competitive pricing, and reliable delivery make them our go-to partner for all large-scale construction projects.',
     date: '2024-11-15',
   },
   {
@@ -35,7 +35,7 @@ const customerReviews = [
     role: 'Owner',
     company: 'Singh Industries',
     rating: 4,
-    text: 'From helping us select the right panels to ensuring timely delivery, Natraj Electricals is a true distribution partner. Highly recommended for any business seeking reliable electrical solutions.',
+    text: 'From helping us select the right panels to ensuring timely delivery, Natraj Electrical Control Panel is a true distribution partner. Highly recommended for any business seeking reliable electrical solutions.',
     date: '2024-10-05',
   },
   {
@@ -62,7 +62,7 @@ const customerReviews = [
     role: 'Operations Director',
     company: 'Reliance Infrastructure',
     rating: 4,
-    text: 'We switched to Natraj Electricals last year and the difference in product quality and after-sales support has been remarkable. Their team understands industrial requirements perfectly.',
+    text: 'We switched to Natraj Electrical Control Panel last year and the difference in product quality and after-sales support has been remarkable. Their team understands industrial requirements perfectly.',
     date: '2024-08-10',
   },
 ]
@@ -331,7 +331,7 @@ export default function CustomerReviewsSection() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="mt-4 text-muted-foreground"
           >
-            Real experiences from businesses that trust Natraj Electricals
+            Real experiences from businesses that trust Natraj Electrical Control Panel
             for their electrical panel needs across India.
           </motion.p>
         </div>
@@ -476,7 +476,7 @@ export default function CustomerReviewsSection() {
                     </label>
                     <Textarea
                       id="review-text"
-                      placeholder="Tell us about your experience with Natraj Electricals..."
+                      placeholder="Tell us about your experience with Natraj Electrical Control Panel..."
                       rows={4}
                       value={formData.review}
                       onChange={(e) =>

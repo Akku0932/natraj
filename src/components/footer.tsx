@@ -288,7 +288,7 @@ export function Footer() {
               ) : (
                 <Image
                   src="/images/logo.PNG"
-                  alt="Natraj Electricals logo"
+                  alt="Natraj Electrical Control Panel logo"
                   width={140}
                   height={40}
                   className="h-9 w-auto object-contain"
@@ -626,7 +626,7 @@ export function Footer() {
                 <ArrowUp className="h-4 w-4" />
               </motion.button>
               <p className="text-xs text-white/40">
-                &copy; {currentYear} Natraj Electricals. All rights reserved.
+                &copy; {currentYear} Natraj Electrical Control Panel. All rights reserved.
               </p>
             </div>
 

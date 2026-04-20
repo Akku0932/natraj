@@ -2,15 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Flame, Sparkles, Truck, Users } from 'lucide-react'
+import { Sparkles, Truck, Users } from 'lucide-react'
 
 const promos = [
-  {
-    icon: Flame,
-    title: '15% OFF on All Three Phase Panels',
-    subtitle: 'Limited Time Offer • Use Code: NATRAJ15',
-    accent: 'from-orange-500/20 to-amber-500/10',
-  },
   {
     icon: Sparkles,
     title: 'New Solar Panel Range',

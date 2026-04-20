@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Natraj Electricals | Trusted Electrical Panel Distributor",
+  title: "Natraj Electrical Control Panel | Trusted Electrical Panel Distributor",
   icons: {
     icon: '/favicon.png',
     shortcut: '/favicon.png',
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   description:
     "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
   keywords: [
-    "Natraj Electricals",
+    "Natraj Electrical Control Panel",
     "electrical control panels",
     "automatic changeovers",
     "busbar systems",
@@ -39,18 +39,18 @@ export const metadata: Metadata = {
     "Siemens distributor",
     "Schneider Electric distributor",
   ],
-  authors: [{ name: "Natraj Electricals" }],
+  authors: [{ name: "Natraj Electrical Control Panel" }],
   openGraph: {
-    title: "Natraj Electricals | Trusted Electrical Panel Distributor",
+    title: "Natraj Electrical Control Panel | Trusted Electrical Panel Distributor",
     description:
       "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
-    siteName: "Natraj Electricals",
+    siteName: "Natraj Electrical Control Panel",
     type: "website",
     locale: "en_IN",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Natraj Electricals | Trusted Electrical Panel Distributor",
+    title: "Natraj Electrical Control Panel | Trusted Electrical Panel Distributor",
     description:
       "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
   },
@@ -64,7 +64,7 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "name": "Natraj Electricals",
+    "name": "Natraj Electrical Control Panel",
     "description": "Trusted distributor and supplier of quality electrical control panels, automatic changeovers, busbar systems, and more from India's leading brands.",
     "url": "https://natrajelectricals.com",
     "telephone": ["+91-11-23873532", "+91-9868225911"],
@@ -109,7 +109,7 @@ export default function RootLayout({
         "name": "Are the products you supply certified?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Yes, Natraj Electricals supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery."
+          "text": "Yes, Natraj Electrical Control Panel supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery."
         }
       },
       {

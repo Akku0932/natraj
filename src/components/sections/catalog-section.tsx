@@ -91,7 +91,7 @@ export default function CatalogDownloadSection() {
         >
           <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
             <a
-              href="/images/Natraj Electricals-4.pdf"
+              href="/images/Natraj Electrical Control Panel-4.pdf"
               target="_blank"
               rel="noopener noreferrer"
             >

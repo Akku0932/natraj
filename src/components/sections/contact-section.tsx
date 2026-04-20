@@ -158,10 +158,18 @@ export default function ContactSection() {
       return
     }
 
-    const whatsappMessage = `Hello, I'm ${formData.name.trim()}
-Phone: ${formData.phone.trim() || 'Not provided'}
-Email: ${formData.email.trim() || 'Not provided'}
-Message: ${formData.message.trim()}`
+    const whatsappMessage = `--- New Enquiry from Website ---
+
+*Name:* ${formData.name.trim()}
+*Email:* ${formData.email.trim() || 'Not provided'}
+*Phone:* ${formData.phone.trim() || 'Not provided'}
+*Category:* ${formData.subjectCategory || 'Not selected'}
+*Subject:* ${formData.subject.trim() || 'Not provided'}
+
+*Message:*
+${formData.message.trim()}
+
+-------------------------------`
 
     const encodedMessage = encodeURIComponent(whatsappMessage)
     const whatsappUrl = `https://wa.me/919868225911?text=${encodedMessage}`
@@ -799,7 +807,7 @@ Message: ${formData.message.trim()}`
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
-                title="Natraj Electricals Location - Bhagirath Place, Delhi"
+                title="Natraj Electrical Control Panel Location - Bhagirath Place, Delhi"
                 className="w-full"
               />
             </div>

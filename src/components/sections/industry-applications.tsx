@@ -199,7 +199,7 @@ export default function IndustryApplications() {
             className="mt-4 text-muted-foreground"
           >
             From residential complexes to government infrastructure, Natraj
-            Electricals powers critical facilities across every major industry
+            Electrical Control Panel powers critical facilities across every major industry
             sector in India.
           </motion.p>
         </div>

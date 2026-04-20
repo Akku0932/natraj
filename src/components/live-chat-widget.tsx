@@ -24,7 +24,7 @@ const QUICK_REPLIES = ['Product Pricing', 'Bulk Orders', 'Delivery Info', 'Techn
 
 const GREETING: Message = {
   id: 'greeting',
-  text: '\uD83D\uDC4B Hello! Welcome to Natraj Electricals. How can I help you today?',
+  text: '\uD83D\uDC4B Hello! Welcome to Natraj Electrical Control Panel. How can I help you today?',
   sender: 'bot',
 }
 

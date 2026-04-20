@@ -21,7 +21,7 @@ const faqs = [
   {
     question: 'Are the products you supply certified?',
     answer:
-      'Yes, Natraj Electricals supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery to ensure it meets the highest standards.',
+      'Yes, Natraj Electrical Control Panel supplies only ISI-marked, BIS, and CE certified products from reputed manufacturers. Every product is quality-checked before delivery to ensure it meets the highest standards.',
   },
   {
     question: 'Can I get custom panels for my specific needs?',

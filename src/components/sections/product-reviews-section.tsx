@@ -30,7 +30,7 @@ const sampleReviews = [
     date: '2 Jan 2025',
     rating: 5,
     productName: 'Temperature Control Panel',
-    review: 'Perfect temperature regulation for our cold storage unit. The digital display is clear and the panel maintains consistent temperature. Natraj Electricals delivered on time with excellent packaging.',
+    review: 'Perfect temperature regulation for our cold storage unit. The digital display is clear and the panel maintains consistent temperature. Natraj Electrical Control Panel delivered on time with excellent packaging.',
     helpful: 15,
   },
   {
@@ -271,7 +271,7 @@ export default function ProductReviewsSection() {
           className="mt-8 text-center"
         >
           <a
-            href={`https://wa.me/919868225911?text=${encodeURIComponent('Hi, I would like to share my review for a product I purchased from Natraj Electricals.')}`}
+            href={`https://wa.me/919868225911?text=${encodeURIComponent('Hi, I would like to share my review for a product I purchased from Natraj Electrical Control Panel.')}`}
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-green-500 px-6 py-3 text-sm font-medium text-white shadow-lg shadow-green-600/20 transition-all hover:shadow-green-600/30 hover:scale-[1.02]"

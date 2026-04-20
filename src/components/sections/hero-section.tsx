@@ -121,7 +121,7 @@ export default function HeroSection() {
           <img
             ref={imgRef}
             src={getFramePath(currentFrame)}
-            alt="Natraj Electricals - Premium Electrical Panels"
+            alt="Natraj Electrical Control Panel - Premium Electrical Panels"
             className="h-[150%] w-full object-cover"
             loading="eager"
             draggable={false}
@@ -148,7 +148,7 @@ export default function HeroSection() {
           <div className="rounded-full border border-white/10 bg-black/30 px-8 py-3 backdrop-blur-md">
             <h1 className="text-2xl font-bold tracking-wider md:text-3xl">
               <span className="gradient-text">NATRAJ</span>{' '}
-              <span className="text-white/90 font-light tracking-widest">ELECTRICALS</span>
+              <span className="text-white/90 font-light tracking-widest">ELECTRICAL CONTROL PANEL</span>
             </h1>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default function HeroSection() {
         <div className="absolute inset-0 z-20 flex flex-col items-center justify-center px-4">
           {/* Semi-transparent glass card behind text for readability */}
           <motion.div
-            className="mx-auto w-full max-w-3xl rounded-3xl border border-white/[0.08] bg-black/20 p-8 backdrop-blur-sm sm:p-10 md:p-14"
+            className="mx-auto w-full max-w-3xl rounded-3xl border border-white/[0.08] bg-black/60 p-8 backdrop-blur-md sm:p-10 md:p-14"
             style={{ opacity: titleOpacity }}
           >
           {/* Trusted Since 1998 with decorative gold lines */}

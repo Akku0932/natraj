@@ -34,7 +34,7 @@ export function PrivacyModal() {
                 1. Introduction
               </h3>
               <p>
-                Natraj Electricals (&quot;the Company&quot;, &quot;we&quot;, &quot;us&quot;, or
+                Natraj Electrical Control Panel (&quot;the Company&quot;, &quot;we&quot;, &quot;us&quot;, or
                 &quot;our&quot;) is committed to protecting your privacy and personal
                 information. This Privacy Policy explains how we collect, use,
                 disclose, and safeguard your information when you visit our
@@ -256,7 +256,7 @@ export function PrivacyModal() {
                 Policy, please contact us at:
               </p>
               <p className="text-foreground/70">
-                Natraj Electricals
+                Natraj Electrical Control Panel
                 <br />
                 1547/3, Jai Hind Building, Bhagirath Place, Delhi-6
                 <br />

@@ -35,7 +35,7 @@ export function TermsModal() {
               </h3>
               <p>
                 These Terms and Conditions govern your use of the website and
-                services provided by Natraj Electricals (&quot;the Company&quot;),
+                services provided by Natraj Electrical Control Panel (&quot;the Company&quot;),
                 located at 1547/3, Jai Hind Building, Bhagirath Place, Delhi-6.
                 By accessing this website or engaging our services, you agree to
                 be bound by these terms in their entirety.
@@ -50,7 +50,7 @@ export function TermsModal() {
                 2. Products &amp; Services
               </h3>
               <p className="mb-2">
-                Natraj Electricals supplies and distributes electrical control
+                Natraj Electrical Control Panel supplies and distributes electrical control
                 panels, automatic changeovers, busbar systems, power factor
                 correction panels, water level controllers, temperature control
                 panels, digital measuring instruments, air break starters, AC
@@ -176,7 +176,7 @@ export function TermsModal() {
               <p>
                 All content on this website, including but not limited to text,
                 graphics, logos, images, product designs, and software, is the
-                intellectual property of Natraj Electricals and is protected by
+                intellectual property of Natraj Electrical Control Panel and is protected by
                 applicable Indian and international intellectual property laws.
                 Unauthorized reproduction, distribution, or use of any content
                 is strictly prohibited.
@@ -210,7 +210,7 @@ export function TermsModal() {
                 contact us at:
               </p>
               <p className="mt-2 text-foreground/70">
-                Natraj Electricals
+                Natraj Electrical Control Panel
                 <br />
                 1547/3, Jai Hind Building, Bhagirath Place, Delhi-6
                 <br />
